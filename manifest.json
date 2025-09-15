@@ -1,0 +1,476 @@
+{
+  "dxt_version": "0.1",
+  "name": "gravitee-apim",
+  "version": "0.0.1",
+  "description": "",
+  "long_description": "Gravitee.io APIM - Management API - APIs: This is the OpenAPI specification for our new version of APIM Management API.",
+  "author": {
+    "name": "Speakeasy"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "./bin/mcp-server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/bin/mcp-server.js",
+        "start",
+        "--bearer-auth",
+        "${user_config.bearer_auth}",
+        "--server-url",
+        "${user_config.server_url}"
+      ]
+    }
+  },
+  "display_name": "Gravitee Apim",
+  "tools": [
+    {
+      "name": "AP-is-list-apis",
+      "description": "List APIs\n\nGet the list of APIs for a specific environment.<br>\nThe results are paginated.\n\nUser must have the ENVIRONMENT_API[READ] permission."
+    },
+    {
+      "name": "AP-is-create-api",
+      "description": "Create an API\n\n⚠️ Support only v4 API for the moment. ⚠️<br>\nCreate a new API.\n\nUser must have the ENVIRONMENT_API[CREATE] permission."
+    },
+    {
+      "name": "AP-is-create-api-from-swagger",
+      "description": "Import API definition\n\n⚠️ Support only v4 API for the moment. ⚠️<br>\nCreate an API by importing from an Open API descriptor. <br>\nThis definition can be retrieved from \\`GET /environments/{envId}/apis/{apiId}/_export/definition\\`\n\nUser must have the ENVIRONMENT_API[CREATE] permission."
+    },
+    {
+      "name": "AP-is-create-api-with-import-definition",
+      "description": "Import API definition\n\n⚠️ Support only v4 API for the moment. ⚠️<br>\nCreate an API by importing an API definition. <br>\nThis definition can be retrieved from \\`GET /environments/{envId}/apis/{apiId}/_export/definition\\`\n\nUser must have the ENVIRONMENT_API[CREATE] permission."
+    },
+    {
+      "name": "AP-is-search-apis",
+      "description": "Search APIs\n\nSearch APIs for a specific environment.<br>\nThe results are paginated and can be sorted.\n\nUser must have the ENVIRONMENT_API[READ] permission."
+    },
+    {
+      "name": "AP-is-verify-paths",
+      "description": "Verify HTTP API paths\n\nVerify paths before creating or updating a HTTP API.<br>\nThis will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br>\nThe result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)"
+    },
+    {
+      "name": "AP-is-verify-hosts",
+      "description": "Verify TCP and Kafka API hosts\n\nVerify hosts before creating or updating a TCP or Kafka API.<br>\nThis will check it is not already used by other APIs in the environment.<br>\nThe result will indicate if the hosts are OK, and give the reason of the failure if they are not."
+    },
+    {
+      "name": "AP-is-get-api",
+      "description": "Get a specific API\n\nGet a specific API.\n\nUser must have at least one management (create, update, or delete) permission on the API to access it."
+    },
+    {
+      "name": "AP-is-update-api",
+      "description": "Update an API\n\nUpdate a V2 or a V4 API.\n\nUser must have API_DEFINITION[UPDATE] or API_GATEWAY_DEFINITION[UPDATE] permissions."
+    },
+    {
+      "name": "AP-is-delete-api",
+      "description": "Delete an API\n\nDelete a V2 or a V4 API.\n\nUser must have API_DEFINITION[DELETE] permission."
+    },
+    {
+      "name": "AP-is-get-api-background",
+      "description": "Get an API's background picture\n\nGet the API's background picture.\n\nUser must have the API_DEFINITION[READ] permission."
+    },
+    {
+      "name": "AP-is-update-api-background",
+      "description": "Update an API's background\n\nUpdate the API's background.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-delete-api-background",
+      "description": "Delete an API's background\n\nDelete the API's background.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-create-api-deployment",
+      "description": "Request a deployment to gateway instances\n\nRequest a deployment for a given API. <br>\nAn optional deployment label can be given to the requested deployment.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-get-current-api-deployment",
+      "description": "Get the current deployment of an API\n\nGet the current deployment of an API.\n\nUser must have the API_DEFINITION[READ] permission."
+    },
+    {
+      "name": "AP-is-get-api-picture",
+      "description": "Get an API's picture\n\nGet the API's picture.\n\nUser must have the API_DEFINITION[READ] permission."
+    },
+    {
+      "name": "AP-is-update-api-picture",
+      "description": "Update an API's picture\n\nUpdate the API's picture.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-delete-api-picture",
+      "description": "Delete an API's picture\n\nDelete the API's picture.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-get-api-metadata",
+      "description": "Get metadata pertaining to API\n\nGet the metadata that pertains to an API. Can be global and API metadata.\n\nUser must have the API_METADATA[READ] permission."
+    },
+    {
+      "name": "AP-is-export-api-definition",
+      "description": "Export an API\n\n⚠️ Support only v4 API for the moment. ⚠️\n\nExport an API to a JSON file.\n\nUser must have at least the API_DEFINITION[READ] permission.<br>\nUser should also have these permissions for specific data:\n - API_DEFINITION[READ] for the API\n - API_MEMBER[READ] for the API's members\n - API_PLAN[READ] for the API's plans\n - API_METADATA[READ] for the API's metadata\n - API_DOCUMENTATION[READ] for the API's documentation pages"
+    },
+    {
+      "name": "AP-is-start-api",
+      "description": "Start an API\n\nChange the API's status to STARTED.\n\nReturn a 400 HTTP Error:\n - when user tries to start an ARCHIVED API\n - when the API is already STARTED\n - when the API needs to be reviewed (only if Review feature is activated).\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-stop-api",
+      "description": "Stop an API\n\nChange the API's status to STOPPED.\n\nReturn a 400 HTTP Error:\n - when user tries to stop an ARCHIVED API\n - when the API is already STOPPED.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-transfer-ownership",
+      "description": "Transfer the ownership of the API\n\nTransfer the ownership of the API to a user, a group or an api member.\n\nReturn a 404 HTTP Error if API cannot be found.\n\nReturn a 400 HTTP Error:\n - when user tries to stop an ARCHIVED API\n - when the API is already STOPPED.\n\nUser must have the API_MEMBER[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-duplicate-api",
+      "description": "Duplicate an API\n\nCreate a new API from an existing one.\nContext-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request.\nUser must have at least the API_DEFINITION[READ] and ENVIRONMENT_API[CREATE] permissions."
+    },
+    {
+      "name": "AP-is-rollback-api",
+      "description": "Rollback an API\n\nRollback an API to a previous version.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-reviews-ask",
+      "description": "Ask for a review\n\nAsk for a review\n\nReturn a 400 HTTP Error:\n - when user tries to change reviews state of an ARCHIVED API\n - when user tries to change reviews state of an API already in review\n\nUser must have the API_DEFINITION[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-reviews-accept",
+      "description": "Accept a review\n\nAccept a review\n\nReturn a 400 HTTP Error:\n - when user tries to change reviews state of an ARCHIVED API\n - when user tries to change reviews state of an API that is not in review\n\nUser must have the API_REVIEWS[UPDATE] permission."
+    },
+    {
+      "name": "AP-is-reviews-reject",
+      "description": "Reject a review\n\nReject a review\n\nReturn a 400 HTTP Error:\n - when user tries to change reviews state of an ARCHIVED API\n - when user tries to change reviews state of an API that is not in review\n\nUser must have the API_REVIEWS[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-verify-api-deployment",
+      "description": "Check if a deployment is possible\n\nCheck if an API deployment is possible given the API's definition and license used by the organization.\n\nUser must have the API_DEFINITION[READ] permission."
+    },
+    {
+      "name": "API-subscriptions-get-api-subscribers",
+      "description": "Get the API's subscribers\n\nList applications that have subscribed to a given API.<br>\nThe results are paginated.\n\nUser must have API_SUBSCRIPTION[READ] permissions to access endpoint.\n"
+    },
+    {
+      "name": "API-subscriptions-get-api-subscriptions",
+      "description": "Get the API's subscriptions\n\nList subscriptions for a given API, always filtered by a \\`status\\` and the possibility to filter by \\`security\\`.\n\nUser must have API_SUBSCRIPTION[READ] permissions to access endpoint.\n"
+    },
+    {
+      "name": "API-subscriptions-create-api-subscription",
+      "description": "Subscribe to an API's plan\n\nCreate a new subscription on a given API.\n\nUser must have the API_SUBSCRIPTION[CREATE] permission."
+    },
+    {
+      "name": "API-subscriptions-export-api-subscriptions",
+      "description": "Export API subscriptions as CSV\n\nExport API subscriptions to a CSV file.\n\nUser must have the API_SUBSCRIPTION[READ] permission."
+    },
+    {
+      "name": "API-subscriptions-verify-create-api-subscription",
+      "description": "Check a subscription can be created\n\nCheck a subscription can be created with given API Key, and application.\n\nUser must have the API_SUBSCRIPTION[CREATE] permission."
+    },
+    {
+      "name": "API-subscriptions-get-api-subscription",
+      "description": "Get one API's subscription\n\nGet the API's subscription by its identifier.\n\nUser must have the API_SUBSCRIPTION[READ] permission."
+    },
+    {
+      "name": "API-subscriptions-update-api-subscription",
+      "description": "Update one API's subscription\n\nUpdate the API's subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-close-api-subscription",
+      "description": "Close one API's subscription\n\nClose the API's subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-pause-api-subscription",
+      "description": "Pause one API's subscription\n\nPause the API's subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-resume-api-subscription",
+      "description": "Resume a paused API's subscription\n\nResume a previously paused subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-accept-api-subscription",
+      "description": "Accept an API subscription\n\nAccept an API subscription with an optional starting / ending dates and reason.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-reject-api-subscription",
+      "description": "Reject an API subscription\n\nReject an API subscription with an optional reason.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-transfer-api-subscription",
+      "description": "Transfer an API subscription\n\nTransfer an API subscription to another plan.<br>\nThe targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-get-api-subscription-api-keys",
+      "description": "Get subscription's API Keys\n\nGet the subscription API Keys.\n\nUser must have the API_SUBSCRIPTION[READ] permission."
+    },
+    {
+      "name": "API-subscriptions-renew-api-subscription-api-keys",
+      "description": "Renew the subscription API Keys.\n\nRenew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br>\nThe newly created API Key is returned in response.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-update-api-subscription-api-key",
+      "description": "Update a subscription API Key\n\nUpdate the subscription API Key.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-revoke-api-subscription-api-key",
+      "description": "Revoke a subscription API Key\n\nRevoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br>\nA notification will be sent to the subscriber according to his portal notification options.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-subscriptions-reactivate-api-subscription-api-key",
+      "description": "Reactivate subscription API Key\n\nReactivate the revoked or expired subscription API Key.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+    },
+    {
+      "name": "API-members-list-api-members",
+      "description": "Get the API's members\n\nList the members for a given API.\n\nUser must have the API_MEMBER[READ] permission.\n"
+    },
+    {
+      "name": "API-members-add-api-member",
+      "description": "Add a member to an API.\n\nAdd a new member to an API.\n\nReturns a 400 HTTP Error:\n - when the user tries to set a member as PrimaryOwner.\n\nUser must have the API_MEMBER[CREATE] permission.\n"
+    },
+    {
+      "name": "API-members-update-api-member",
+      "description": "Updates a member for an API.\n\nEdit a member for an API.\n\nReturns a 400 HTTP Error:\n - when the user tries to set a member as PrimaryOwner.\n\nUser must have the API_MEMBER[UPDATE] permission.\n"
+    },
+    {
+      "name": "API-members-remove-api-member",
+      "description": "Remove one API member\n\nRemove an API member.\n\nReturns a 400 HTTP Error:\n - when the user tries to remove a PrimaryOwner.\n\nUser must have the API_MEMBER[DELETE] permission.\n"
+    },
+    {
+      "name": "API-plans-list-api-plans",
+      "description": "List the API's plans\n\nList plans for a given API, always filtered by a \\`status\\` and the possibility to filter by \\`security\\`.<br>\nThe results are paginated.\n\nUser must have API_PLAN[READ] permissions to access endpoint.\n"
+    },
+    {
+      "name": "API-plans-create-api-plan",
+      "description": "Create an API's plan\n\nCreate a new plan on a given API.\n\nUser must have the API_PLAN[CREATE] permission."
+    },
+    {
+      "name": "API-plans-get-api-plan",
+      "description": "Get one API's plan\n\nGet the API's plan by its identifier.\n\nUser must have the API_PLAN[READ] permission."
+    },
+    {
+      "name": "API-plans-update-api-plan",
+      "description": "Update one API's plan\n\nUpdate the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+    },
+    {
+      "name": "API-plans-delete-api-plan",
+      "description": "Delete one API's plan\n\nDelete the API's plan.\n\nUser must have the API_PLAN[DELETE] permission."
+    },
+    {
+      "name": "API-plans-close-api-plan",
+      "description": "Close an API's plan\n\nClose the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+    },
+    {
+      "name": "API-plans-deprecate-api-plan",
+      "description": "Deprecate an API's plan\n\nDeprecate the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+    },
+    {
+      "name": "API-plans-publish-api-plan",
+      "description": "Publish an API's plan\n\nPublish the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+    },
+    {
+      "name": "groups-list-groups",
+      "description": "List of environment groups\n\nList the groups of a given environment.\n\nUser must have the ENVIRONMENT_GROUP[READ] permission.\n"
+    },
+    {
+      "name": "groups-list-group-members",
+      "description": "List a group's members\n\nList the members of a given group.\n\nUser must have the GROUP_MEMBER[READ] permission.\n"
+    },
+    {
+      "name": "integrations-list-integrations",
+      "description": "List Integrations\n\nGet the list of Integration for a specific environment.<br>\nThe results are paginated.\n\nUser must have the ENVIRONMENT_INTEGRATION[READ] permission."
+    },
+    {
+      "name": "integrations-create-integration",
+      "description": "Create an Integration\n\nCreate a new Integration.\n\nThe response body will not contain Agent Status. To get it you should use getIntegration operation.\nUser must have the ENVIRONMENT_INTEGRATION[CREATE] permission."
+    },
+    {
+      "name": "integrations-get-integration",
+      "description": "Get a specific Integration\n\nGet a specific Integration.\n\nUser must have at least one management (create, update, or delete) permission on the Integration to access it."
+    },
+    {
+      "name": "integrations-update-integration",
+      "description": "Update Integration\n\nUpdate specific Integration.\n\nThe response body will not contain Agent Status. To get it you should use getIntegration operation.\nUser must have ENVIRONMENT_INTEGRATION[UPDATE] permission to access it."
+    },
+    {
+      "name": "integrations-delete-integration",
+      "description": "Delete Integration\n\nDelete specific integration\n\nTo delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission.\nDeletion is not possible if there is any federated API associated."
+    },
+    {
+      "name": "integrations-ingest-integration",
+      "description": "Ingest APIs for a specific Integration\n\nIngest all APIs for a specific Integration."
+    },
+    {
+      "name": "integrations-preview-integration",
+      "description": "Preview APIs to ingest for a specific Integration\n\nPreview APIs to ingest before actual ingestion.\n\nUser must have both the ENVIRONMENT_INTEGRATION[READ] and the ENVIRONMENT_API[CREATE] permission \nto perform ingestion preview."
+    },
+    {
+      "name": "integrations-ingested-apis",
+      "description": "Get list of ingested APIs associated to integration\n\nGet a list of all APIs that were ingested from 3rd party provider using this integration. \n\nUser must have the ENVIRONMENT_INTEGRATION[READ] permission.\n"
+    },
+    {
+      "name": "integrations-delete-ingested-apis",
+      "description": "Delete ingested APIs associated to integration\n\nDelete APIs that were ingested from 3rd party provider using this integration. \n\nTo delete APIs user must have ENVIRONMENT_API[DELETE] permission.\nOnly unpublished APIs will deleted. APIs that are published will be omitted!"
+    },
+    {
+      "name": "integration-members-list-integration-members",
+      "description": "Get the Integration's members\n\nList the members for a given Integration.\n\nUser must have the INTEGRATION_MEMBER[READ] permission.\n"
+    },
+    {
+      "name": "integration-members-add-integration-member",
+      "description": "Add a member to an Integration.\n\nAdd a new member to an Integration.\n\nReturns a 400 HTTP Error:\n- when the user tries to set a member as PrimaryOwner.\n\nUser must have the INTEGRATION_MEMBER[CREATE] permission.\n"
+    },
+    {
+      "name": "integration-members-update-integration-member",
+      "description": "Updates a member for an Integration.\n\nEdit a member for an Integration.\n\nReturns a 400 HTTP Error:\n - when the user tries to set a member as PrimaryOwner.\n\nUser must have the INTEGRATION_MEMBER[UPDATE] permission.\n"
+    },
+    {
+      "name": "integration-members-remove-integration-member",
+      "description": "Remove one Integration member\n\nRemove an Integration member.\n\nReturns a 400 HTTP Error:\n - when the user tries to remove a PrimaryOwner.\n\nUser must have the INTEGRATION_MEMBER[DELETE] permission.\n"
+    },
+    {
+      "name": "API-analytics-get-api-analytics-request-count",
+      "description": "Get API Analytics requests count\n\nGet API analytics request count.\nTCP Proxy APIs are not supported.\n\nUser must have the API_ANALYTICS[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-average-messages-per-request",
+      "description": "Get API Analytics average messages per request\n\nGet API analytics average messages per request.\n\nUser must have the API_ANALYTICS[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-average-connection-duration",
+      "description": "Get API Analytics average connection duration\n\nGet API analytics average connection duration. Duration is only computed for ended requests.\nTCP Proxy APIs are not supported.\n\nUser must have the API_ANALYTICS[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-response-status-codes",
+      "description": "Get API Analytics response status counts\n\nGet API analytics response status counts. Response statuses are grouped by endpoint and status code hundreds.\n\nUser must have the API_ANALYTICS[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-response-time-over-time",
+      "description": "Get API Analytics average response time\n\nGet API Analytics average response time\n\nUser must have the API_ANALYTICS[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-response-status-overtime",
+      "description": "Get API Analytics response status counts over time\n\nGet API analytics response status counts over time.\n\nUser must have the API_ANALYTICS[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-api-logs",
+      "description": "Get API logs\n\nGet API logs.\n\nUser must have the API_LOG[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-api-log",
+      "description": "Get API log for a request\n\nGet API log for a request.\n\nUser must have the API_LOG[READ] permission."
+    },
+    {
+      "name": "API-analytics-get-api-message-logs",
+      "description": "Get API Messages logs\n\nGet API Messages logs.\n\nUser must have the API_LOG[READ] permission."
+    },
+    {
+      "name": "API-health-get-api-health-average-response-time",
+      "description": "Get API Health Check average response time\n\nGet API Health Check average response time. \n\nUser must have the API_HEALTH[READ] permission."
+    },
+    {
+      "name": "API-health-get-api-health-average-response-time-overtime",
+      "description": "Get API Health Check average response time overtime\n\nGet API Health Check average response time overtime. \n\nUser must have the API_HEALTH[READ] permission."
+    },
+    {
+      "name": "API-health-get-api-availability",
+      "description": "Get API availability by endpoint or by gateway\n\nGet API Health availability. \n\nUser must have the API_HEALTH[READ] permission."
+    },
+    {
+      "name": "API-health-get-api-health-logs",
+      "description": "Get API Health Check logs\n\nGet API Health Check average response time overtime. \n\nUser must have the API_HEALTH[READ] permission."
+    },
+    {
+      "name": "API-audits-get-api-audits",
+      "description": "Get API Audit\n\nGet API Audit.\n\nUser must have the API_AUDIT[READ] permission."
+    },
+    {
+      "name": "API-audits-list-api-audit-events",
+      "description": "List available audit event type for API\n\nList available audit event type for API.\n\nUser must have the API_AUDIT[READ] permission."
+    },
+    {
+      "name": "API-events-get-api-events",
+      "description": "Get API Events\n\nGet API Events.\n\nUser must have the API_EVENT[READ] permission."
+    },
+    {
+      "name": "API-events-get-api-event-by-id",
+      "description": "Get single API Event by it's ID\n\nGet specific single API Event.\n\nUser must have the API_EVENT[READ] permission."
+    },
+    {
+      "name": "API-documentation-get-api-pages",
+      "description": "Get API documentation pages\n\nGet API documentation pages.\nWhen no parentId is specified, returns all the pages of the API.\n\nWhen parentId is specified (either ID of a folder, or 'ROOT'), only the pages with the given parent are returned, \nand the breadcrumb of the specified folder is added to the response. \n\nUser must have the API_DOCUMENTATION[READ] permission."
+    },
+    {
+      "name": "API-documentation-create-documentation-page",
+      "description": "Create API documentation page\n\nCreate API documentation. The result will be the created page or folder.\nOnly MARKDOWN and FOLDER types are supported.\n\nUser must have the API_DOCUMENTATION[CREATE] permission."
+    },
+    {
+      "name": "API-documentation-get-api-page",
+      "description": "Get API Documentation Page\n\nGet API Documentation Page by ID.\n\nUser must have the API_DOCUMENTATION[READ] permission."
+    },
+    {
+      "name": "API-documentation-update-documentation-page",
+      "description": "Update API documentation page\n\nUpdate API documentation. The result will be the updated documentation.\nOnly MARKDOWN and FOLDER types are supported.\n\nUser must have the API_DOCUMENTATION[CREATE] permission."
+    },
+    {
+      "name": "API-documentation-delete-documentation-page",
+      "description": "Delete API documentation page\n\nDelete API documentation page.\nA FOLDER will be deleted only if it is empty."
+    },
+    {
+      "name": "API-documentation-publish-documentation-page",
+      "description": "Publish API Documentation Page\n\nPublish API Documentation Page. Returns the published page.\n\nUser must have the API_DOCUMENTATION[UPDATE] permission."
+    },
+    {
+      "name": "API-documentation-unpublish-documentation-page",
+      "description": "Unpublish API Documentation Page\n\nUnpublish API Documentation Page. Returns the unpublished page.\n\nUser must have the API_DOCUMENTATION[UPDATE] permission."
+    },
+    {
+      "name": "API-documentation-fetch-documentation-page",
+      "description": "Fetch Content of API Documentation Page\n\nFetch Content of API Documentation Page. Returns the page with newly fetched content.\nThe page must have a configured source, otherwise an error is returned.\n\nUser must have the API_DOCUMENTATION[UPDATE] permission."
+    },
+    {
+      "name": "API-spec-gen-get-spec-gen-state",
+      "description": "Evaluate the state of the API SpecGen\n\nEvaluate the state of the API SpecGen\n\nUser must have the API_DOCUMENTATION[READ] permission."
+    },
+    {
+      "name": "API-spec-gen-post",
+      "description": "Starts the API SpecGen\n\nStarts the API SpecGen\n\nUser must have the API_DOCUMENTATION[CREATE] permission."
+    },
+    {
+      "name": "API-scoring-trigger-api-scoring",
+      "description": "Trigger API Scoring\n\nTrigger API Scoring."
+    },
+    {
+      "name": "API-scoring-get-api-scoring",
+      "description": "Get API Scoring\n\nGet API Scoring.\n\nReturn a 404 HTTP Response status if API was never evaluated."
+    },
+    {
+      "name": "categories-get-category-apis-page",
+      "description": "Page of APIs within a Category"
+    },
+    {
+      "name": "categories-update-category-api",
+      "description": "Update a specified API within a Category"
+    },
+    {
+      "name": "async-jobs-list-async-job",
+      "description": "List Async Jobs\n\nGet the list of AsyncJobs."
+    }
+  ],
+  "prompts": [],
+  "keywords": [
+      "gravitee",
+      "apim",
+      "management",
+      "api",
+      "apis"
+    ],
+  "user_config": {
+      "bearer_auth": {
+        "type": "string",
+        "title": "Bearer Auth Token",
+        "description": "The bearer authentication token to access the Gravitee API",
+        "required": true,
+        "sensitive": true
+      },
+      "server_url": {
+        "type": "string",
+        "title": "Server URL",
+        "description": "The base URL of your Gravitee APIM Management API (e.g., https://your-domain.gravitee.io/management/v2)",
+        "required": true,
+        "sensitive": false
+      }
+    }
+}

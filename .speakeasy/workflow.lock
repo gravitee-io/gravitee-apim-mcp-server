@@ -1,0 +1,29 @@
+speakeasyVersion: 1.615.2
+sources:
+    Gravitee.io APIM - Management API - APIs:
+        sourceNamespace: gravitee-io-apim---management-api---ap-is
+        sourceRevisionDigest: sha256:6f166ff99906c54f8c03fec5429def4a6f8c7b340f67d7a5413130c395f74521
+        sourceBlobDigest: sha256:3c59f29a8f3a266764786adb2d521a4f2ee84a82a282caf1037ae865348f4f28
+        tags:
+            - latest
+            - 2.0.0
+targets:
+    gravitee-apim:
+        source: Gravitee.io APIM - Management API - APIs
+        sourceNamespace: gravitee-io-apim---management-api---ap-is
+        sourceRevisionDigest: sha256:6f166ff99906c54f8c03fec5429def4a6f8c7b340f67d7a5413130c395f74521
+        sourceBlobDigest: sha256:3c59f29a8f3a266764786adb2d521a4f2ee84a82a282caf1037ae865348f4f28
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        Gravitee.io APIM - Management API - APIs:
+            inputs:
+                - location: ../mapi_spec_fixed.yaml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-apim---management-api---ap-is
+    targets:
+        gravitee-apim:
+            target: mcp-typescript
+            source: Gravitee.io APIM - Management API - APIs
