@@ -1,6 +1,8 @@
-# gravitee-apim
+# Gravitee API Management (APIM) MCP Server
 
-Model Context Protocol (MCP) Server for the *gravitee-apim* API.
+This repository contains a Model Context Protocol (MCP) server for the Gravitee.io API Management (APIM) platform. It allows you to interact with your Gravitee instance using natural language in AI assistants like Claude, Cursor, and other MCP-compatible clients.
+
+The server is generated from the official Gravitee Management API v2 OpenAPI specification and exposes its functionality as a set of tools for an LLM to use.
 
 <div align="left">
     <a href="https://www.speakeasy.com/?utm_source=gravitee-apim&utm_campaign=mcp-typescript"><img src="https://www.speakeasy.com/assets/badges/built-by-speakeasy.svg" /></a>
@@ -9,40 +11,74 @@ Model Context Protocol (MCP) Server for the *gravitee-apim* API.
     </a>
 </div>
 
-
-<br /><br />
-> [!IMPORTANT]
-> This MCP Server is not yet ready for production use. To complete setup please follow the steps outlined in your [workspace](https://app.speakeasy.com/org/gravitee/gravitee). Delete this notice before publishing to a package manager.
-
-<!-- Start Summary [summary] -->
-## Summary
-
-Gravitee.io APIM - Management API - APIs: This is the OpenAPI specification for our new version of APIM Management API.
-<!-- End Summary [summary] -->
-
-<!-- Start Table of Contents [toc] -->
 ## Table of Contents
-<!-- $toc-max-depth=2 -->
-* [gravitee-apim](#gravitee-apim)
-  * [Installation](#installation)
-  * [Development](#development)
-  * [Contributions](#contributions)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+  - [1. Create a Service User and Generate a Token](#1-create-a-service-user-and-generate-a-token)
+  - [2. Clone and Build the Server](#2-clone-and-build-the-server)
+- [Installation](#installation)
+- [Usage Examples](#usage-examples)
+- [Contributions](#contributions)
 
-<!-- End Table of Contents [toc] -->
+## Prerequisites
+- **Node.js v18+**
+- **npm** (included with Node.js)
+- Access to a **Gravitee APIM instance** (Self-hosted or Cloud)
 
-<!-- Start Installation [installation] -->
+## Getting Started
+
+Follow these steps to get the MCP server running and configured with your AI client.
+
+### 1. Create a Service User and Generate a Token
+
+The MCP server authenticates with the Gravitee Management API using a Bearer Token. For security, it is highly recommended to create a dedicated **Service User** for this purpose.
+
+1.  **Log into your Gravitee APIM Management Console.**
+    *   **Self-Hosted:** e.g., `http://localhost:8084`
+    *   **Cloud:** e.g., `https://<your-org>.<region>.console.gravitee.io`
+2.  From the main navigation, select **Organization Settings**, then click on **Users**.
+3.  Click the **Add User** button.
+4.  In the form, select **Service User** as the user type, provide a meaningful name (e.g., `mcp-server-user`), and click **Create**.
+5.  You will be returned to the user list. Find and click on the service user you just created to open its configuration page.
+6.  **Assign Permissions.** The capabilities of the AI assistant are directly determined by the permissions granted to this service user. You should assign roles based on the **principle of least privilege** for your intended operations.
+    *   **Organization Role:** Sets permissions that apply across the entire organization.
+    *   **Environment Roles:** Sets specific permissions for each environment (e.g., Development, Production).
+    > **Important**: The Management API is powerful. To understand which permission is required for a specific action, please refer to the official Gravitee Management API documentation.
+7.  Click **Save** to apply the roles.
+8.  On the user's configuration page, navigate to the **Tokens** section and click **Generate a personal token**.
+9.  Enter a descriptive name for the token (e.g., `mcp-server-token`) and click **Generate**.
+10. **Copy the generated token immediately and store it in a safe place.** You will not be able to view it again. This token is the value you will use for the `--bearer-auth` argument.
+
+### 2. Clone and Build the Server
+
+```bash
+# Clone the repository
+git clone https://github.com/gravitee-io/gravitee-apim-mcp-server.git
+cd gravitee-apim-mcp-server
+
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# The server executable is now available at ./bin/mcp-server.js
+```
+
 ## Installation
 
-> [!TIP]
-> To finish publishing your MCP Server to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
+The server can be installed in any MCP-compatible client. The required arguments are `--bearer-auth` (the token you generated) and `--server-url`.
+
+#### Server URL Guide
+-   **Self-Hosted:** Use the base URL of your Management API. Example: `http://localhost:8083/management/v2`
+-   **Gravitee Cloud:** Use your organization-specific API URL. Example: `https://<your-org>.<region>.api.gravitee.io/management/v2`
+
 <details>
-<summary>DXT (Desktop Extension)</summary>
+<summary>DXT (Desktop Extension for Claude)</summary>
 
-Install the MCP server as a Desktop Extension using the pre-built [`mcp-server.dxt`](./mcp-server.dxt) file:
+Install the MCP server as a Desktop Extension using the pre-built [`mcp-server.dxt`](./mcp-server.dxt) file.
 
-Simply drag and drop the [`mcp-server.dxt`](./mcp-server.dxt) file onto Claude Desktop to install the extension.
-
-The DXT package includes the MCP server and all necessary configuration. Once installed, the server will be available without additional setup.
+Simply drag and drop the [`mcp-server.dxt`](./mcp-server.dxt) file onto Claude Desktop to install the extension. The DXT package includes the MCP server and will prompt you for the required configuration values upon installation.
 
 > [!NOTE]
 > DXT (Desktop Extensions) provide a streamlined way to package and distribute MCP servers. Learn more about [Desktop Extensions](https://www.anthropic.com/engineering/desktop-extensions).
@@ -50,156 +86,10 @@ The DXT package includes the MCP server and all necessary configuration. Once in
 </details>
 
 <details>
-<summary>Cursor</summary>
+<summary>Claude Desktop (Manual Config)</summary>
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=GraviteeApim&config=eyJtY3BTZXJ2ZXJzIjp7IkdyYXZpdGVlQXBpbSI6eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJncmF2aXRlZS1hcGltIiwic3RhcnQiLCItLWJlYXJlci1hdXRoIiwiLi4uIl19fX0=)
-
-Or manually:
-
-1. Open Cursor Settings
-2. Select Tools and Integrations
-3. Select New MCP Server
-4. If the configuration file is empty paste the following JSON into the MCP Server Configuration:
-
-```json
-{
-  "mcpServers": {
-    "GraviteeApim": {
-      "command": "npx",
-      "args": [
-        "gravitee-apim",
-        "start",
-        "--bearer-auth",
-        "YOUR_BEARER_TOKEN",
-        "--server-url",
-        "https://your-domain.gravitee.io/management/v2"
-      ]
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary>Claude Code CLI</summary>
-
-```bash
-claude mcp add gravitee-apim npx gravitee-apim start -- --bearer-auth YOUR_BEARER_TOKEN --server-url https://your-domain.gravitee.io/management/v2
-```
-
-</details>
-<details>
-<summary>Windsurf</summary>
-
-Refer to [Official Windsurf documentation](https://docs.windsurf.com/windsurf/cascade/mcp#adding-a-new-mcp-plugin) for latest information
-
-1. Open Windsurf Settings
-2. Select Cascade on left side menu
-3. Click on `Manage MCPs`. (To Manage MCPs you should be signed in with a Windsurf Account)
-4. Click on `View raw config` to open up the mcp configuration file.
-5. If the configuration file is empty paste the full json
-```
-{
-  "mcpServers": {
-    "GraviteeApim": {
-      "command": "npx",
-      "args": [
-        "gravitee-apim",
-        "start",
-        "--bearer-auth",
-        "..."
-      ]
-    }
-  }
-}
-```
-</details>
-<details>
-<summary>VS Code</summary>
-
-Refer to [Official VS Code documentation](https://code.visualstudio.com/api/extension-guides/ai/mcp) for latest information
-
-1. Open [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)
-1. Search and open `MCP: Open User Configuration`. This should open mcp.json file
-2. If the configuration file is empty paste the full json
-```
-{
-  "mcpServers": {
-    "GraviteeApim": {
-      "command": "npx",
-      "args": [
-        "gravitee-apim",
-        "start",
-        "--bearer-auth",
-        "..."
-      ]
-    }
-  }
-}
-```
-
-</details>
-<details>
-<summary>Claude Desktop</summary>
-Claude Desktop doesn't yet support SSE/remote MCP servers.
-
-You need to do the following
-1. Open claude Desktop
-2. Open left hand side pane, then click on your Username
-3. Go to `Settings`
-4. Go to `Developer` tab (on the left hand side)
-5. Click on `Edit Config`
-Paste the following config in the configuration
-
-```json
-{
-  "mcpServers": {
-    "GraviteeApim": {
-      "command": "npx",
-      "args": [
-        "gravitee-apim",
-        "start",
-        "--bearer-auth",
-        "YOUR_BEARER_TOKEN",
-        "--server-url",
-        "https://your-domain.gravitee.io/management/v2"
-      ]
-    }
-  }
-}
-```
-
-</details>
-
-
-<details>
-<summary> Stdio installation via npm </summary>
-To start the MCP server, run:
-
-```bash
-npx gravitee-apim start --bearer-auth ...
-```
-
-For a full list of server arguments, run:
-
-```
-npx gravitee-apim --help
-```
-
-</details>
-<!-- End Installation [installation] -->
-
-<!-- Placeholder for Future Speakeasy SDK Sections -->
-
-## Development
-
-Run locally without a published npm package:
-1. Clone this repository
-2. Run `npm install`
-3. Run `npm run build`
-4. Run `node ./bin/mcp-server.js start --bearer-auth YOUR_BEARER_TOKEN --server-url https://your-domain.gravitee.io/management/v2`
-To use this local version with Cursor, Claude or other MCP Clients, you'll need to add the following config:
+1. Open Claude Desktop Settings -> Developer -> Edit Config.
+2. Add the following JSON, replacing the placeholder values.
 
 ```json
 {
@@ -207,29 +97,103 @@ To use this local version with Cursor, Claude or other MCP Clients, you'll need 
     "GraviteeApim": {
       "command": "node",
       "args": [
-        "./bin/mcp-server.js",
+        "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
         "start",
         "--bearer-auth",
         "YOUR_BEARER_TOKEN",
         "--server-url",
-        "https://your-domain.gravitee.io/management/v2"
+        "https://your-management-api-url/management/v2"
       ]
     }
   }
 }
 ```
 
-Or to debug the MCP server locally, use the official MCP Inspector: 
+</details>
 
-```bash
-npx @modelcontextprotocol/inspector node ./bin/mcp-server.js start --bearer-auth ...
+<details>
+<summary>Cursor</summary>
+
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=GraviteeApim&config=eyJtY3BTZXJ2ZXJzIjp7IkdyYXZpdGVlQXBpbSI6eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJncmF2aXRlZS1hcGltIiwic3RhcnQiLCItLWJlYXJlci1hdXRoIiwiLi4uIiwiLS1zZXJ2ZXItdXJsIiwiLi4uIl19fX0=)
+
+Or manually:
+1. Open Cursor Settings -> Tools and Integrations -> New MCP Server.
+2. Paste the following JSON, replacing the placeholder values.
+
+```json
+{
+  "mcpServers": {
+    "GraviteeApim": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
+        "start",
+        "--bearer-auth",
+        "YOUR_BEARER_TOKEN",
+        "--server-url",
+        "https://your-management-api-url/management/v2"
+      ]
+    }
+  }
+}
 ```
 
+</details>
 
+<details>
+<summary>VS Code</summary>
+
+Refer to the [Official VS Code documentation](https://code.visualstudio.com/api/extension-guides/ai/mcp) for the latest information.
+
+1. Open the Command Palette and search for `MCP: Open User Configuration`.
+2. This will open the `mcp.json` file. Paste the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "GraviteeApim": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
+        "start",
+        "--bearer-auth",
+        "YOUR_BEARER_TOKEN",
+        "--server-url",
+        "https://your-management-api-url/management/v2"
+      ]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary> Run with Stdio via npx (after publishing) </summary>
+Once the package is published to npm, you can run it directly with `npx`.
+
+```bash
+# Start the server
+npx gravitee-apim start --bearer-auth YOUR_BEARER_TOKEN --server-url https://your-management-api-url/management/v2
+
+# See all available arguments
+npx gravitee-apim --help
+```
+</details>
+
+## Usage Examples
+
+Once configured, you can interact with your Gravitee instance using natural language. For Cloud instances, remember to specify the target environment ID or HRID.
+
+-   `List all of my APIs in the 'dev' environment.`
+-   `Get the health status for the API with ID '123-abc-456'.`
+-   `Create a new API named "Weather API" that points to http://example.com/weather.`
+-   `For the "Weather API", create a keyless plan, publish it, and start the API.`
 
 ## Contributions
 
-While we value contributions to this MCP Server, the code is generated programmatically. Any manual changes added to internal files will be overwritten on the next generation. 
-We look forward to hearing your feedback. Feel free to open a PR or an issue with a proof of concept and we'll do our best to include it in a future release. 
+While we value contributions to this MCP Server, the code is generated programmatically. Any manual changes added to the `src` directory will be overwritten on the next generation.
+
+We look forward to hearing your feedback. Feel free to open a PR with changes to the generation process or open an issue with a proof of concept, and we'll do our best to include it in a future release.
 
 ### MCP Server Created by [Speakeasy](https://www.speakeasy.com/?utm_source=gravitee-apim&utm_campaign=mcp-typescript)
