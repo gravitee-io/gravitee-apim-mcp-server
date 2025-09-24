@@ -73,6 +73,8 @@ The server can be installed in any MCP-compatible client. The required arguments
 -   **Self-Hosted:** Use the base URL of your Management API. Example: `http://localhost:8083/management/v2`
 -   **Gravitee Cloud:** Use your organization-specific API URL. Example: `https://<your-org>.<region>.api.gravitee.io/management/v2`
 
+#### Installations in MCP Clients
+
 <details>
 <summary>DXT (Desktop Extension for Claude)</summary>
 
@@ -164,20 +166,6 @@ Refer to the [Official VS Code documentation](https://code.visualstudio.com/api/
     }
   }
 }
-```
-
-</details>
-
-<details>
-<summary> Run with Stdio via npx (after publishing) </summary>
-Once the package is published to npm, you can run it directly with `npx`.
-
-```bash
-# Start the server
-npx gravitee-apim start --bearer-auth YOUR_BEARER_TOKEN --server-url https://your-management-api-url/management/v2
-
-# See all available arguments
-npx gravitee-apim --help
 ```
 </details>
 
