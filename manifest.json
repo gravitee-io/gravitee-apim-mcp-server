@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.3",
   "name": "gravitee-apim",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Model Context Protocol server for the Gravitee APIM Management API.",
   "long_description": "Gravitee APIM MCP server for the APIM 4.12 Management API v2 APIs surface. It exposes API management tools for MCP-compatible clients.",
   "author": {

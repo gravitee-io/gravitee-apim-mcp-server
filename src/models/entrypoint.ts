@@ -6,21 +6,15 @@ import * as z from "zod";
 import { Dlq, Dlq$zodSchema } from "./dlq.js";
 import { Qos, Qos$zodSchema } from "./qos.js";
 
-export type EntrypointConfiguration = {};
-
-export const EntrypointConfiguration$zodSchema: z.ZodType<
-  EntrypointConfiguration
-> = z.object({});
-
 export type Entrypoint = {
   type: string;
   qos?: Qos | undefined;
   dlq?: Dlq | undefined;
-  configuration?: EntrypointConfiguration | undefined;
+  configuration?: { [k: string]: any } | undefined;
 };
 
 export const Entrypoint$zodSchema: z.ZodType<Entrypoint> = z.object({
-  configuration: z.lazy(() => EntrypointConfiguration$zodSchema).optional(),
+  configuration: z.record(z.string(), z.any()).optional(),
   dlq: Dlq$zodSchema.optional(),
   qos: Qos$zodSchema.default("AUTO").describe(
     "Type of the quality of service.",

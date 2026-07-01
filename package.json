@@ -1,6 +1,6 @@
 {
   "name": "gravitee-apim",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Model Context Protocol server for the Gravitee APIM Management API.",
   "author": "Gravitee.io",
   "license": "MIT",
@@ -27,6 +27,7 @@
   },
   "scripts": {
     "clean": "node -e \"const fs=require('node:fs'); for (const p of ['bin','esm','mcp-server.mcpb','gravitee-apim-mcp-server.mcpb','.mcpb-stage']) fs.rmSync(p,{recursive:true,force:true});\"",
+    "speakeasy:run": "node scripts/speakeasy-run.mjs",
     "build": "npm run clean && bun src/mcp-server/build.mts && tsc",
     "mcpb:build": "npm run clean && bun src/mcp-server/build.mts --pack && tsc",
     "check": "npm run lint",

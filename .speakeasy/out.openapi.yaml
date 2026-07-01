@@ -7014,8 +7014,10 @@ components:
           default: false
         configuration:
           type: object
+          additionalProperties: true
         sharedConfigurationOverride:
           type: object
+          additionalProperties: true
         services:
           $ref: '#/components/schemas/EndpointServices'
         secondary:
@@ -7046,6 +7048,7 @@ components:
           $ref: '#/components/schemas/LoadBalancer'
         sharedConfiguration:
           type: object
+          additionalProperties: true
         endpoints:
           type: array
           items:
@@ -7082,6 +7085,7 @@ components:
           $ref: '#/components/schemas/Dlq'
         configuration:
           type: object
+          additionalProperties: true
     Error:
       type: object
       properties:

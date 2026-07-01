@@ -1,0 +1,18 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Gravitee APIM MCP generation fixes
+  version: 0.1.1
+actions:
+  - target: $["components"]["schemas"]["EndpointV4"]["properties"]["configuration"]
+    update:
+      additionalProperties: true
+  - target: $["components"]["schemas"]["EndpointV4"]["properties"]["sharedConfigurationOverride"]
+    update:
+      additionalProperties: true
+  - target: $["components"]["schemas"]["EndpointGroupV4"]["properties"]["sharedConfiguration"]
+    update:
+      additionalProperties: true
+  - target: $["components"]["schemas"]["Entrypoint"]["properties"]["configuration"]
+    update:
+      additionalProperties: true

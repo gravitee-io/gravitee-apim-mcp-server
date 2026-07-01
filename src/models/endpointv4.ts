@@ -8,32 +8,20 @@ import {
   EndpointServices$zodSchema,
 } from "./endpointservices.js";
 
-export type EndpointV4Configuration = {};
-
-export const EndpointV4Configuration$zodSchema: z.ZodType<
-  EndpointV4Configuration
-> = z.object({});
-
-export type SharedConfigurationOverride = {};
-
-export const SharedConfigurationOverride$zodSchema: z.ZodType<
-  SharedConfigurationOverride
-> = z.object({});
-
 export type EndpointV4 = {
   name?: string | undefined;
   type: string;
   weight?: number | undefined;
   inheritConfiguration?: boolean | undefined;
-  configuration?: EndpointV4Configuration | undefined;
-  sharedConfigurationOverride?: SharedConfigurationOverride | undefined;
+  configuration?: { [k: string]: any } | undefined;
+  sharedConfigurationOverride?: { [k: string]: any } | undefined;
   services?: EndpointServices | undefined;
   secondary?: boolean | undefined;
   tenants?: Array<string> | undefined;
 };
 
 export const EndpointV4$zodSchema: z.ZodType<EndpointV4> = z.object({
-  configuration: z.lazy(() => EndpointV4Configuration$zodSchema).optional(),
+  configuration: z.record(z.string(), z.any()).optional(),
   inheritConfiguration: z.boolean().default(false).describe(
     "Is the configuration of the endpoint inherited from the endpoint group it belongs to.",
   ),
@@ -42,9 +30,7 @@ export const EndpointV4$zodSchema: z.ZodType<EndpointV4> = z.object({
     "Is the endpoint a secondary endpoint.",
   ),
   services: EndpointServices$zodSchema.optional(),
-  sharedConfigurationOverride: z.lazy(() =>
-    SharedConfigurationOverride$zodSchema
-  ).optional(),
+  sharedConfigurationOverride: z.record(z.string(), z.any()).optional(),
   tenants: z.array(z.string()).optional().describe(
     "The list of tenants associated to the endpoint.",
   ),

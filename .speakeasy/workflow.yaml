@@ -4,6 +4,8 @@ sources:
     Gravitee.io APIM - Management API - APIs:
         inputs:
             - location: ./.speakeasy/openapi-apis.yaml
+        overlays:
+            - location: ./.speakeasy/apim-mcp-overlay.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-apim---management-api---ap-is
