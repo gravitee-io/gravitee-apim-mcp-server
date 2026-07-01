@@ -7,10 +7,6 @@ import { ServiceV4, ServiceV4$zodSchema } from "./servicev4.js";
 
 export type ApiServices = { dynamicProperty?: ServiceV4 | undefined };
 
-export const ApiServices$zodSchema: z.ZodType<
-  ApiServices,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const ApiServices$zodSchema: z.ZodType<ApiServices> = z.object({
   dynamicProperty: ServiceV4$zodSchema.optional(),
 });

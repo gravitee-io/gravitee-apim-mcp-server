@@ -6,10 +6,8 @@ import * as z from "zod";
 
 export type BaseSubscription = { id?: string | undefined };
 
-export const BaseSubscription$zodSchema: z.ZodType<
-  BaseSubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  id: z.string().optional(),
-});
+export const BaseSubscription$zodSchema: z.ZodType<BaseSubscription> = z.object(
+  {
+    id: z.string().optional().describe("Subscription's uuid."),
+  },
+);

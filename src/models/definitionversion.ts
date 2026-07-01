@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * API's gravitee definition version.
  */
+export const DefinitionVersion = {
+  V2: "V2",
+  V4: "V4",
+  Federated: "FEDERATED",
+  FederatedAgent: "FEDERATED_AGENT",
+} as const;
+/**
+ * API's gravitee definition version.
+ */
+export type DefinitionVersion = ClosedEnum<typeof DefinitionVersion>;
+
 export const DefinitionVersion$zodSchema = z.enum([
-  "V1",
   "V2",
   "V4",
   "FEDERATED",
+  "FEDERATED_AGENT",
 ]).describe("API's gravitee definition version.");
-
-export type DefinitionVersion = z.infer<typeof DefinitionVersion$zodSchema>;

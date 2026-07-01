@@ -11,10 +11,8 @@ export type IntegrationIngestionResponse = {
 };
 
 export const IntegrationIngestionResponse$zodSchema: z.ZodType<
-  IntegrationIngestionResponse,
-  z.ZodTypeDef,
-  unknown
+  IntegrationIngestionResponse
 > = z.object({
-  message: z.string().optional(),
-  status: AsyncJobStatus$zodSchema.optional(),
+  message: z.string().optional().describe("Integration Ingestion message."),
+  status: AsyncJobStatus$zodSchema.optional().describe("Status of the job."),
 });

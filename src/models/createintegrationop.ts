@@ -16,9 +16,7 @@ export type CreateIntegrationRequest = {
 };
 
 export const CreateIntegrationRequest$zodSchema: z.ZodType<
-  CreateIntegrationRequest,
-  z.ZodTypeDef,
-  unknown
+  CreateIntegrationRequest
 > = z.object({
   CreateIntegration: CreateIntegration$zodSchema,
   envId: z.string().default("DEFAULT").describe(
@@ -26,22 +24,11 @@ export const CreateIntegrationRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type CreateIntegrationResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Integration?: Integration | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateIntegrationResponse = Integration | ErrorT;
 
 export const CreateIntegrationResponse$zodSchema: z.ZodType<
-  CreateIntegrationResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Integration: Integration$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  CreateIntegrationResponse
+> = z.union([
+  Integration$zodSchema,
+  ErrorT$zodSchema,
+]);

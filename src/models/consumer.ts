@@ -10,8 +10,9 @@ export type Consumer = {
   consumerId?: string | undefined;
 };
 
-export const Consumer$zodSchema: z.ZodType<Consumer, z.ZodTypeDef, unknown> = z
-  .object({
-    consumerId: z.string().optional(),
-    consumerType: ConsumerType$zodSchema.default("TAG"),
-  });
+export const Consumer$zodSchema: z.ZodType<Consumer> = z.object({
+  consumerId: z.string().optional().describe("The id of the consumer."),
+  consumerType: ConsumerType$zodSchema.default("TAG").describe(
+    "The type of the consumer.",
+  ),
+});

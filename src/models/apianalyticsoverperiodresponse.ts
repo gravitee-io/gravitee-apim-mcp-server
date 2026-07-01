@@ -17,10 +17,10 @@ export type ApiAnalyticsOverPeriodResponse = {
 };
 
 export const ApiAnalyticsOverPeriodResponse$zodSchema: z.ZodType<
-  ApiAnalyticsOverPeriodResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiAnalyticsOverPeriodResponse
 > = z.object({
-  data: z.array(z.number().int()).optional(),
-  timeRange: AnalyticTimeRange$zodSchema.optional(),
+  data: z.array(z.int()).optional().describe(
+    "Response time average (in milliseconds) over time",
+  ),
+  timeRange: AnalyticTimeRange$zodSchema.optional().describe("A Time range"),
 }).describe("API Analytics integer data point on a period.");

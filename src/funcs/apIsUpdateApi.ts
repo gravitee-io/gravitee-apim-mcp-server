@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Update an API
  *
  * @remarks
+ * Update an API
+ *
  * Update a V2 or a V4 API.
  *
- * User must have API_DEFINITION[UPDATE] or API_GATEWAY_DEFINITION[UPDATE] permissions.
+ * Fetch the current API first, modify the complete API body, then submit the full update payload.
  */
 export function apIsUpdateApi(
   client$: GraviteeApimCore,
@@ -114,7 +116,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "updateApi",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -170,7 +172,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, UpdateApiResponse$zodSchema, { key: "Api" }),
-    M.json("default", UpdateApiResponse$zodSchema, { key: "Error" }),
+    M.json("default", UpdateApiResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

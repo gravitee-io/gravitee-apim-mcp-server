@@ -21,16 +21,16 @@ export type HealthCheckLog = {
   steps?: Array<HealthCheckLogStep> | undefined;
 };
 
-export const HealthCheckLog$zodSchema: z.ZodType<
-  HealthCheckLog,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  endpointName: z.string().optional(),
-  gatewayId: z.string().optional(),
-  id: z.string().optional(),
-  responseTime: z.number().int().optional(),
+export const HealthCheckLog$zodSchema: z.ZodType<HealthCheckLog> = z.object({
+  endpointName: z.string().optional().describe("The name of the endpoint"),
+  gatewayId: z.string().optional().describe(
+    "The id of the gateway that called the health check",
+  ),
+  id: z.string().optional().describe("The id of the log"),
+  responseTime: z.int().optional().describe("The response time in ms"),
   steps: z.array(HealthCheckLogStep$zodSchema).optional(),
-  success: z.boolean().optional(),
-  timestamp: z.string().datetime({ offset: true }).optional(),
+  success: z.boolean().optional().describe("The success of the health check"),
+  timestamp: z.iso.datetime({ offset: true }).optional().describe(
+    "The date of the log",
+  ),
 }).describe("A healh check log");

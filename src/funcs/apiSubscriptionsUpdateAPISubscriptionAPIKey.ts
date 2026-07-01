@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Update a subscription API Key
  *
  * @remarks
- * Update the subscription API Key.
+ * Update a subscription API Key
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Update the subscription API Key.
  */
 export function apiSubscriptionsUpdateAPISubscriptionAPIKey(
   client$: GraviteeApimCore,
@@ -124,7 +124,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "updateApiSubscriptionApiKey",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -183,7 +183,7 @@ async function $do(
       key: "ApiKey",
     }),
     M.json("default", UpdateApiSubscriptionApiKeyResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

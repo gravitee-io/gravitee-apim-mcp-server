@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Type of the quality of service.
  */
+export const Qos = {
+  None: "NONE",
+  Auto: "AUTO",
+  AtMostOnce: "AT_MOST_ONCE",
+  AtLeastOnce: "AT_LEAST_ONCE",
+} as const;
+/**
+ * Type of the quality of service.
+ */
+export type Qos = ClosedEnum<typeof Qos>;
+
 export const Qos$zodSchema = z.enum([
   "NONE",
   "AUTO",
   "AT_MOST_ONCE",
   "AT_LEAST_ONCE",
 ]).describe("Type of the quality of service.");
-
-export type Qos = z.infer<typeof Qos$zodSchema>;

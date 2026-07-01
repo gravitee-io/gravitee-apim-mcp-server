@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * API's flow mode.
  */
+export const FlowMode = {
+  BestMatch: "BEST_MATCH",
+  Default: "DEFAULT",
+} as const;
+/**
+ * API's flow mode.
+ */
+export type FlowMode = ClosedEnum<typeof FlowMode>;
+
 export const FlowMode$zodSchema = z.enum([
   "BEST_MATCH",
   "DEFAULT",
 ]).describe("API's flow mode.");
-
-export type FlowMode = z.infer<typeof FlowMode$zodSchema>;

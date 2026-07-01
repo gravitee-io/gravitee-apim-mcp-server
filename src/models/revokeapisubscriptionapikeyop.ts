@@ -14,9 +14,7 @@ export type RevokeApiSubscriptionApiKeyRequest = {
 };
 
 export const RevokeApiSubscriptionApiKeyRequest$zodSchema: z.ZodType<
-  RevokeApiSubscriptionApiKeyRequest,
-  z.ZodTypeDef,
-  unknown
+  RevokeApiSubscriptionApiKeyRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   apiKeyId: z.string().describe("Id of an API Key."),
@@ -26,22 +24,11 @@ export const RevokeApiSubscriptionApiKeyRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type RevokeApiSubscriptionApiKeyResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiKey?: ApiKey | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type RevokeApiSubscriptionApiKeyResponse = ApiKey | ErrorT;
 
 export const RevokeApiSubscriptionApiKeyResponse$zodSchema: z.ZodType<
-  RevokeApiSubscriptionApiKeyResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiKey: ApiKey$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  RevokeApiSubscriptionApiKeyResponse
+> = z.union([
+  ApiKey$zodSchema,
+  ErrorT$zodSchema,
+]);

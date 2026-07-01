@@ -17,10 +17,8 @@ export type ApiHealthAverageResponseTimeOvertimeResponse = {
 };
 
 export const ApiHealthAverageResponseTimeOvertimeResponse$zodSchema: z.ZodType<
-  ApiHealthAverageResponseTimeOvertimeResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiHealthAverageResponseTimeOvertimeResponse
 > = z.object({
-  data: z.array(z.number().int()).optional(),
-  timeRange: AnalyticTimeRange$zodSchema.optional(),
+  data: z.array(z.int()).optional().describe("Average response time buckets"),
+  timeRange: AnalyticTimeRange$zodSchema.optional().describe("A Time range"),
 }).describe("Average response time of an API Health-Check.");

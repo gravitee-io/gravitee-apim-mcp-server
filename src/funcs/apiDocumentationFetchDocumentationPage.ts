@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Fetch Content of API Documentation Page
  *
  * @remarks
- * Fetch Content of API Documentation Page. Returns the page with newly fetched content.
- * The page must have a configured source, otherwise an error is returned.
+ * Fetch Content of API Documentation Page
  *
- * User must have the API_DOCUMENTATION[UPDATE] permission.
+ * Fetch Content of API Documentation Page. Returns the page with newly fetched content. The page must have a configured source, otherwise an error is returned.
+ *
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apiDocumentationFetchDocumentationPage(
   client$: GraviteeApimCore,
@@ -120,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "fetchDocumentationPage",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -177,7 +178,7 @@ async function $do(
   >(
     M.json(200, FetchDocumentationPageResponse$zodSchema, { key: "Page" }),
     M.json("default", FetchDocumentationPageResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

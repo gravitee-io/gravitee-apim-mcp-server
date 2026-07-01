@@ -3,28 +3,46 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { Operator, Operator$zodSchema } from "./operator.js";
 
 /**
  * Selector type.
  */
+export const ChannelSelectorType = {
+  Http: "HTTP",
+  Channel: "CHANNEL",
+  Condition: "CONDITION",
+  Mcp: "MCP",
+} as const;
+/**
+ * Selector type.
+ */
+export type ChannelSelectorType = ClosedEnum<typeof ChannelSelectorType>;
+
 export const ChannelSelectorType$zodSchema = z.enum([
   "HTTP",
   "CHANNEL",
   "CONDITION",
+  "MCP",
 ]).describe("Selector type.");
-
-export type ChannelSelectorType = z.infer<typeof ChannelSelectorType$zodSchema>;
 
 /**
  * The operation associated with this channel selector.
  */
+export const Operation = {
+  Publish: "PUBLISH",
+  Subscribe: "SUBSCRIBE",
+} as const;
+/**
+ * The operation associated with this channel selector.
+ */
+export type Operation = ClosedEnum<typeof Operation>;
+
 export const Operation$zodSchema = z.enum([
   "PUBLISH",
   "SUBSCRIBE",
 ]).describe("The operation associated with this channel selector.");
-
-export type Operation = z.infer<typeof Operation$zodSchema>;
 
 export type ChannelSelector = {
   type: ChannelSelectorType;
@@ -34,14 +52,14 @@ export type ChannelSelector = {
   entrypoints?: Array<string> | undefined;
 };
 
-export const ChannelSelector$zodSchema: z.ZodType<
-  ChannelSelector,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  channel: z.string().default("/"),
-  channelOperator: Operator$zodSchema.default("STARTS_WITH"),
+export const ChannelSelector$zodSchema: z.ZodType<ChannelSelector> = z.object({
+  channel: z.string().default("/").describe("The channel of the selector"),
+  channelOperator: Operator$zodSchema.default("STARTS_WITH").describe(
+    "The path operator of the selector",
+  ),
   entrypoints: z.array(z.string()).optional(),
-  operations: z.array(Operation$zodSchema).optional(),
-  type: ChannelSelectorType$zodSchema,
+  operations: z.array(Operation$zodSchema).optional().describe(
+    "The list of operations associated with this channel selector.",
+  ),
+  type: ChannelSelectorType$zodSchema.describe("Selector type."),
 });

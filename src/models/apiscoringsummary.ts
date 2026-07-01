@@ -13,15 +13,22 @@ export type ApiScoringSummary = {
   hints?: number | undefined;
 };
 
-export const ApiScoringSummary$zodSchema: z.ZodType<
-  ApiScoringSummary,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  all: z.number().int().optional(),
-  errors: z.number().int().optional(),
-  hints: z.number().int().optional(),
-  infos: z.number().int().optional(),
-  score: z.number().optional(),
-  warnings: z.number().int().optional(),
-});
+export const ApiScoringSummary$zodSchema: z.ZodType<ApiScoringSummary> = z
+  .object({
+    all: z.int().optional().describe(
+      "The total number of violated rules for all assets.",
+    ),
+    errors: z.int().optional().describe(
+      "The total number of violated rules with severity ERROR for all assets.",
+    ),
+    hints: z.int().optional().describe(
+      "The total number of violated rules with severity HINT for all assets.",
+    ),
+    infos: z.int().optional().describe(
+      "The total number of violated rules with severity INFO for all assets.",
+    ),
+    score: z.number().optional().describe("The score of the API."),
+    warnings: z.int().optional().describe(
+      "The total number of violated rules with severity WARN for all assets.",
+    ),
+  });

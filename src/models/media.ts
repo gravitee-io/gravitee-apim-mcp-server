@@ -15,14 +15,15 @@ export type Media = {
   createdAt?: string | undefined;
 };
 
-export const Media$zodSchema: z.ZodType<Media, z.ZodTypeDef, unknown> = z
-  .object({
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    data: z.string().optional(),
-    fileName: z.string().optional(),
-    hash: z.string().optional(),
-    id: z.string().optional(),
-    size: z.number().int().optional(),
-    subType: z.string().optional(),
-    type: z.string().optional(),
-  });
+export const Media$zodSchema: z.ZodType<Media> = z.object({
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "Media's creation date.",
+  ),
+  data: z.string().optional().describe("Media's data."),
+  fileName: z.string().optional().describe("Media's file name."),
+  hash: z.string().optional().describe("Media's hash."),
+  id: z.string().optional().describe("Media's uuid."),
+  size: z.int().optional().describe("Media's size."),
+  subType: z.string().optional().describe("Media's sub type."),
+  type: z.string().optional().describe("Media's type."),
+});

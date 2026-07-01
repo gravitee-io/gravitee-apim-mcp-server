@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Get API Analytics average connection duration
  *
  * @remarks
- * Get API analytics average connection duration. Duration is only computed for ended requests.
- * TCP Proxy APIs are not supported.
+ * Get API Analytics average connection duration
  *
- * User must have the API_ANALYTICS[READ] permission.
+ * Get API analytics average connection duration. Duration is only computed for ended requests. TCP Proxy APIs are not supported.
+ *
+ * @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
  */
 export function apiAnalyticsGetAverageConnectionDuration(
   client$: GraviteeApimCore,
@@ -120,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getAverageConnectionDuration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -180,7 +181,7 @@ async function $do(
       key: "ApiAnalyticsAverageConnectionDurationResponse",
     }),
     M.json("default", GetAverageConnectionDurationResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

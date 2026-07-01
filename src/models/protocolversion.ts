@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The protocol version.
  */
+export const ProtocolVersion = {
+  Http11: "HTTP_1_1",
+  Http2: "HTTP_2",
+} as const;
+/**
+ * The protocol version.
+ */
+export type ProtocolVersion = ClosedEnum<typeof ProtocolVersion>;
+
 export const ProtocolVersion$zodSchema = z.enum([
   "HTTP_1_1",
   "HTTP_2",
 ]).describe("The protocol version.");
-
-export type ProtocolVersion = z.infer<typeof ProtocolVersion$zodSchema>;

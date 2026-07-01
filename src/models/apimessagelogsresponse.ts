@@ -8,7 +8,7 @@ import { Links, Links$zodSchema } from "./links.js";
 import { Pagination, Pagination$zodSchema } from "./pagination.js";
 
 /**
- * Page of API Messages Logs
+ * Page of Message metrics
  */
 export type ApiMessageLogsResponse = {
   data?: Array<ApiMessageLog> | undefined;
@@ -17,11 +17,13 @@ export type ApiMessageLogsResponse = {
 };
 
 export const ApiMessageLogsResponse$zodSchema: z.ZodType<
-  ApiMessageLogsResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiMessageLogsResponse
 > = z.object({
-  data: z.array(ApiMessageLog$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of API Messages Logs");
+  data: z.array(ApiMessageLog$zodSchema).optional().describe(
+    "List of Message metrics.",
+  ),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
+}).describe("Page of Message metrics");

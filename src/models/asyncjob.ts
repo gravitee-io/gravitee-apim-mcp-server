@@ -3,17 +3,27 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { AsyncJobStatus, AsyncJobStatus$zodSchema } from "./asyncjobstatus.js";
 
 /**
  * Resource id related to this job.
  */
+export const AsyncJobType = {
+  FederatedApisIngestion: "FEDERATED_APIS_INGESTION",
+  ScoringRequest: "SCORING_REQUEST",
+  AmUserSync: "AM_USER_SYNC",
+} as const;
+/**
+ * Resource id related to this job.
+ */
+export type AsyncJobType = ClosedEnum<typeof AsyncJobType>;
+
 export const AsyncJobType$zodSchema = z.enum([
   "FEDERATED_APIS_INGESTION",
   "SCORING_REQUEST",
+  "AM_USER_SYNC",
 ]).describe("Resource id related to this job.");
-
-export type AsyncJobType = z.infer<typeof AsyncJobType$zodSchema>;
 
 export type AsyncJob = {
   id?: string | undefined;
@@ -27,15 +37,24 @@ export type AsyncJob = {
   updatedAt?: string | undefined;
 };
 
-export const AsyncJob$zodSchema: z.ZodType<AsyncJob, z.ZodTypeDef, unknown> = z
-  .object({
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    environmentId: z.string().optional(),
-    errorMessage: z.string().optional(),
-    id: z.string().optional(),
-    initiatorId: z.string().optional(),
-    sourceId: z.string().optional(),
-    status: AsyncJobStatus$zodSchema.optional(),
-    type: AsyncJobType$zodSchema.optional(),
-    updatedAt: z.string().datetime({ offset: true }).optional(),
-  });
+export const AsyncJob$zodSchema: z.ZodType<AsyncJob> = z.object({
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The date when the job has been created.",
+  ),
+  environmentId: z.string().optional().describe("The environment id"),
+  errorMessage: z.string().optional().describe(
+    "A message detailing why the job failed.",
+  ),
+  id: z.string().optional().describe("Id of the job."),
+  initiatorId: z.string().optional().describe(
+    "User id who triggered this job.",
+  ),
+  sourceId: z.string().optional().describe("Resource id related to this job."),
+  status: AsyncJobStatus$zodSchema.optional().describe("Status of the job."),
+  type: AsyncJobType$zodSchema.optional().describe(
+    "Resource id related to this job.",
+  ),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The date when the job has been updated.",
+  ),
+});

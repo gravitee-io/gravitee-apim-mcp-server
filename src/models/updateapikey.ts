@@ -6,10 +6,8 @@ import * as z from "zod";
 
 export type UpdateApiKey = { expireAt?: string | undefined };
 
-export const UpdateApiKey$zodSchema: z.ZodType<
-  UpdateApiKey,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  expireAt: z.string().datetime({ offset: true }).optional(),
+export const UpdateApiKey$zodSchema: z.ZodType<UpdateApiKey> = z.object({
+  expireAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the API Key expires. No date means no expiration.",
+  ),
 });

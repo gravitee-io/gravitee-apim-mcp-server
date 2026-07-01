@@ -32,11 +32,9 @@ import { Result } from "../types/fp.js";
  * Import API definition
  *
  * @remarks
- * ⚠️ Support only v4 API for the moment. ⚠️<br>
- * Create an API by importing an API definition. <br>
- * This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`
+ * Import API definition
  *
- * User must have the ENVIRONMENT_API[CREATE] permission.
+ * ⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by importing an API definition. <br> This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`
  */
 export function apIsCreateApiWithImportDefinition(
   client$: GraviteeApimCore,
@@ -112,7 +110,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createApiWithImportDefinition",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -171,7 +169,7 @@ async function $do(
       key: "ApiV4",
     }),
     M.json("default", CreateApiWithImportDefinitionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

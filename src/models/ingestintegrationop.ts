@@ -17,9 +17,7 @@ export type IngestIntegrationRequest = {
 };
 
 export const IngestIntegrationRequest$zodSchema: z.ZodType<
-  IngestIntegrationRequest,
-  z.ZodTypeDef,
-  unknown
+  IngestIntegrationRequest
 > = z.object({
   ApisIngest: ApisIngest$zodSchema.optional(),
   envId: z.string().default("DEFAULT").describe(
@@ -28,23 +26,11 @@ export const IngestIntegrationRequest$zodSchema: z.ZodType<
   integrationId: z.string().describe("Id of an integration."),
 });
 
-export type IngestIntegrationResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  IntegrationIngestionResponse?: IntegrationIngestionResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type IngestIntegrationResponse = IntegrationIngestionResponse | ErrorT;
 
 export const IngestIntegrationResponse$zodSchema: z.ZodType<
-  IngestIntegrationResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  IntegrationIngestionResponse: IntegrationIngestionResponse$zodSchema
-    .optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  IngestIntegrationResponse
+> = z.union([
+  IntegrationIngestionResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

@@ -18,15 +18,25 @@ export type CreateSubscription = {
   apiKeyMode?: ApiKeyMode | undefined;
 };
 
-export const CreateSubscription$zodSchema: z.ZodType<
-  CreateSubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiKeyMode: ApiKeyMode$zodSchema.optional(),
-  applicationId: z.string(),
-  consumerConfiguration: SubscriptionConsumerConfiguration$zodSchema.optional(),
-  customApiKey: z.string().optional(),
-  metadata: z.record(z.string()).optional(),
-  planId: z.string(),
-});
+export const CreateSubscription$zodSchema: z.ZodType<CreateSubscription> = z
+  .object({
+    apiKeyMode: ApiKeyMode$zodSchema.optional().describe(
+      "The mode of an application regarding ApiKey plans.\n* UNSPECIFIED: no selected mode yet\n* EXCLUSIVE: an API Key is generated for each new subscription\n* SHARED: reuse always the same API Key for all subscriptions\n",
+    ),
+    applicationId: z.string().describe(
+      "The id of the application subscribing.",
+    ),
+    consumerConfiguration: SubscriptionConsumerConfiguration$zodSchema
+      .optional().describe(
+        "Consumer configuration associated to the subscription in case it is attached to a push plan.",
+      ),
+    customApiKey: z.string().optional().describe(
+      "Optional custom API Key that can be given when the subscription is related to an api-key plan and custom API Key support is enabled.",
+    ),
+    metadata: z.record(z.string(), z.string()).optional().describe(
+      "A list of metadata associated to this subscription.",
+    ),
+    planId: z.string().describe(
+      "The id plan the application is subscribing to.",
+    ),
+  });

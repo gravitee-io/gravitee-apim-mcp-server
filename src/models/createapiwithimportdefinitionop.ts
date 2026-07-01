@@ -16,9 +16,7 @@ export type CreateApiWithImportDefinitionRequest = {
 };
 
 export const CreateApiWithImportDefinitionRequest$zodSchema: z.ZodType<
-  CreateApiWithImportDefinitionRequest,
-  z.ZodTypeDef,
-  unknown
+  CreateApiWithImportDefinitionRequest
 > = z.object({
   ExportApiV4: ExportApiV4Input$zodSchema,
   envId: z.string().default("DEFAULT").describe(
@@ -26,22 +24,11 @@ export const CreateApiWithImportDefinitionRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type CreateApiWithImportDefinitionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiV4?: ApiV4Output | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateApiWithImportDefinitionResponse = ApiV4Output | ErrorT;
 
 export const CreateApiWithImportDefinitionResponse$zodSchema: z.ZodType<
-  CreateApiWithImportDefinitionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiV4: ApiV4Output$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  CreateApiWithImportDefinitionResponse
+> = z.union([
+  ApiV4Output$zodSchema,
+  ErrorT$zodSchema,
+]);

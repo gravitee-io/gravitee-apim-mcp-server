@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Reactivate subscription API Key
  *
  * @remarks
- * Reactivate the revoked or expired subscription API Key.
+ * Reactivate subscription API Key
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Reactivate the revoked or expired subscription API Key.
  */
 export function apiSubscriptionsReactivateAPISubscriptionAPIKey(
   client$: GraviteeApimCore,
@@ -123,7 +123,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "reactivateApiSubscriptionApiKey",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -182,7 +182,7 @@ async function $do(
       key: "ApiKey",
     }),
     M.json("default", ReactivateApiSubscriptionApiKeyResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

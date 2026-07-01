@@ -11,25 +11,24 @@ import { UpdateApiV2, UpdateApiV2$zodSchema } from "./updateapiv2.js";
 import { UpdateApiV4, UpdateApiV4$zodSchema } from "./updateapiv4.js";
 
 export type UpdateApi =
-  | (UpdateApiFederated & { definitionVersion: "FEDERATED" })
+  | (UpdateApiV4 & { definitionVersion: "V4" })
   | (UpdateApiV2 & { definitionVersion: "V2" })
-  | (UpdateApiV4 & { definitionVersion: "V4" });
+  | (UpdateApiFederated & { definitionVersion: "FEDERATED" });
 
-export const UpdateApi$zodSchema: z.ZodType<UpdateApi, z.ZodTypeDef, unknown> =
-  z.union([
-    UpdateApiFederated$zodSchema.and(
-      z.object({
-        definitionVersion: z.literal("FEDERATED"),
-      }).transform((v) => ({ definitionVersion: v.definitionVersion })),
-    ),
-    UpdateApiV2$zodSchema.and(
-      z.object({
-        definitionVersion: z.literal("V2"),
-      }).transform((v) => ({ definitionVersion: v.definitionVersion })),
-    ),
-    UpdateApiV4$zodSchema.and(
-      z.object({
-        definitionVersion: z.literal("V4"),
-      }).transform((v) => ({ definitionVersion: v.definitionVersion })),
-    ),
-  ]);
+export const UpdateApi$zodSchema: z.ZodType<UpdateApi> = z.union([
+  UpdateApiV4$zodSchema.and(
+    z.object({
+      definitionVersion: z.literal("V4"),
+    }).transform((v) => ({ definitionVersion: v.definitionVersion })),
+  ),
+  UpdateApiV2$zodSchema.and(
+    z.object({
+      definitionVersion: z.literal("V2"),
+    }).transform((v) => ({ definitionVersion: v.definitionVersion })),
+  ),
+  UpdateApiFederated$zodSchema.and(
+    z.object({
+      definitionVersion: z.literal("FEDERATED"),
+    }).transform((v) => ({ definitionVersion: v.definitionVersion })),
+  ),
+]);

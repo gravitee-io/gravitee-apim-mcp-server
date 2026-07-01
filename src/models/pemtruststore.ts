@@ -11,12 +11,8 @@ export type PEMTrustStore = {
   content?: string | undefined;
 };
 
-export const PEMTrustStore$zodSchema: z.ZodType<
-  PEMTrustStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  content: z.string().optional(),
-  path: z.string().optional(),
-  type: TrustStoreType$zodSchema,
+export const PEMTrustStore$zodSchema: z.ZodType<PEMTrustStore> = z.object({
+  content: z.string().optional().describe("The content of the trust store"),
+  path: z.string().optional().describe("The path of the trust store"),
+  type: TrustStoreType$zodSchema.describe("The type of the trust store."),
 });

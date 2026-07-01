@@ -8,14 +8,14 @@ import { PlanV2, PlanV2$zodSchema } from "./planv2.js";
 import { PlanV4, PlanV4$zodSchema } from "./planv4.js";
 
 export type Plan =
-  | (PlanFederated & { definitionVersion: "FEDERATED" })
+  | (PlanV2 & { definitionVersion: "V2" })
   | (PlanV4 & { definitionVersion: "V4" })
-  | (PlanV2 & { definitionVersion: "V2" });
+  | (PlanFederated & { definitionVersion: "FEDERATED" });
 
-export const Plan$zodSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z.union([
-  PlanFederated$zodSchema.and(
+export const Plan$zodSchema: z.ZodType<Plan> = z.union([
+  PlanV2$zodSchema.and(
     z.object({
-      definitionVersion: z.literal("FEDERATED"),
+      definitionVersion: z.literal("V2"),
     }).transform((v) => ({ definitionVersion: v.definitionVersion })),
   ),
   PlanV4$zodSchema.and(
@@ -23,9 +23,9 @@ export const Plan$zodSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z.union([
       definitionVersion: z.literal("V4"),
     }).transform((v) => ({ definitionVersion: v.definitionVersion })),
   ),
-  PlanV2$zodSchema.and(
+  PlanFederated$zodSchema.and(
     z.object({
-      definitionVersion: z.literal("V2"),
+      definitionVersion: z.literal("FEDERATED"),
     }).transform((v) => ({ definitionVersion: v.definitionVersion })),
   ),
 ]);

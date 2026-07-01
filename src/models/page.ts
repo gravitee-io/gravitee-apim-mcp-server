@@ -40,29 +40,51 @@ export type Page = {
   generalConditions?: boolean | undefined;
 };
 
-export const Page$zodSchema: z.ZodType<Page, z.ZodTypeDef, unknown> = z.object({
-  accessControls: z.array(AccessControl$zodSchema).optional(),
-  attachedMedia: z.array(PageMedia$zodSchema).optional(),
-  configuration: z.record(z.string()).optional(),
-  content: z.string().optional(),
+export const Page$zodSchema: z.ZodType<Page> = z.object({
+  accessControls: z.array(AccessControl$zodSchema).optional().describe(
+    "List of access controls.",
+  ),
+  attachedMedia: z.array(PageMedia$zodSchema).optional().describe(
+    "List of attached media.",
+  ),
+  configuration: z.record(z.string(), z.string()).optional().describe(
+    "Page's configuration.",
+  ),
+  content: z.string().optional().describe("Page's content."),
   contentRevision: Revision$zodSchema.optional(),
-  contentType: z.string().optional(),
-  crossId: z.string().optional(),
-  excludedAccessControls: z.boolean().optional(),
-  generalConditions: z.boolean().optional(),
-  hidden: z.boolean().optional(),
-  homepage: z.boolean().optional(),
-  id: z.string().optional(),
-  lastContributor: z.string().optional(),
-  metadata: z.record(z.string()).optional(),
-  name: z.string().optional(),
-  order: z.number().int().optional(),
-  parentId: z.string().optional(),
-  parentPath: z.string().optional(),
-  published: z.boolean().optional(),
+  contentType: z.string().optional().describe("Page's content type."),
+  crossId: z.string().optional().describe("Page's cross uuid."),
+  excludedAccessControls: z.boolean().optional().describe(
+    "Flag to restrict access to user matching the restrictions.",
+  ),
+  generalConditions: z.boolean().optional().describe(
+    "If page is used as General Conditions of an active plan.",
+  ),
+  hidden: z.boolean().optional().describe(
+    "If folder is published but not shown in Portal.",
+  ),
+  homepage: z.boolean().optional().describe("Page's homepage status."),
+  id: z.string().optional().describe("Page's uuid."),
+  lastContributor: z.string().optional().describe(
+    "Page's last contributor. Id of a user.",
+  ),
+  metadata: z.record(z.string(), z.string()).optional().describe(
+    "Page's metadata.",
+  ),
+  name: z.string().optional().describe("Page's name."),
+  order: z.int().optional().describe("Page's order."),
+  parentId: z.string().optional().describe("Page's parent id."),
+  parentPath: z.string().optional().describe("Page's parent path."),
+  published: z.boolean().optional().describe("Page's published status."),
   source: PageSource$zodSchema.optional(),
-  translations: z.array(z.lazy(() => Page$zodSchema)).optional(),
-  type: PageType$zodSchema.optional(),
-  updatedAt: z.string().datetime({ offset: true }).optional(),
-  visibility: Visibility$zodSchema.optional(),
+  translations: z.array(z.lazy(() => Page$zodSchema)).optional().describe(
+    "List of page translations.",
+  ),
+  type: PageType$zodSchema.optional().describe("The type of the page."),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "Page's last update date.",
+  ),
+  visibility: Visibility$zodSchema.default("PRIVATE").describe(
+    "The visibility of the resource regarding the portal.",
+  ),
 }).describe("Documentation page. Can be of multiple formats.");

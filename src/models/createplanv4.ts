@@ -29,27 +29,61 @@ export type CreatePlanV4 = {
   validation?: PlanValidation | undefined;
   flows?: Array<FlowV4> | undefined;
   mode?: PlanMode | undefined;
+  bootstrapPort?: number | undefined;
+  brokerRangeStart?: number | undefined;
+  brokerRangeEnd?: number | undefined;
 };
 
-export const CreatePlanV4$zodSchema: z.ZodType<
-  CreatePlanV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const CreatePlanV4$zodSchema: z.ZodType<CreatePlanV4> = z.object({
+  bootstrapPort: z.int().optional().describe(
+    "Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.",
+  ),
+  brokerRangeEnd: z.int().optional().describe(
+    "End of broker port range for port-based routing (native Kafka APIs only).",
+  ),
+  brokerRangeStart: z.int().optional().describe(
+    "Start of broker port range for port-based routing (native Kafka APIs only).",
+  ),
   characteristics: z.array(z.string()).optional(),
-  commentMessage: z.string().optional(),
-  commentRequired: z.boolean().optional(),
-  crossId: z.string().optional(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
-  excludedGroups: z.array(z.string()).optional(),
+  commentMessage: z.string().optional().describe(
+    "A message from the API Publisher that is displayed to the consumer at subscription time.",
+  ),
+  commentRequired: z.boolean().optional().describe(
+    "A flag indicating if the consumer has to write a \"consumer message\" or if he/she can leave the field blank.",
+  ),
+  crossId: z.string().optional().describe(
+    "Plan's crossId. Identifies plan across environments.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "Plan's description. A short description of your Plan.",
+  ),
+  excludedGroups: z.array(z.string()).optional().describe(
+    "Groups of users which are not allowed to subscribe to this plan.",
+  ),
   flows: z.array(FlowV4$zodSchema).optional(),
-  generalConditions: z.string().optional(),
-  mode: PlanMode$zodSchema.optional(),
-  name: z.string().optional(),
-  order: z.number().int().optional(),
+  generalConditions: z.string().optional().describe(
+    "This field contains the UUID of the documentation page that is used as General Conditions.",
+  ),
+  mode: PlanMode$zodSchema.optional().describe(
+    "The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).",
+  ),
+  name: z.string().optional().describe(
+    "Plan's name. Duplicate names can exists.",
+  ),
+  order: z.int().optional().describe(
+    "Simple order that could be used by a front end to display plans in a certain order. To highlight a plan on the portal for instance.",
+  ),
   security: PlanSecurity$zodSchema.optional(),
-  selectionRule: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  validation: PlanValidation$zodSchema.optional(),
+  selectionRule: z.string().optional().describe(
+    "An optional EL expression that will be evaluated at request time to select this plan.",
+  ),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this plan.",
+  ),
+  validation: PlanValidation$zodSchema.optional().describe(
+    "Plan validation type.",
+  ),
 });

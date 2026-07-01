@@ -18,9 +18,7 @@ export type UpdateDocumentationPageRequest = {
 };
 
 export const UpdateDocumentationPageRequest$zodSchema: z.ZodType<
-  UpdateDocumentationPageRequest,
-  z.ZodTypeDef,
-  unknown
+  UpdateDocumentationPageRequest
 > = z.object({
   UpdateDocumentation: UpdateDocumentation$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -30,22 +28,11 @@ export const UpdateDocumentationPageRequest$zodSchema: z.ZodType<
   pageId: z.string().describe("Id of a documentation page."),
 });
 
-export type UpdateDocumentationPageResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Page?: Page | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type UpdateDocumentationPageResponse = Page | ErrorT;
 
 export const UpdateDocumentationPageResponse$zodSchema: z.ZodType<
-  UpdateDocumentationPageResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Page: Page$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  UpdateDocumentationPageResponse
+> = z.union([
+  Page$zodSchema,
+  ErrorT$zodSchema,
+]);

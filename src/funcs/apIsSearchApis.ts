@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * Search APIs
  *
  * @remarks
- * Search APIs for a specific environment.<br>
- * The results are paginated and can be sorted.
+ * Search APIs
  *
- * User must have the ENVIRONMENT_API[READ] permission.
+ * Search APIs for a specific environment.<br> The results are paginated and can be sorted.
  */
 export function apIsSearchApis(
   client$: GraviteeApimCore,
@@ -118,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "searchApis",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +174,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, SearchApisResponse$zodSchema, { key: "ApisResponse" }),
-    M.json("default", SearchApisResponse$zodSchema, { key: "Error" }),
+    M.json("default", SearchApisResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

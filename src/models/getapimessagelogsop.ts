@@ -7,49 +7,57 @@ import {
   ApiMessageLogsResponse,
   ApiMessageLogsResponse$zodSchema,
 } from "./apimessagelogsresponse.js";
+import { ConnectorType, ConnectorType$zodSchema } from "./connectortype.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
+import {
+  MessageOperation,
+  MessageOperation$zodSchema,
+} from "./messageoperation.js";
 
 export type GetApiMessageLogsRequest = {
   envId?: string | undefined;
   apiId: string;
-  requestId: string;
   page?: number | undefined;
   perPage?: number | undefined;
+  connectorType?: ConnectorType | undefined;
+  connectorId?: string | undefined;
+  operation?: MessageOperation | undefined;
+  from?: number | undefined;
+  to?: number | undefined;
 };
 
 export const GetApiMessageLogsRequest$zodSchema: z.ZodType<
-  GetApiMessageLogsRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiMessageLogsRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
+  connectorId: z.string().describe(
+    "Connector ID (plugin ID) to filter on. If unset, no filtering is applied.",
+  ).optional(),
+  connectorType: ConnectorType$zodSchema.optional().describe(
+    "Connector type to filter on. If unset, no filtering is applied.",
+  ),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  from: z.int().describe(
+    "The timestamp from which the logs will be returned.\n",
+  ).optional(),
+  operation: MessageOperation$zodSchema.optional().describe(
+    "Operation to filter on. If unset, no filtering is applied.",
   ),
-  requestId: z.string().describe("Id of a request."),
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
+  ),
+  to: z.int().describe("The timestamp to which the logs will be returned.\n")
+    .optional(),
 });
 
-export type GetApiMessageLogsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiMessageLogsResponse?: ApiMessageLogsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiMessageLogsResponse = ApiMessageLogsResponse | ErrorT;
 
 export const GetApiMessageLogsResponse$zodSchema: z.ZodType<
-  GetApiMessageLogsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiMessageLogsResponse: ApiMessageLogsResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiMessageLogsResponse
+> = z.union([
+  ApiMessageLogsResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

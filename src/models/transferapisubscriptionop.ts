@@ -18,9 +18,7 @@ export type TransferApiSubscriptionRequest = {
 };
 
 export const TransferApiSubscriptionRequest$zodSchema: z.ZodType<
-  TransferApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  TransferApiSubscriptionRequest
 > = z.object({
   TransferSubscription: TransferSubscription$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -30,22 +28,11 @@ export const TransferApiSubscriptionRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type TransferApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Subscription?: Subscription | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type TransferApiSubscriptionResponse = Subscription | ErrorT;
 
 export const TransferApiSubscriptionResponse$zodSchema: z.ZodType<
-  TransferApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  Subscription: Subscription$zodSchema.optional(),
-});
+  TransferApiSubscriptionResponse
+> = z.union([
+  Subscription$zodSchema,
+  ErrorT$zodSchema,
+]);

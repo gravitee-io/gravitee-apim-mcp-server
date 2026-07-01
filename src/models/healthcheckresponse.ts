@@ -6,10 +6,7 @@ import * as z from "zod";
 
 export type HealthCheckResponse = { assertions?: Array<string> | undefined };
 
-export const HealthCheckResponse$zodSchema: z.ZodType<
-  HealthCheckResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  assertions: z.array(z.string()).optional(),
-});
+export const HealthCheckResponse$zodSchema: z.ZodType<HealthCheckResponse> = z
+  .object({
+    assertions: z.array(z.string()).optional(),
+  });

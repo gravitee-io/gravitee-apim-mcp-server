@@ -15,9 +15,7 @@ export type ListApiAuditEventsRequest = {
 };
 
 export const ListApiAuditEventsRequest$zodSchema: z.ZodType<
-  ListApiAuditEventsRequest,
-  z.ZodTypeDef,
-  unknown
+  ListApiAuditEventsRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -25,22 +23,11 @@ export const ListApiAuditEventsRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type ListApiAuditEventsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  AuditEventsResponse?: AuditEventsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListApiAuditEventsResponse = AuditEventsResponse | ErrorT;
 
 export const ListApiAuditEventsResponse$zodSchema: z.ZodType<
-  ListApiAuditEventsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  AuditEventsResponse: AuditEventsResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  ListApiAuditEventsResponse
+> = z.union([
+  AuditEventsResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

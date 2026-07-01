@@ -21,23 +21,48 @@ export type HttpClientOptions = {
   followRedirects?: boolean | undefined;
   clearTextUpgrade?: boolean | undefined;
   version?: ProtocolVersion | undefined;
+  maxHeaderSize?: number | undefined;
+  maxChunkSize?: number | undefined;
 };
 
-export const HttpClientOptions$zodSchema: z.ZodType<
-  HttpClientOptions,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  clearTextUpgrade: z.boolean().default(true),
-  connectTimeout: z.number().int().default(5000),
-  followRedirects: z.boolean().default(false),
-  idleTimeout: z.number().int().default(60000),
-  keepAlive: z.boolean().default(true),
-  keepAliveTimeout: z.number().int().default(30000),
-  maxConcurrentConnections: z.number().int().default(100),
-  pipelining: z.boolean().default(false),
-  propagateClientAcceptEncoding: z.boolean().default(false),
-  readTimeout: z.number().int().default(10000),
-  useCompression: z.boolean().default(true),
-  version: ProtocolVersion$zodSchema.default("HTTP_1_1"),
-});
+export const HttpClientOptions$zodSchema: z.ZodType<HttpClientOptions> = z
+  .object({
+    clearTextUpgrade: z.boolean().default(true).describe(
+      "Clear text upgrade or not",
+    ),
+    connectTimeout: z.int().default(5000).describe(
+      "The connect timeout of the http client in ms",
+    ),
+    followRedirects: z.boolean().default(false).describe(
+      "Follow redirects or not",
+    ),
+    idleTimeout: z.int().default(60000).describe(
+      "The idle timeout of the http client in ms",
+    ),
+    keepAlive: z.boolean().default(true).describe(
+      "The keep alive parameter of the http client",
+    ),
+    keepAliveTimeout: z.int().default(30000).describe(
+      "The keep-alive timeout of the http client in ms",
+    ),
+    maxChunkSize: z.int().default(8192).describe("Maximum chunk size value"),
+    maxConcurrentConnections: z.int().default(100).describe(
+      "The max connections of the http client",
+    ),
+    maxHeaderSize: z.int().default(8192).describe("Maximum header size value"),
+    pipelining: z.boolean().default(false).describe(
+      "The pipelining parameter of the http client",
+    ),
+    propagateClientAcceptEncoding: z.boolean().default(false).describe(
+      "Propagate the client accept encoding or not",
+    ),
+    readTimeout: z.int().default(10000).describe(
+      "The read timeout of the http client in ms",
+    ),
+    useCompression: z.boolean().default(true).describe(
+      "Use compression or not",
+    ),
+    version: ProtocolVersion$zodSchema.default("HTTP_1_1").describe(
+      "The protocol version.",
+    ),
+  });

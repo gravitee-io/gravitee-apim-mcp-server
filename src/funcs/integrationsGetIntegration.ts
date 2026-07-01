@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get a specific Integration
  *
  * @remarks
- * Get a specific Integration.
+ * Get a specific Integration
  *
- * User must have at least one management (create, update, or delete) permission on the Integration to access it.
+ * Get a specific Integration.
  */
 export function integrationsGetIntegration(
   client$: GraviteeApimCore,
@@ -115,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getIntegration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -171,7 +171,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetIntegrationResponse$zodSchema, { key: "Integration" }),
-    M.json("default", GetIntegrationResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetIntegrationResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

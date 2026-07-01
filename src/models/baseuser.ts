@@ -12,8 +12,7 @@ export type BaseUser = {
   displayName?: string | undefined;
 };
 
-export const BaseUser$zodSchema: z.ZodType<BaseUser, z.ZodTypeDef, unknown> = z
-  .object({
-    displayName: z.string().optional(),
-    id: z.string().optional(),
-  }).describe("Base information about a user.");
+export const BaseUser$zodSchema: z.ZodType<BaseUser> = z.object({
+  displayName: z.string().optional().describe("User's name."),
+  id: z.string().optional().describe("User's uuid."),
+}).describe("Base information about a user.");

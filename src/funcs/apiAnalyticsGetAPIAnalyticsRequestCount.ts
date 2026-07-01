@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Get API Analytics requests count
  *
  * @remarks
- * Get API analytics request count.
- * TCP Proxy APIs are not supported.
+ * Get API Analytics requests count
  *
- * User must have the API_ANALYTICS[READ] permission.
+ * Get API analytics request count. TCP Proxy APIs are not supported.
+ *
+ * @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
  */
 export function apiAnalyticsGetAPIAnalyticsRequestCount(
   client$: GraviteeApimCore,
@@ -120,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiAnalyticsRequestCount",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -180,7 +181,7 @@ async function $do(
       key: "ApiAnalyticsRequestsCountResponse",
     }),
     M.json("default", GetApiAnalyticsRequestCountResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

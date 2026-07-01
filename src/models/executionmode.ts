@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The execution mode of the API.
  */
+export const ExecutionMode = {
+  V3: "V3",
+  V4EmulationEngine: "V4_EMULATION_ENGINE",
+} as const;
+/**
+ * The execution mode of the API.
+ */
+export type ExecutionMode = ClosedEnum<typeof ExecutionMode>;
+
 export const ExecutionMode$zodSchema = z.enum([
   "V3",
   "V4_EMULATION_ENGINE",
 ]).describe("The execution mode of the API.");
-
-export type ExecutionMode = z.infer<typeof ExecutionMode$zodSchema>;

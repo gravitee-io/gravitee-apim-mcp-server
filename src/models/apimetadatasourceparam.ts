@@ -3,12 +3,15 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const ApiMetadataSourceParam = {
+  Global: "GLOBAL",
+  Api: "API",
+} as const;
+export type ApiMetadataSourceParam = ClosedEnum<typeof ApiMetadataSourceParam>;
 
 export const ApiMetadataSourceParam$zodSchema = z.enum([
   "GLOBAL",
   "API",
 ]);
-
-export type ApiMetadataSourceParam = z.infer<
-  typeof ApiMetadataSourceParam$zodSchema
->;

@@ -12,13 +12,9 @@ export type JKSTrustStore = {
   password?: string | undefined;
 };
 
-export const JKSTrustStore$zodSchema: z.ZodType<
-  JKSTrustStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  content: z.string().optional(),
-  password: z.string().optional(),
-  path: z.string().optional(),
-  type: TrustStoreType$zodSchema,
+export const JKSTrustStore$zodSchema: z.ZodType<JKSTrustStore> = z.object({
+  content: z.string().optional().describe("The content of the trust store"),
+  password: z.string().optional().describe("The password of the trust store"),
+  path: z.string().optional().describe("The path of the trust store"),
+  type: TrustStoreType$zodSchema.describe("The type of the trust store."),
 });

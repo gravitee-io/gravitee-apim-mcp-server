@@ -11,12 +11,8 @@ export type VerifyApiHosts = {
   hosts: Array<string>;
 };
 
-export const VerifyApiHosts$zodSchema: z.ZodType<
-  VerifyApiHosts,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const VerifyApiHosts$zodSchema: z.ZodType<VerifyApiHosts> = z.object({
   apiId: z.string().optional(),
   hosts: z.array(z.string()),
-  listenerType: ListenerType$zodSchema.optional(),
+  listenerType: ListenerType$zodSchema.optional().describe("Listener type."),
 });

@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$groupsListGroupMembers: ToolDefinition<typeof args> = {
-  name: "groups-list-group-members",
+  name: "list_group_members",
   description: `List a group's members
 
-List the members of a given group.
-
-User must have the GROUP_MEMBER[READ] permission.
-`,
+List the members of a given group.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Group Members",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await groupsListGroupMembers(

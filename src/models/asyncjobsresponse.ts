@@ -16,12 +16,13 @@ export type AsyncJobsResponse = {
   links?: Links | undefined;
 };
 
-export const AsyncJobsResponse$zodSchema: z.ZodType<
-  AsyncJobsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(AsyncJob$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of async jobs");
+export const AsyncJobsResponse$zodSchema: z.ZodType<AsyncJobsResponse> = z
+  .object({
+    data: z.array(AsyncJob$zodSchema).optional().describe(
+      "List of Async Jobs.",
+    ),
+    links: Links$zodSchema.optional().describe("List of links for pagination"),
+    pagination: Pagination$zodSchema.optional().describe(
+      "Generic object to handle pagination data.",
+    ),
+  }).describe("Page of async jobs");

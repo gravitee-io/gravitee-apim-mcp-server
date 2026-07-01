@@ -15,34 +15,21 @@ export type UpdateApiMemberRequest = {
 };
 
 export const UpdateApiMemberRequest$zodSchema: z.ZodType<
-  UpdateApiMemberRequest,
-  z.ZodTypeDef,
-  unknown
+  UpdateApiMemberRequest
 > = z.object({
   UpdateMember: UpdateMember$zodSchema,
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  memberId: z.string().describe("Id of an API member."),
+  memberId: z.string().describe("The memberId path parameter."),
 });
 
-export type UpdateApiMemberResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Member?: Member | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type UpdateApiMemberResponse = Member | ErrorT;
 
 export const UpdateApiMemberResponse$zodSchema: z.ZodType<
-  UpdateApiMemberResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Member: Member$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  UpdateApiMemberResponse
+> = z.union([
+  Member$zodSchema,
+  ErrorT$zodSchema,
+]);

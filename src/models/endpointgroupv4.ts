@@ -12,11 +12,8 @@ import { LoadBalancer, LoadBalancer$zodSchema } from "./loadbalancer.js";
 
 export type SharedConfiguration = {};
 
-export const SharedConfiguration$zodSchema: z.ZodType<
-  SharedConfiguration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({});
+export const SharedConfiguration$zodSchema: z.ZodType<SharedConfiguration> = z
+  .object({});
 
 export type EndpointGroupV4 = {
   name?: string | undefined;
@@ -27,15 +24,11 @@ export type EndpointGroupV4 = {
   services?: EndpointGroupServices | undefined;
 };
 
-export const EndpointGroupV4$zodSchema: z.ZodType<
-  EndpointGroupV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const EndpointGroupV4$zodSchema: z.ZodType<EndpointGroupV4> = z.object({
   endpoints: z.array(EndpointV4$zodSchema).optional(),
   loadBalancer: LoadBalancer$zodSchema.optional(),
-  name: z.string().optional(),
+  name: z.string().optional().describe("The name of the endpoint group"),
   services: EndpointGroupServices$zodSchema.optional(),
   sharedConfiguration: z.lazy(() => SharedConfiguration$zodSchema).optional(),
-  type: z.string(),
+  type: z.string().describe("The type of the endpoint group"),
 });

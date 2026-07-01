@@ -3,14 +3,21 @@
  */
 
 import * as z from "zod";
+import {
+  TracingRedactionConfig,
+  TracingRedactionConfig$zodSchema,
+} from "./tracingredactionconfig.js";
 
 export type TracingV4 = {
   enabled?: boolean | undefined;
   verbose?: boolean | undefined;
+  redaction?: TracingRedactionConfig | undefined;
 };
 
-export const TracingV4$zodSchema: z.ZodType<TracingV4, z.ZodTypeDef, unknown> =
-  z.object({
-    enabled: z.boolean().optional(),
-    verbose: z.boolean().optional(),
-  });
+export const TracingV4$zodSchema: z.ZodType<TracingV4> = z.object({
+  enabled: z.boolean().optional().describe("Enable OpenTelemetry tracing"),
+  redaction: TracingRedactionConfig$zodSchema.optional(),
+  verbose: z.boolean().optional().describe(
+    "Enable technical tracing to get more details on request execution. Be careful this settings would generate more noise and would impact performance.",
+  ),
+});

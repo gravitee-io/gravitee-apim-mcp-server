@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$integrationsGetIntegration: ToolDefinition<typeof args> = {
-  name: "integrations-get-integration",
+  name: "get_integration",
   description: `Get a specific Integration
 
-Get a specific Integration.
-
-User must have at least one management (create, update, or delete) permission on the Integration to access it.`,
+Get a specific Integration.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Integration",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsGetIntegration(

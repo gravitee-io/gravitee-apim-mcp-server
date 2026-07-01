@@ -15,13 +15,19 @@ export type UpdateSubscription = {
   endingAt?: string | undefined;
 };
 
-export const UpdateSubscription$zodSchema: z.ZodType<
-  UpdateSubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  consumerConfiguration: SubscriptionConsumerConfiguration$zodSchema.optional(),
-  endingAt: z.string().datetime({ offset: true }).optional(),
-  metadata: z.record(z.string()).optional(),
-  startingAt: z.string().datetime({ offset: true }).optional(),
-});
+export const UpdateSubscription$zodSchema: z.ZodType<UpdateSubscription> = z
+  .object({
+    consumerConfiguration: SubscriptionConsumerConfiguration$zodSchema
+      .optional().describe(
+        "Consumer configuration associated to the subscription in case it is attached to a push plan.",
+      ),
+    endingAt: z.iso.datetime({ offset: true }).optional().describe(
+      "The datetime when the subscription ends. No ending date means the subscription never ends.",
+    ),
+    metadata: z.record(z.string(), z.string()).optional().describe(
+      "A list of metadata associated to this subscription.",
+    ),
+    startingAt: z.iso.datetime({ offset: true }).optional().describe(
+      "The datetime when the subscription starts. No starting date means the subscription starts immediately.",
+    ),
+  });

@@ -7,7 +7,7 @@ import { RoleScope, RoleScope$zodSchema } from "./rolescope.js";
 
 export type Role = { name?: string | undefined; scope?: RoleScope | undefined };
 
-export const Role$zodSchema: z.ZodType<Role, z.ZodTypeDef, unknown> = z.object({
-  name: z.string().optional(),
-  scope: RoleScope$zodSchema.optional(),
+export const Role$zodSchema: z.ZodType<Role> = z.object({
+  name: z.string().optional().describe("Role's name."),
+  scope: RoleScope$zodSchema.optional().describe("Scope of a role."),
 });

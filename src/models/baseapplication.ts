@@ -16,16 +16,20 @@ export type BaseApplication = {
   apiKeyMode?: ApiKeyMode | undefined;
 };
 
-export const BaseApplication$zodSchema: z.ZodType<
-  BaseApplication,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiKeyMode: ApiKeyMode$zodSchema.optional(),
-  description: z.string().optional(),
-  domain: z.string().optional(),
-  id: z.string().optional(),
-  name: z.string().optional(),
+export const BaseApplication$zodSchema: z.ZodType<BaseApplication> = z.object({
+  apiKeyMode: ApiKeyMode$zodSchema.optional().describe(
+    "The mode of an application regarding ApiKey plans.\n* UNSPECIFIED: no selected mode yet\n* EXCLUSIVE: an API Key is generated for each new subscription\n* SHARED: reuse always the same API Key for all subscriptions\n",
+  ),
+  description: z.string().optional().describe(
+    "Application's description. A short description of your App.",
+  ),
+  domain: z.string().optional().describe(
+    "Application's domain. Domain used by application, if relevant.",
+  ),
+  id: z.string().optional().describe("Application's uuid."),
+  name: z.string().optional().describe(
+    "Application's name. Duplicate names can exist.",
+  ),
   primaryOwner: PrimaryOwner$zodSchema.optional(),
-  type: z.string().optional(),
+  type: z.string().optional().describe("Application's type."),
 });

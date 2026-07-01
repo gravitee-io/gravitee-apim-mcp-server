@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiEventsGetAPIEvents: ToolDefinition<typeof args> = {
-  name: "API-events-get-api-events",
+  name: "get_api_events",
   description: `Get API Events
 
-Get API Events.
-
-User must have the API_EVENT[READ] permission.`,
+Get API Events.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Events",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiEventsGetAPIEvents(

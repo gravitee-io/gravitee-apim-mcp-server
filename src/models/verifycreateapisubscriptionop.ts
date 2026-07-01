@@ -20,9 +20,7 @@ export type VerifyCreateApiSubscriptionRequest = {
 };
 
 export const VerifyCreateApiSubscriptionRequest$zodSchema: z.ZodType<
-  VerifyCreateApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  VerifyCreateApiSubscriptionRequest
 > = z.object({
   VerifySubscription: VerifySubscription$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -31,22 +29,13 @@ export const VerifyCreateApiSubscriptionRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type VerifyCreateApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  VerifySubscriptionResponse?: VerifySubscriptionResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type VerifyCreateApiSubscriptionResponse =
+  | VerifySubscriptionResponse
+  | ErrorT;
 
 export const VerifyCreateApiSubscriptionResponse$zodSchema: z.ZodType<
-  VerifyCreateApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  VerifySubscriptionResponse: VerifySubscriptionResponse$zodSchema.optional(),
-});
+  VerifyCreateApiSubscriptionResponse
+> = z.union([
+  VerifySubscriptionResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

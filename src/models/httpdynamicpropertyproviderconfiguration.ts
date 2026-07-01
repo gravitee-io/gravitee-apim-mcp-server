@@ -21,15 +21,23 @@ export type HttpDynamicPropertyProviderConfiguration = {
 };
 
 export const HttpDynamicPropertyProviderConfiguration$zodSchema: z.ZodType<
-  HttpDynamicPropertyProviderConfiguration,
-  z.ZodTypeDef,
-  unknown
+  HttpDynamicPropertyProviderConfiguration
 > = z.object({
-  body: z.string().optional(),
+  body: z.string().optional().describe("The body of the request"),
   headers: z.array(HttpHeader$zodSchema).optional(),
-  method: HttpMethod$zodSchema.optional(),
-  provider: DynamicPropertyProvider$zodSchema,
-  specification: z.string().optional(),
-  url: z.string().optional(),
-  useSystemProxy: z.boolean().default(false),
+  method: HttpMethod$zodSchema.optional().describe(
+    "The method of the selector",
+  ),
+  provider: DynamicPropertyProvider$zodSchema.describe(
+    "The type of the dynamic property provider.",
+  ),
+  specification: z.string().optional().describe(
+    "The specification of the dynamic property provider",
+  ),
+  url: z.string().optional().describe(
+    "The url of the dynamic property provider",
+  ),
+  useSystemProxy: z.boolean().default(false).describe(
+    "Use the system proxy or not",
+  ),
 });

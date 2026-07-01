@@ -9,11 +9,8 @@ import * as z from "zod";
  */
 export type StepV4Configuration = {};
 
-export const StepV4Configuration$zodSchema: z.ZodType<
-  StepV4Configuration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({}).describe("The configuration of the step");
+export const StepV4Configuration$zodSchema: z.ZodType<StepV4Configuration> = z
+  .object({}).describe("The configuration of the step");
 
 export type StepV4 = {
   name?: string | undefined;
@@ -25,13 +22,15 @@ export type StepV4 = {
   messageCondition?: string | undefined;
 };
 
-export const StepV4$zodSchema: z.ZodType<StepV4, z.ZodTypeDef, unknown> = z
-  .object({
-    condition: z.string().optional(),
-    configuration: z.lazy(() => StepV4Configuration$zodSchema).optional(),
-    description: z.string().optional(),
-    enabled: z.boolean().default(true),
-    messageCondition: z.string().optional(),
-    name: z.string().optional(),
-    policy: z.string().optional(),
-  });
+export const StepV4$zodSchema: z.ZodType<StepV4> = z.object({
+  condition: z.string().optional().describe("The condition of the step"),
+  configuration: z.lazy(() => StepV4Configuration$zodSchema).optional()
+    .describe("The configuration of the step"),
+  description: z.string().optional().describe("The description of the step"),
+  enabled: z.boolean().default(true).describe("Is the step enabled or not."),
+  messageCondition: z.string().optional().describe(
+    "The message condition of the step",
+  ),
+  name: z.string().optional().describe("The name of the step"),
+  policy: z.string().optional().describe("The policy of the step"),
+});

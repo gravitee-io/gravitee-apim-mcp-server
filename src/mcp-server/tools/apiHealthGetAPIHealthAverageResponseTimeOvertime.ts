@@ -12,12 +12,18 @@ const args = {
 
 export const tool$apiHealthGetAPIHealthAverageResponseTimeOvertime:
   ToolDefinition<typeof args> = {
-    name: "API-health-get-api-health-average-response-time-overtime",
+    name: "get_api_health_average_response_time_overtime",
     description: `Get API Health Check average response time overtime
 
-Get API Health Check average response time overtime. 
-
-User must have the API_HEALTH[READ] permission.`,
+Get API Health Check average response time overtime.`,
+    scopes: ["read"],
+    annotations: {
+      "title": "Get Api Health Average Response Time Overtime",
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
     args,
     tool: async (client, args, ctx) => {
       const [result, apiCall] =

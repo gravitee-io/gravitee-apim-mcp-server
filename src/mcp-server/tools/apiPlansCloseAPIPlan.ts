@@ -11,12 +11,20 @@ const args = {
 };
 
 export const tool$apiPlansCloseAPIPlan: ToolDefinition<typeof args> = {
-  name: "API-plans-close-api-plan",
+  name: "close_api_plan",
   description: `Close an API's plan
 
 Close the API's plan.
 
-User must have the API_PLAN[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Close Api Plan",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansCloseAPIPlan(

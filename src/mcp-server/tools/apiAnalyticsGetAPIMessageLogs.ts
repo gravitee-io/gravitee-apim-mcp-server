@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiAnalyticsGetAPIMessageLogs: ToolDefinition<typeof args> = {
-  name: "API-analytics-get-api-message-logs",
+  name: "get_api_message_logs",
   description: `Get API Messages logs
 
-Get API Messages logs.
-
-User must have the API_LOG[READ] permission.`,
+Get API Messages logs. Allow filtering.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Message Logs",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetAPIMessageLogs(

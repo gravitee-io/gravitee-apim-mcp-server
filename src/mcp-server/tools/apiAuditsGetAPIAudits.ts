@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiAuditsGetAPIAudits: ToolDefinition<typeof args> = {
-  name: "API-audits-get-api-audits",
+  name: "get_api_audits",
   description: `Get API Audit
 
-Get API Audit.
-
-User must have the API_AUDIT[READ] permission.`,
+Get API Audit.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Audits",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAuditsGetAPIAudits(

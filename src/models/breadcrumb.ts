@@ -10,12 +10,8 @@ export type Breadcrumb = {
   name?: string | undefined;
 };
 
-export const Breadcrumb$zodSchema: z.ZodType<
-  Breadcrumb,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  id: z.string().optional(),
-  name: z.string().optional(),
-  position: z.number().int().optional(),
+export const Breadcrumb$zodSchema: z.ZodType<Breadcrumb> = z.object({
+  id: z.string().optional().describe("Id of the folder"),
+  name: z.string().optional().describe("Name of the folder"),
+  position: z.int().optional().describe("Distance of folder from the root"),
 });

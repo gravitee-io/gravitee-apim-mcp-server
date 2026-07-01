@@ -10,9 +10,12 @@ export type BaseApi = {
   description?: string | undefined;
 };
 
-export const BaseApi$zodSchema: z.ZodType<BaseApi, z.ZodTypeDef, unknown> = z
-  .object({
-    description: z.string().optional(),
-    id: z.string().optional(),
-    name: z.string().optional(),
-  });
+export const BaseApi$zodSchema: z.ZodType<BaseApi> = z.object({
+  description: z.string().optional().describe(
+    "API's description. A short description of your API.",
+  ),
+  id: z.string().optional().describe("API's uuid."),
+  name: z.string().optional().describe(
+    "API's name. Duplicate names can exists.",
+  ),
+});

@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * List APIs
  *
  * @remarks
- * Get the list of APIs for a specific environment.<br>
- * The results are paginated.
+ * List APIs
  *
- * User must have the ENVIRONMENT_API[READ] permission.
+ * Get the list of APIs for a specific environment.<br> The results are paginated.
  */
 export function apIsListApis(
   client$: GraviteeApimCore,
@@ -115,7 +114,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listApis",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -172,7 +171,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, ListApisResponse$zodSchema, { key: "ApisResponse" }),
-    M.json("default", ListApisResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListApisResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

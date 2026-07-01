@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get single API Event by it's ID
  *
  * @remarks
- * Get specific single API Event.
+ * Get single API Event by it's ID
  *
- * User must have the API_EVENT[READ] permission.
+ * Get specific single API Event.
  */
 export function apiEventsGetAPIEventById(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiEventById",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +175,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiEventByIdResponse$zodSchema, { key: "Event" }),
-    M.json("default", GetApiEventByIdResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiEventByIdResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

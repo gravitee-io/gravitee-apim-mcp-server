@@ -11,11 +11,7 @@ export type PropertyOutput = {
   dynamic?: boolean | undefined;
 };
 
-export const PropertyOutput$zodSchema: z.ZodType<
-  PropertyOutput,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const PropertyOutput$zodSchema: z.ZodType<PropertyOutput> = z.object({
   dynamic: z.boolean().optional(),
   encrypted: z.boolean().optional(),
   key: z.string(),

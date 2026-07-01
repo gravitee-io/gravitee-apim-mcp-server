@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsExportAPISubscriptions: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-export-api-subscriptions",
+  name: "export_api_subscriptions",
   description: `Export API subscriptions as CSV
 
-Export API subscriptions to a CSV file.
-
-User must have the API_SUBSCRIPTION[READ] permission.`,
+Export API subscriptions to a CSV file.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Export Api Subscriptions",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsExportAPISubscriptions(

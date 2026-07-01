@@ -15,9 +15,7 @@ export type PreviewIntegrationRequest = {
 };
 
 export const PreviewIntegrationRequest$zodSchema: z.ZodType<
-  PreviewIntegrationRequest,
-  z.ZodTypeDef,
-  unknown
+  PreviewIntegrationRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
@@ -25,22 +23,11 @@ export const PreviewIntegrationRequest$zodSchema: z.ZodType<
   integrationId: z.string().describe("Id of an integration."),
 });
 
-export type PreviewIntegrationResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  IngestionPreviewResponse?: IngestionPreviewResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type PreviewIntegrationResponse = IngestionPreviewResponse | ErrorT;
 
 export const PreviewIntegrationResponse$zodSchema: z.ZodType<
-  PreviewIntegrationResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  IngestionPreviewResponse: IngestionPreviewResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  PreviewIntegrationResponse
+> = z.union([
+  IngestionPreviewResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

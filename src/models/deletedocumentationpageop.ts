@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type DeleteDocumentationPageRequest = {
   envId?: string | undefined;
@@ -12,31 +11,11 @@ export type DeleteDocumentationPageRequest = {
 };
 
 export const DeleteDocumentationPageRequest$zodSchema: z.ZodType<
-  DeleteDocumentationPageRequest,
-  z.ZodTypeDef,
-  unknown
+  DeleteDocumentationPageRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   pageId: z.string().describe("Id of a documentation page."),
-});
-
-export type DeleteDocumentationPageResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const DeleteDocumentationPageResponse$zodSchema: z.ZodType<
-  DeleteDocumentationPageResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

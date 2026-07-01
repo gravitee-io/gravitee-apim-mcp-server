@@ -3,10 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The status of the API regarding the console.
  */
+export const ApiLifecycleState = {
+  Archived: "ARCHIVED",
+  Created: "CREATED",
+  Deprecated: "DEPRECATED",
+  Published: "PUBLISHED",
+  Unpublished: "UNPUBLISHED",
+} as const;
+/**
+ * The status of the API regarding the console.
+ */
+export type ApiLifecycleState = ClosedEnum<typeof ApiLifecycleState>;
+
 export const ApiLifecycleState$zodSchema = z.enum([
   "ARCHIVED",
   "CREATED",
@@ -14,5 +27,3 @@ export const ApiLifecycleState$zodSchema = z.enum([
   "PUBLISHED",
   "UNPUBLISHED",
 ]).describe("The status of the API regarding the console.");
-
-export type ApiLifecycleState = z.infer<typeof ApiLifecycleState$zodSchema>;

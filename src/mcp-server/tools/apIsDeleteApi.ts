@@ -11,12 +11,20 @@ const args = {
 };
 
 export const tool$apIsDeleteApi: ToolDefinition<typeof args> = {
-  name: "AP-is-delete-api",
+  name: "delete_api",
   description: `Delete an API
 
 Delete a V2 or a V4 API.
 
-User must have API_DEFINITION[DELETE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Delete Api",
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsDeleteApi(

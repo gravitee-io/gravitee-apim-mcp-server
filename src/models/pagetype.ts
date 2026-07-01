@@ -3,10 +3,28 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the page.
  */
+export const PageType = {
+  Asciidoc: "ASCIIDOC",
+  Asyncapi: "ASYNCAPI",
+  Markdown: "MARKDOWN",
+  MarkdownTemplate: "MARKDOWN_TEMPLATE",
+  Swagger: "SWAGGER",
+  Folder: "FOLDER",
+  Link: "LINK",
+  Root: "ROOT",
+  SystemFolder: "SYSTEM_FOLDER",
+  Translation: "TRANSLATION",
+} as const;
+/**
+ * The type of the page.
+ */
+export type PageType = ClosedEnum<typeof PageType>;
+
 export const PageType$zodSchema = z.enum([
   "ASCIIDOC",
   "ASYNCAPI",
@@ -19,5 +37,3 @@ export const PageType$zodSchema = z.enum([
   "SYSTEM_FOLDER",
   "TRANSLATION",
 ]).describe("The type of the page.");
-
-export type PageType = z.infer<typeof PageType$zodSchema>;

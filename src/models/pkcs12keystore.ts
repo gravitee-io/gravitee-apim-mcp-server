@@ -12,13 +12,9 @@ export type Pkcs12KeyStore = {
   password?: string | undefined;
 };
 
-export const Pkcs12KeyStore$zodSchema: z.ZodType<
-  Pkcs12KeyStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  content: z.string().optional(),
-  password: z.string().optional(),
-  path: z.string().optional(),
-  type: KeyStoreType$zodSchema,
+export const Pkcs12KeyStore$zodSchema: z.ZodType<Pkcs12KeyStore> = z.object({
+  content: z.string().optional().describe("The content of the key store"),
+  password: z.string().optional().describe("The password of the key store"),
+  path: z.string().optional().describe("The path of the key store"),
+  type: KeyStoreType$zodSchema.describe("The type of the key store."),
 });

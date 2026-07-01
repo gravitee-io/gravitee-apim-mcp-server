@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Check a subscription can be created
  *
  * @remarks
- * Check a subscription can be created with given API Key, and application.
+ * Check a subscription can be created
  *
- * User must have the API_SUBSCRIPTION[CREATE] permission.
+ * Check a subscription can be created with given API Key, and application.
  */
 export function apiSubscriptionsVerifyCreateAPISubscription(
   client$: GraviteeApimCore,
@@ -118,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "verifyCreateApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -177,7 +177,7 @@ async function $do(
       key: "VerifySubscriptionResponse",
     }),
     M.json("default", VerifyCreateApiSubscriptionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

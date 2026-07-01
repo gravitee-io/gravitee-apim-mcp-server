@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * List available audit event type for API
  *
  * @remarks
- * List available audit event type for API.
+ * List available audit event type for API
  *
- * User must have the API_AUDIT[READ] permission.
+ * List available audit event type for API.
  */
 export function apiAuditsListAPIAuditEvents(
   client$: GraviteeApimCore,
@@ -113,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "ListApiAuditEvents",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -171,7 +171,7 @@ async function $do(
     M.json(200, ListApiAuditEventsResponse$zodSchema, {
       key: "AuditEventsResponse",
     }),
-    M.json("default", ListApiAuditEventsResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListApiAuditEventsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

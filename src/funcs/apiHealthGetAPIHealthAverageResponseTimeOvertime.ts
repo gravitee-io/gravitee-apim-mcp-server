@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API Health Check average response time overtime
  *
  * @remarks
- * Get API Health Check average response time overtime.
+ * Get API Health Check average response time overtime
  *
- * User must have the API_HEALTH[READ] permission.
+ * Get API Health Check average response time overtime.
  */
 export function apiHealthGetAPIHealthAverageResponseTimeOvertime(
   client$: GraviteeApimCore,
@@ -120,7 +120,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiHealthAverageResponseTimeOvertime",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -182,7 +182,7 @@ async function $do(
     M.json(
       "default",
       GetApiHealthAverageResponseTimeOvertimeResponse$zodSchema,
-      { key: "Error" },
+      { key: "ErrorT" },
     ),
   )(response, req$, { extraFields: responseFields$ });
 

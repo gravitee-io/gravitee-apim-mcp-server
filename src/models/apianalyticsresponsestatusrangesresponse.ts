@@ -13,10 +13,11 @@ export type ApiAnalyticsResponseStatusRangesResponse = {
 };
 
 export const ApiAnalyticsResponseStatusRangesResponse$zodSchema: z.ZodType<
-  ApiAnalyticsResponseStatusRangesResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiAnalyticsResponseStatusRangesResponse
 > = z.object({
-  ranges: z.record(z.number()).optional(),
-  rangesByEntrypoint: z.record(z.record(z.number())).optional(),
+  ranges: z.record(z.string(), z.number()).optional().describe(
+    "Global status ranges",
+  ),
+  rangesByEntrypoint: z.record(z.string(), z.record(z.string(), z.number()))
+    .optional().describe("Status ranges by entrypoint"),
 }).describe("API Analytics for status codes by entrypoint.");

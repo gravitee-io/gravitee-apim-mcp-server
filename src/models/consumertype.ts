@@ -3,12 +3,19 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the consumer.
  */
+export const ConsumerType = {
+  Tag: "TAG",
+} as const;
+/**
+ * The type of the consumer.
+ */
+export type ConsumerType = ClosedEnum<typeof ConsumerType>;
+
 export const ConsumerType$zodSchema = z.enum([
   "TAG",
 ]).describe("The type of the consumer.");
-
-export type ConsumerType = z.infer<typeof ConsumerType$zodSchema>;

@@ -12,19 +12,15 @@ import {
 } from "./pkcs12truststore.js";
 
 export type TrustStore =
-  | (NoneTrustStore & { type: "NONE" })
-  | (PEMTrustStore & { type: "PEM" })
   | (JKSTrustStore & { type: "JKS" })
-  | (Pkcs12TrustStore & { type: "PKCS12" });
+  | (PEMTrustStore & { type: "PEM" })
+  | (Pkcs12TrustStore & { type: "PKCS12" })
+  | (NoneTrustStore & { type: "NONE" });
 
-export const TrustStore$zodSchema: z.ZodType<
-  TrustStore,
-  z.ZodTypeDef,
-  unknown
-> = z.union([
-  NoneTrustStore$zodSchema.and(
+export const TrustStore$zodSchema: z.ZodType<TrustStore> = z.union([
+  JKSTrustStore$zodSchema.and(
     z.object({
-      type: z.literal("NONE"),
+      type: z.literal("JKS"),
     }).transform((v) => ({ type: v.type })),
   ),
   PEMTrustStore$zodSchema.and(
@@ -32,14 +28,14 @@ export const TrustStore$zodSchema: z.ZodType<
       type: z.literal("PEM"),
     }).transform((v) => ({ type: v.type })),
   ),
-  JKSTrustStore$zodSchema.and(
-    z.object({
-      type: z.literal("JKS"),
-    }).transform((v) => ({ type: v.type })),
-  ),
   Pkcs12TrustStore$zodSchema.and(
     z.object({
       type: z.literal("PKCS12"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  NoneTrustStore$zodSchema.and(
+    z.object({
+      type: z.literal("NONE"),
     }).transform((v) => ({ type: v.type })),
   ),
 ]);

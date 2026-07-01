@@ -3,13 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Type of group event.
  */
+export const GroupEvent = {
+  ApiCreate: "API_CREATE",
+  ApplicationCreate: "APPLICATION_CREATE",
+  ApiProductCreate: "API_PRODUCT_CREATE",
+} as const;
+/**
+ * Type of group event.
+ */
+export type GroupEvent = ClosedEnum<typeof GroupEvent>;
+
 export const GroupEvent$zodSchema = z.enum([
   "API_CREATE",
   "APPLICATION_CREATE",
+  "API_PRODUCT_CREATE",
 ]).describe("Type of group event.");
-
-export type GroupEvent = z.infer<typeof GroupEvent$zodSchema>;

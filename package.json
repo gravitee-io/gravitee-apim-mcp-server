@@ -1,7 +1,24 @@
 {
   "name": "gravitee-apim",
-  "version": "0.0.1",
-  "author": "Speakeasy",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for the Gravitee APIM Management API.",
+  "author": "Gravitee.io",
+  "license": "MIT",
+  "homepage": "https://github.com/gravitee-io/gravitee-apim-mcp-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gravitee-io/gravitee-apim-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gravitee-io/gravitee-apim-mcp-server/issues"
+  },
+  "keywords": [
+    "gravitee",
+    "apim",
+    "mcp",
+    "model-context-protocol",
+    "management-api"
+  ],
   "type": "module",
   "sideEffects": false,
   "bin": {
@@ -9,24 +26,30 @@
     "mcp": "bin/mcp-server.js"
   },
   "scripts": {
-    "build": "bun i && bun src/mcp-server/build.mts && tsc",
+    "clean": "node -e \"const fs=require('node:fs'); for (const p of ['bin','esm','mcp-server.mcpb','gravitee-apim-mcp-server.mcpb','.mcpb-stage']) fs.rmSync(p,{recursive:true,force:true});\"",
+    "build": "npm run clean && bun src/mcp-server/build.mts && tsc",
+    "mcpb:build": "npm run clean && bun src/mcp-server/build.mts --pack && tsc",
     "check": "npm run lint",
     "lint": "eslint --cache --max-warnings=0 src",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.0",
+    "@modelcontextprotocol/sdk": "1.26.0",
     "@stricli/core": "^1.1.2",
-    "bun": "^1.2.12",
     "express": "^5.1.0",
-    "zod": "^3.25.7"
+    "zod": "^4.0.0"
+  },
+  "overrides": {
+    "@modelcontextprotocol/sdk": "1.26.0",
+    "path-to-regexp": "^8.4.2",
+    "tmp": "^0.2.7"
   },
   "devDependencies": {
-    "@anthropic-ai/dxt": "^0.1.0",
+    "@anthropic-ai/mcpb": "^2.1.2",
     "@eslint/js": "^9.26.0",
     "@types/bun": "^1.2.13",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.15.20",
+    "@types/node": "^18.19.3",
     "eslint": "^9.26.0",
     "globals": "^16.0.0",
     "typescript": "~5.8.3",

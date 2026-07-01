@@ -38,23 +38,43 @@ export type UpdateApiFederated = {
   properties?: Array<Property> | undefined;
 };
 
-export const UpdateApiFederated$zodSchema: z.ZodType<
-  UpdateApiFederated,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiVersion: z.string(),
-  categories: z.array(z.string()).optional(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
-  disableMembershipNotifications: z.boolean().default(false),
-  groups: z.array(z.string()).optional(),
-  labels: z.array(z.string()).optional(),
-  lifecycleState: ApiLifecycleState$zodSchema.optional(),
-  name: z.string(),
-  properties: z.array(Property$zodSchema).optional(),
-  resources: z.array(Resource$zodSchema).optional(),
-  responseTemplates: z.record(z.record(ResponseTemplate$zodSchema)).optional(),
-  tags: z.array(z.string()).optional(),
-  visibility: Visibility$zodSchema.optional(),
-});
+export const UpdateApiFederated$zodSchema: z.ZodType<UpdateApiFederated> = z
+  .object({
+    apiVersion: z.string().describe(
+      "API's version. It's a simple string only used in the portal.",
+    ),
+    categories: z.array(z.string()).optional().describe(
+      "The list of category ids or keys associated with this API.",
+    ),
+    definitionVersion: DefinitionVersion$zodSchema.describe(
+      "API's gravitee definition version.",
+    ),
+    description: z.string().optional().describe(
+      "API's description. A short description of your API.",
+    ),
+    disableMembershipNotifications: z.boolean().default(false).describe(
+      "Disable membership notifications.",
+    ),
+    groups: z.array(z.string()).optional().describe(
+      "List of group IDs associated with this API. Used to manage team access.",
+    ),
+    labels: z.array(z.string()).optional().describe(
+      "The free list of labels associated with this API.",
+    ),
+    lifecycleState: ApiLifecycleState$zodSchema.optional().describe(
+      "The status of the API regarding the console.",
+    ),
+    name: z.string().describe("API's name. Duplicate names can exists."),
+    properties: z.array(Property$zodSchema).optional(),
+    resources: z.array(Resource$zodSchema).optional(),
+    responseTemplates: z.record(
+      z.string(),
+      z.record(z.string(), ResponseTemplate$zodSchema),
+    ).optional(),
+    tags: z.array(z.string()).optional().describe(
+      "The list of sharding tags associated with this API.",
+    ),
+    visibility: Visibility$zodSchema.default("PRIVATE").describe(
+      "The visibility of the resource regarding the portal.",
+    ),
+  });

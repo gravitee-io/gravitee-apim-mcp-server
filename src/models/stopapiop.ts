@@ -3,35 +3,12 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type StopApiRequest = { envId?: string | undefined; apiId: string };
 
-export const StopApiRequest$zodSchema: z.ZodType<
-  StopApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const StopApiRequest$zodSchema: z.ZodType<StopApiRequest> = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-});
-
-export type StopApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const StopApiResponse$zodSchema: z.ZodType<
-  StopApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

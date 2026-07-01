@@ -10,9 +10,7 @@ import * as z from "zod";
 export type ServiceV4Configuration = {};
 
 export const ServiceV4Configuration$zodSchema: z.ZodType<
-  ServiceV4Configuration,
-  z.ZodTypeDef,
-  unknown
+  ServiceV4Configuration
 > = z.object({}).describe("The configuration of the service");
 
 export type ServiceV4 = {
@@ -22,10 +20,12 @@ export type ServiceV4 = {
   type?: string | undefined;
 };
 
-export const ServiceV4$zodSchema: z.ZodType<ServiceV4, z.ZodTypeDef, unknown> =
-  z.object({
-    configuration: z.lazy(() => ServiceV4Configuration$zodSchema).optional(),
-    enabled: z.boolean().default(true),
-    overrideConfiguration: z.boolean().default(false),
-    type: z.string().optional(),
-  });
+export const ServiceV4$zodSchema: z.ZodType<ServiceV4> = z.object({
+  configuration: z.lazy(() => ServiceV4Configuration$zodSchema).optional()
+    .describe("The configuration of the service"),
+  enabled: z.boolean().default(true).describe("Is the service enabled or not."),
+  overrideConfiguration: z.boolean().default(false).describe(
+    "Override the configuration of the service",
+  ),
+  type: z.string().optional(),
+});

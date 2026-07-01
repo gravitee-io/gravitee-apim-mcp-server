@@ -10,9 +10,7 @@ import * as z from "zod";
 export type ApiMessageLogContentHeaders = {};
 
 export const ApiMessageLogContentHeaders$zodSchema: z.ZodType<
-  ApiMessageLogContentHeaders,
-  z.ZodTypeDef,
-  unknown
+  ApiMessageLogContentHeaders
 > = z.object({}).describe("The list of headers associated with this message.");
 
 /**
@@ -21,9 +19,7 @@ export const ApiMessageLogContentHeaders$zodSchema: z.ZodType<
 export type ApiMessageLogContentMetadata = {};
 
 export const ApiMessageLogContentMetadata$zodSchema: z.ZodType<
-  ApiMessageLogContentMetadata,
-  z.ZodTypeDef,
-  unknown
+  ApiMessageLogContentMetadata
 > = z.object({}).describe("The list of Message's metadata.");
 
 /**
@@ -38,15 +34,16 @@ export type ApiMessageLogContent = {
   metadata?: ApiMessageLogContentMetadata | undefined;
 };
 
-export const ApiMessageLogContent$zodSchema: z.ZodType<
-  ApiMessageLogContent,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  connectorId: z.string().optional(),
-  headers: z.lazy(() => ApiMessageLogContentHeaders$zodSchema).optional(),
-  id: z.string().optional(),
-  isError: z.boolean().optional(),
-  metadata: z.lazy(() => ApiMessageLogContentMetadata$zodSchema).optional(),
-  payload: z.string().optional(),
-}).describe("The message content.");
+export const ApiMessageLogContent$zodSchema: z.ZodType<ApiMessageLogContent> = z
+  .object({
+    connectorId: z.string().optional().describe(
+      "The id of connector for this log.",
+    ),
+    headers: z.lazy(() => ApiMessageLogContentHeaders$zodSchema).optional()
+      .describe("The list of headers associated with this message."),
+    id: z.string().optional().describe("The internal UUID of the Message."),
+    isError: z.boolean().optional().describe("Is the Message in error."),
+    metadata: z.lazy(() => ApiMessageLogContentMetadata$zodSchema).optional()
+      .describe("The list of Message's metadata."),
+    payload: z.string().optional().describe("The payload of the Message."),
+  }).describe("The message content.");

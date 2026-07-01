@@ -11,17 +11,29 @@ export type FailoverV4 = {
   openStateDuration?: number | undefined;
   maxFailures?: number | undefined;
   perSubscription?: boolean | undefined;
+  failureCondition?: string | undefined;
+  forceNextEndpointOnFailure?: boolean | undefined;
 };
 
-export const FailoverV4$zodSchema: z.ZodType<
-  FailoverV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  enabled: z.boolean().default(false),
-  maxFailures: z.number().int().default(5),
-  maxRetries: z.number().int().default(2),
-  openStateDuration: z.number().int().default(10000),
-  perSubscription: z.boolean().default(true),
-  slowCallDuration: z.number().int().default(2000),
+export const FailoverV4$zodSchema: z.ZodType<FailoverV4> = z.object({
+  enabled: z.boolean().default(false).describe("Is the failover enabled."),
+  failureCondition: z.string().optional().describe(
+    "An EL expression evaluated on the response to determine if it should be considered a failure (e.g. \"{#response.status >= 500}\"). If null, response content is not evaluated.",
+  ),
+  forceNextEndpointOnFailure: z.boolean().default(false).describe(
+    "If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints.",
+  ),
+  maxFailures: z.int().default(5).describe(
+    "The maximum number of failures allowed before the circuit breaker can calculate the error rate.",
+  ),
+  maxRetries: z.int().default(2).describe("The maximum number of retries."),
+  openStateDuration: z.int().default(10000).describe(
+    "The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open.",
+  ),
+  perSubscription: z.boolean().default(true).describe(
+    "If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API.",
+  ),
+  slowCallDuration: z.int().default(2000).describe(
+    "The duration in milliseconds to consider a request as slow.",
+  ),
 });

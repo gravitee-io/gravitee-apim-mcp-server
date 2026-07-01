@@ -12,7 +12,7 @@ export interface Env {
   GRAVITEEAPIM_DEBUG?: boolean | undefined;
 }
 
-export const envSchema: z.ZodType<Env, z.ZodTypeDef, unknown> = z.object({
+export const envSchema: z.ZodType<Env> = z.object({
   GRAVITEEAPIM_BEARER_AUTH: z.string().optional(),
 
   GRAVITEEAPIM_DEBUG: z.coerce.boolean().optional(),

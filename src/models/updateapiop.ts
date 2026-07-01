@@ -13,34 +13,20 @@ export type UpdateApiRequest = {
   UpdateApi: UpdateApi;
 };
 
-export const UpdateApiRequest$zodSchema: z.ZodType<
-  UpdateApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  UpdateApi: UpdateApi$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const UpdateApiRequest$zodSchema: z.ZodType<UpdateApiRequest> = z.object(
+  {
+    UpdateApi: UpdateApi$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  },
+);
 
-export type UpdateApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Api?: Api | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type UpdateApiResponse = Api | ErrorT;
 
-export const UpdateApiResponse$zodSchema: z.ZodType<
-  UpdateApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  Api: Api$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const UpdateApiResponse$zodSchema: z.ZodType<UpdateApiResponse> = z
+  .union([
+    Api$zodSchema,
+    ErrorT$zodSchema,
+  ]);

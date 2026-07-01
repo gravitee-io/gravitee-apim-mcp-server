@@ -17,36 +17,24 @@ export type GetApiHealthAverageResponseTimeRequest = {
 };
 
 export const GetApiHealthAverageResponseTimeRequest$zodSchema: z.ZodType<
-  GetApiHealthAverageResponseTimeRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiHealthAverageResponseTimeRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  field: HealthField$zodSchema.default("endpoint"),
+  field: HealthField$zodSchema.default("endpoint").describe(
+    "The field to group response time and availability.\n",
+  ),
 });
 
-export type GetApiHealthAverageResponseTimeResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiHealthAverageResponseTimeResponse?:
-    | ApiHealthAverageResponseTimeResponse
-    | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiHealthAverageResponseTimeResponse =
+  | ApiHealthAverageResponseTimeResponse
+  | ErrorT;
 
 export const GetApiHealthAverageResponseTimeResponse$zodSchema: z.ZodType<
-  GetApiHealthAverageResponseTimeResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiHealthAverageResponseTimeResponse:
-    ApiHealthAverageResponseTimeResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiHealthAverageResponseTimeResponse
+> = z.union([
+  ApiHealthAverageResponseTimeResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

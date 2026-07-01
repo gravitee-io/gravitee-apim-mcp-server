@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apIsGetApiMetadata: ToolDefinition<typeof args> = {
-  name: "AP-is-get-api-metadata",
+  name: "get_api_metadata",
   description: `Get metadata pertaining to API
 
-Get the metadata that pertains to an API. Can be global and API metadata.
-
-User must have the API_METADATA[READ] permission.`,
+Get the metadata that pertains to an API. Can be global and API metadata.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Metadata",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsGetApiMetadata(

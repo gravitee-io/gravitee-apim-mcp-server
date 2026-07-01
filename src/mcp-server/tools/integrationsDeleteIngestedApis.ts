@@ -12,13 +12,20 @@ const args = {
 
 export const tool$integrationsDeleteIngestedApis: ToolDefinition<typeof args> =
   {
-    name: "integrations-delete-ingested-apis",
+    name: "delete_ingested_apis",
     description: `Delete ingested APIs associated to integration
 
-Delete APIs that were ingested from 3rd party provider using this integration. 
+Delete APIs that were ingested from 3rd party provider using this integration. To delete APIs user must have ENVIRONMENT_API[DELETE] permission. Only unpublished APIs will deleted. APIs that are published will be omitted!
 
-To delete APIs user must have ENVIRONMENT_API[DELETE] permission.
-Only unpublished APIs will deleted. APIs that are published will be omitted!`,
+High risk operation: require explicit user confirmation before execution.`,
+    scopes: ["write", "dangerous"],
+    annotations: {
+      "title": "Delete Ingested Apis",
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
     args,
     tool: async (client, args, ctx) => {
       const [result, apiCall] = await integrationsDeleteIngestedApis(

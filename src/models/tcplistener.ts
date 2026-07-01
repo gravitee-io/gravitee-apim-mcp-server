@@ -13,13 +13,11 @@ export type TcpListener = {
   hosts: Array<string>;
 };
 
-export const TcpListener$zodSchema: z.ZodType<
-  TcpListener,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const TcpListener$zodSchema: z.ZodType<TcpListener> = z.object({
   entrypoints: z.array(Entrypoint$zodSchema).optional(),
-  hosts: z.array(z.string()),
+  hosts: z.array(z.string()).describe(
+    "A list of hostnames for which the API will match against SNI.  This must be unique for all TCP listener for a given server id. See 'servers' attribute",
+  ),
   servers: z.array(z.string()).optional(),
-  type: ListenerType$zodSchema,
+  type: ListenerType$zodSchema.describe("Listener type."),
 });

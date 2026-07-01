@@ -11,13 +11,18 @@ export type AcceptSubscription = {
   endingAt?: string | undefined;
 };
 
-export const AcceptSubscription$zodSchema: z.ZodType<
-  AcceptSubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  customApiKey: z.string().optional(),
-  endingAt: z.string().datetime({ offset: true }).optional(),
-  reason: z.string().optional(),
-  startingAt: z.string().datetime({ offset: true }).optional(),
-});
+export const AcceptSubscription$zodSchema: z.ZodType<AcceptSubscription> = z
+  .object({
+    customApiKey: z.string().optional().describe(
+      "Optional custom API Key that can be given when the subscription is related to an api-key plan and custom API Key support is enabled.",
+    ),
+    endingAt: z.iso.datetime({ offset: true }).optional().describe(
+      "The datetime when the subscription ends. No ending date means the subscription never ends.",
+    ),
+    reason: z.string().optional().describe(
+      "Optional reason explaining why the subscription has been accepted.",
+    ),
+    startingAt: z.iso.datetime({ offset: true }).optional().describe(
+      "The datetime when the subscription starts. No starting date means the subscription starts immediately.",
+    ),
+  });

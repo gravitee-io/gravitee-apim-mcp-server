@@ -14,11 +14,11 @@ export type HealthCheckLogResponse = {
 };
 
 export const HealthCheckLogResponse$zodSchema: z.ZodType<
-  HealthCheckLogResponse,
-  z.ZodTypeDef,
-  unknown
+  HealthCheckLogResponse
 > = z.object({
-  body: z.string().optional(),
-  headers: z.record(z.string()).optional(),
-  status: z.number().int().optional(),
+  body: z.string().optional().describe("The response body"),
+  headers: z.record(z.string(), z.string()).optional().describe(
+    "The response headers",
+  ),
+  status: z.int().optional().describe("The response status"),
 }).describe("A health check response");

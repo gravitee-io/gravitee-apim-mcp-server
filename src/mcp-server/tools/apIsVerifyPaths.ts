@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apIsVerifyPaths: ToolDefinition<typeof args> = {
-  name: "AP-is-verify-paths",
+  name: "verify_paths",
   description: `Verify HTTP API paths
 
-Verify paths before creating or updating a HTTP API.<br>
-This will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br>
-The result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)`,
+Verify paths before creating or updating a HTTP API.<br> This will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br> The result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Verify Paths",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsVerifyPaths(

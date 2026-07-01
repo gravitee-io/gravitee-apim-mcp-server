@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Create API documentation page
  *
  * @remarks
- * Create API documentation. The result will be the created page or folder.
- * Only MARKDOWN and FOLDER types are supported.
+ * Create API documentation page
  *
- * User must have the API_DOCUMENTATION[CREATE] permission.
+ * Create API documentation. The result will be the created page or folder. Only MARKDOWN and FOLDER types are supported.
+ *
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apiDocumentationCreateDocumentationPage(
   client$: GraviteeApimCore,
@@ -117,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createDocumentationPage",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +175,7 @@ async function $do(
   >(
     M.json(201, CreateDocumentationPageResponse$zodSchema, { key: "Page" }),
     M.json("default", CreateDocumentationPageResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

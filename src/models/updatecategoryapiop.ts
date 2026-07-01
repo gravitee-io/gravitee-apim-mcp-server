@@ -18,9 +18,7 @@ export type UpdateCategoryApiRequest = {
 };
 
 export const UpdateCategoryApiRequest$zodSchema: z.ZodType<
-  UpdateCategoryApiRequest,
-  z.ZodTypeDef,
-  unknown
+  UpdateCategoryApiRequest
 > = z.object({
   UpdateCategoryApi: UpdateCategoryApi$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -30,22 +28,11 @@ export const UpdateCategoryApiRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type UpdateCategoryApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  CategoryApi?: CategoryApi | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type UpdateCategoryApiResponse = CategoryApi | ErrorT;
 
 export const UpdateCategoryApiResponse$zodSchema: z.ZodType<
-  UpdateCategoryApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  CategoryApi: CategoryApi$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  UpdateCategoryApiResponse
+> = z.union([
+  CategoryApi$zodSchema,
+  ErrorT$zodSchema,
+]);

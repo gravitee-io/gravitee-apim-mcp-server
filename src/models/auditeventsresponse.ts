@@ -9,10 +9,7 @@ import * as z from "zod";
  */
 export type AuditEventsResponse = { data?: Array<string> | undefined };
 
-export const AuditEventsResponse$zodSchema: z.ZodType<
-  AuditEventsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(z.string()).optional(),
-}).describe("Audit events response");
+export const AuditEventsResponse$zodSchema: z.ZodType<AuditEventsResponse> = z
+  .object({
+    data: z.array(z.string()).optional().describe("List of Audit events name."),
+  }).describe("Audit events response");

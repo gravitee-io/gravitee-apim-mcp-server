@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get subscription's API Keys
  *
  * @remarks
- * Get the subscription API Keys.
+ * Get subscription's API Keys
  *
- * User must have the API_SUBSCRIPTION[READ] permission.
+ * Get the subscription API Keys.
  */
 export function apiSubscriptionsGetAPISubscriptionAPIKeys(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiSubscriptionApiKeys",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -178,7 +178,7 @@ async function $do(
       key: "SubscriptionApiKeysResponse",
     }),
     M.json("default", GetApiSubscriptionApiKeysResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

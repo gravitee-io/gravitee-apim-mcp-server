@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Subscribe to an API's plan
  *
  * @remarks
- * Create a new subscription on a given API.
+ * Subscribe to an API's plan
  *
- * User must have the API_SUBSCRIPTION[CREATE] permission.
+ * Create a new subscription on a given API.
  */
 export function apiSubscriptionsCreateAPISubscription(
   client$: GraviteeApimCore,
@@ -116,7 +116,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +175,7 @@ async function $do(
       key: "Subscription",
     }),
     M.json("default", CreateApiSubscriptionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

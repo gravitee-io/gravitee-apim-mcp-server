@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsPauseAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-pause-api-subscription",
+  name: "pause_api_subscription",
   description: `Pause one API's subscription
 
-Pause the API's subscription.
-
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+Pause the API's subscription.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Pause Api Subscription",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsPauseAPISubscription(

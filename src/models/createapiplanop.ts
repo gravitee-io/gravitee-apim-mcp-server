@@ -13,34 +13,19 @@ export type CreateApiPlanRequest = {
   CreatePlan: CreatePlan;
 };
 
-export const CreateApiPlanRequest$zodSchema: z.ZodType<
-  CreateApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  CreatePlan: CreatePlan$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const CreateApiPlanRequest$zodSchema: z.ZodType<CreateApiPlanRequest> = z
+  .object({
+    CreatePlan: CreatePlan$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type CreateApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Plan?: Plan | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateApiPlanResponse = Plan | ErrorT;
 
-export const CreateApiPlanResponse$zodSchema: z.ZodType<
-  CreateApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Plan: Plan$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const CreateApiPlanResponse$zodSchema: z.ZodType<CreateApiPlanResponse> =
+  z.union([
+    Plan$zodSchema,
+    ErrorT$zodSchema,
+  ]);

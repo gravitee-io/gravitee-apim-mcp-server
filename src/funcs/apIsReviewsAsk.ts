@@ -10,6 +10,7 @@ import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,8 +23,6 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   ReviewsAskRequest,
   ReviewsAskRequest$zodSchema,
-  ReviewsAskResponse,
-  ReviewsAskResponse$zodSchema,
 } from "../models/reviewsaskop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -33,12 +32,6 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * Ask for a review
- *
- * Return a 400 HTTP Error:
- *  - when user tries to change reviews state of an ARCHIVED API
- *  - when user tries to change reviews state of an API already in review
- *
- * User must have the API_DEFINITION[UPDATE] permission.
  */
 export function apIsReviewsAsk(
   client$: GraviteeApimCore,
@@ -46,7 +39,7 @@ export function apIsReviewsAsk(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    ReviewsAskResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -70,7 +63,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      ReviewsAskResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -118,7 +111,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "reviewsAsk",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -164,7 +157,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    ReviewsAskResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -173,8 +166,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, ReviewsAskResponse$zodSchema),
-    M.json("default", ReviewsAskResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

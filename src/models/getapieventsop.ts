@@ -16,48 +16,29 @@ export type GetApiEventsRequest = {
   types?: Array<string> | undefined;
 };
 
-export const GetApiEventsRequest$zodSchema: z.ZodType<
-  GetApiEventsRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  from: z.number().int().describe(
-    "The timestamp from which the logs will be returned.\n"
-      + "",
-  ).optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  to: z.number().int().describe(
-    "The timestamp to which the logs will be returned.\n"
-      + "",
-  ).optional(),
-  types: z.array(z.string()).describe("List of event types to filter on.")
-    .optional(),
-});
+export const GetApiEventsRequest$zodSchema: z.ZodType<GetApiEventsRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    from: z.int().describe(
+      "The timestamp from which the logs will be returned.\n",
+    ).optional(),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    to: z.int().describe("The timestamp to which the logs will be returned.\n")
+      .optional(),
+    types: z.array(z.string()).describe("List of event types to filter on.")
+      .optional(),
+  });
 
-export type GetApiEventsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  EventsResponse?: EventsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiEventsResponse = EventsResponse | ErrorT;
 
-export const GetApiEventsResponse$zodSchema: z.ZodType<
-  GetApiEventsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  EventsResponse: EventsResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiEventsResponse$zodSchema: z.ZodType<GetApiEventsResponse> = z
+  .union([
+    EventsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

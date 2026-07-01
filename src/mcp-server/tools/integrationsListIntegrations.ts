@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$integrationsListIntegrations: ToolDefinition<typeof args> = {
-  name: "integrations-list-integrations",
+  name: "list_integrations",
   description: `List Integrations
 
-Get the list of Integration for a specific environment.<br>
-The results are paginated.
-
-User must have the ENVIRONMENT_INTEGRATION[READ] permission.`,
+Get the list of Integration for a specific environment.<br> The results are paginated.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Integrations",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsListIntegrations(

@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * Update Integration
  *
  * @remarks
- * Update specific Integration.
+ * Update Integration
  *
- * The response body will not contain Agent Status. To get it you should use getIntegration operation.
- * User must have ENVIRONMENT_INTEGRATION[UPDATE] permission to access it.
+ * Update specific Integration. The response body will not contain Agent Status. To get it you should use getIntegration operation.
  */
 export function integrationsUpdateIntegration(
   client$: GraviteeApimCore,
@@ -119,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "updateIntegration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +174,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, UpdateIntegrationResponse$zodSchema, { key: "Integration" }),
-    M.json("default", UpdateIntegrationResponse$zodSchema, { key: "Error" }),
+    M.json("default", UpdateIntegrationResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

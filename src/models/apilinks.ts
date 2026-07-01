@@ -9,8 +9,9 @@ export type ApiLinks = {
   backgroundUrl?: string | undefined;
 };
 
-export const ApiLinks$zodSchema: z.ZodType<ApiLinks, z.ZodTypeDef, unknown> = z
-  .object({
-    backgroundUrl: z.string().optional(),
-    pictureUrl: z.string().optional(),
-  });
+export const ApiLinks$zodSchema: z.ZodType<ApiLinks> = z.object({
+  backgroundUrl: z.string().optional().describe(
+    "The URL to the API's background.",
+  ),
+  pictureUrl: z.string().optional().describe("The URL to the API's picture."),
+});

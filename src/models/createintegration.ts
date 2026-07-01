@@ -3,19 +3,27 @@
  */
 
 import * as z from "zod";
+import {
+  IntegrationWellKnownUrl,
+  IntegrationWellKnownUrl$zodSchema,
+} from "./integrationwellknownurl.js";
 
 export type CreateIntegration = {
   name: string;
   description?: string | undefined;
   provider: string;
+  wellKnownUrls?: Array<IntegrationWellKnownUrl> | undefined;
 };
 
-export const CreateIntegration$zodSchema: z.ZodType<
-  CreateIntegration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  description: z.string().optional(),
-  name: z.string(),
-  provider: z.string(),
-});
+export const CreateIntegration$zodSchema: z.ZodType<CreateIntegration> = z
+  .object({
+    description: z.string().optional().describe(
+      "Description of the integration",
+    ),
+    name: z.string().describe("Name of the integration"),
+    provider: z.string().describe(
+      "Provider of this integration (use \"A2A\" for A2A integrations)",
+    ),
+    wellKnownUrls: z.array(IntegrationWellKnownUrl$zodSchema).optional()
+      .describe("A2A well-known URLs (only for A2A provider)"),
+  });

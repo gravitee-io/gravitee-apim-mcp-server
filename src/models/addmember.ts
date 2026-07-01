@@ -13,11 +13,14 @@ export type AddMember = {
   roleName: string;
 };
 
-export const AddMember$zodSchema: z.ZodType<AddMember, z.ZodTypeDef, unknown> =
-  z.object({
-    externalReference: z.string().optional(),
-    roleName: z.string(),
-    userId: z.string().optional(),
-  }).describe(
-    "Membership can be created for existing users, or for users provided by external identity provider. Thus, either userId or externalReference are required.",
-  );
+export const AddMember$zodSchema: z.ZodType<AddMember> = z.object({
+  externalReference: z.string().optional().describe(
+    "User's reference for user provided from an identity provider.",
+  ),
+  roleName: z.string().describe("The name of the role"),
+  userId: z.string().optional().describe(
+    "Technical identifier for existing user.",
+  ),
+}).describe(
+  "Membership can be created for existing users, or for users provided by external identity provider. Thus, either userId or externalReference are required.",
+);

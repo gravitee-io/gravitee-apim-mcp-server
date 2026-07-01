@@ -13,15 +13,19 @@ export type Cors = {
   exposeHeaders?: Array<string> | undefined;
   maxAge?: number | undefined;
   runPolicies?: boolean | undefined;
+  allowPrivateNetwork?: boolean | undefined;
 };
 
-export const Cors$zodSchema: z.ZodType<Cors, z.ZodTypeDef, unknown> = z.object({
+export const Cors$zodSchema: z.ZodType<Cors> = z.object({
   allowCredentials: z.boolean().optional(),
   allowHeaders: z.array(z.string()).optional(),
   allowMethods: z.array(z.string()).optional(),
   allowOrigin: z.array(z.string()).optional(),
+  allowPrivateNetwork: z.boolean().optional().describe(
+    "Allow private network access (PNA) requests during CORS preflight",
+  ),
   enabled: z.boolean().optional(),
   exposeHeaders: z.array(z.string()).optional(),
-  maxAge: z.number().int().default(-1),
+  maxAge: z.int().default(-1),
   runPolicies: z.boolean().optional(),
 });

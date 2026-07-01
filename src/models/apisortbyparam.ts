@@ -3,12 +3,43 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const ApiSortByParam = {
+  Name: "name",
+  MinusName: "-name",
+  ApiType: "api_type",
+  MinusApiType: "-api_type",
+  Status: "status",
+  MinusStatus: "-status",
+  Paths: "paths",
+  MinusPaths: "-paths",
+  TagsAsc: "tags_asc",
+  MinusTagsDesc: "-tags_desc",
+  CategoriesAsc: "categories_asc",
+  MinusCategoriesDesc: "-categories_desc",
+  Owner: "owner",
+  MinusOwner: "-owner",
+  Visibility: "visibility",
+  MinusVisibility: "-visibility",
+} as const;
+export type ApiSortByParam = ClosedEnum<typeof ApiSortByParam>;
 
 export const ApiSortByParam$zodSchema = z.enum([
   "name",
   "-name",
+  "api_type",
+  "-api_type",
+  "status",
+  "-status",
   "paths",
   "-paths",
+  "tags_asc",
+  "-tags_desc",
+  "categories_asc",
+  "-categories_desc",
+  "owner",
+  "-owner",
+  "visibility",
+  "-visibility",
 ]);
-
-export type ApiSortByParam = z.infer<typeof ApiSortByParam$zodSchema>;

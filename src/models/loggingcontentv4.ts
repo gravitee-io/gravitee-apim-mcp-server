@@ -12,14 +12,12 @@ export type LoggingContentV4 = {
   messageMetadata?: boolean | undefined;
 };
 
-export const LoggingContentV4$zodSchema: z.ZodType<
-  LoggingContentV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  headers: z.boolean().optional(),
-  messageHeaders: z.boolean().optional(),
-  messageMetadata: z.boolean().optional(),
-  messagePayload: z.boolean().optional(),
-  payload: z.boolean().optional(),
-});
+export const LoggingContentV4$zodSchema: z.ZodType<LoggingContentV4> = z.object(
+  {
+    headers: z.boolean().optional(),
+    messageHeaders: z.boolean().optional(),
+    messageMetadata: z.boolean().optional(),
+    messagePayload: z.boolean().optional(),
+    payload: z.boolean().optional(),
+  },
+);

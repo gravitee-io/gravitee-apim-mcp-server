@@ -7,10 +7,6 @@ import { KeyStoreType, KeyStoreType$zodSchema } from "./keystoretype.js";
 
 export type NoneKeyStore = { type: KeyStoreType };
 
-export const NoneKeyStore$zodSchema: z.ZodType<
-  NoneKeyStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  type: KeyStoreType$zodSchema,
+export const NoneKeyStore$zodSchema: z.ZodType<NoneKeyStore> = z.object({
+  type: KeyStoreType$zodSchema.describe("The type of the key store."),
 });

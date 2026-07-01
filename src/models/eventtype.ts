@@ -3,13 +3,52 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the event.
  */
+export const EventType = {
+  AlertNotification: "ALERT_NOTIFICATION",
+  DebugApi: "DEBUG_API",
+  DeployApiProduct: "DEPLOY_API_PRODUCT",
+  DeployCluster: "DEPLOY_CLUSTER",
+  DeploySharedPolicyGroup: "DEPLOY_SHARED_POLICY_GROUP",
+  GatewayStarted: "GATEWAY_STARTED",
+  GatewayStopped: "GATEWAY_STOPPED",
+  PublishApi: "PUBLISH_API",
+  PublishApiResult: "PUBLISH_API_RESULT",
+  PublishDictionary: "PUBLISH_DICTIONARY",
+  PublishOrganization: "PUBLISH_ORGANIZATION",
+  PublishOrganizationLicense: "PUBLISH_ORGANIZATION_LICENSE",
+  StartApi: "START_API",
+  StartDictionary: "START_DICTIONARY",
+  StopApi: "STOP_API",
+  StopDictionary: "STOP_DICTIONARY",
+  UndeployApiProduct: "UNDEPLOY_API_PRODUCT",
+  UndeployCluster: "UNDEPLOY_CLUSTER",
+  UndeploySharedPolicyGroup: "UNDEPLOY_SHARED_POLICY_GROUP",
+  UnpublishApi: "UNPUBLISH_API",
+  UnpublishApiResult: "UNPUBLISH_API_RESULT",
+  UnpublishDictionary: "UNPUBLISH_DICTIONARY",
+  PublishAuthzPolicy: "PUBLISH_AUTHZ_POLICY",
+  UnpublishAuthzPolicy: "UNPUBLISH_AUTHZ_POLICY",
+  PublishAuthzEntity: "PUBLISH_AUTHZ_ENTITY",
+  UnpublishAuthzEntity: "UNPUBLISH_AUTHZ_ENTITY",
+  PublishAuthzPdp: "PUBLISH_AUTHZ_PDP",
+  UnpublishAuthzPdp: "UNPUBLISH_AUTHZ_PDP",
+} as const;
+/**
+ * The type of the event.
+ */
+export type EventType = ClosedEnum<typeof EventType>;
+
 export const EventType$zodSchema = z.enum([
   "ALERT_NOTIFICATION",
   "DEBUG_API",
+  "DEPLOY_API_PRODUCT",
+  "DEPLOY_CLUSTER",
+  "DEPLOY_SHARED_POLICY_GROUP",
   "GATEWAY_STARTED",
   "GATEWAY_STOPPED",
   "PUBLISH_API",
@@ -21,11 +60,16 @@ export const EventType$zodSchema = z.enum([
   "START_DICTIONARY",
   "STOP_API",
   "STOP_DICTIONARY",
+  "UNDEPLOY_API_PRODUCT",
+  "UNDEPLOY_CLUSTER",
+  "UNDEPLOY_SHARED_POLICY_GROUP",
   "UNPUBLISH_API",
   "UNPUBLISH_API_RESULT",
   "UNPUBLISH_DICTIONARY",
-  "DEPLOY_SHARED_POLICY_GROUP",
-  "UNDEPLOY_SHARED_POLICY_GROUP",
+  "PUBLISH_AUTHZ_POLICY",
+  "UNPUBLISH_AUTHZ_POLICY",
+  "PUBLISH_AUTHZ_ENTITY",
+  "UNPUBLISH_AUTHZ_ENTITY",
+  "PUBLISH_AUTHZ_PDP",
+  "UNPUBLISH_AUTHZ_PDP",
 ]).describe("The type of the event.");
-
-export type EventType = z.infer<typeof EventType$zodSchema>;

@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsAcceptAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-accept-api-subscription",
+  name: "accept_api_subscription",
   description: `Accept an API subscription
 
-Accept an API subscription with an optional starting / ending dates and reason.
-
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+Accept an API subscription with an optional starting / ending dates and reason.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Accept Api Subscription",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsAcceptAPISubscription(

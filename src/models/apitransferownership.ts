@@ -15,13 +15,18 @@ export type ApiTransferOwnership = {
   poRole?: string | undefined;
 };
 
-export const ApiTransferOwnership$zodSchema: z.ZodType<
-  ApiTransferOwnership,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  poRole: z.string().optional(),
-  userId: z.string().optional(),
-  userReference: z.string().optional(),
-  userType: MembershipMemberType$zodSchema.optional(),
-});
+export const ApiTransferOwnership$zodSchema: z.ZodType<ApiTransferOwnership> = z
+  .object({
+    poRole: z.string().optional().describe(
+      "The name of the role that will be assigned to the current primary owner after the transfer.",
+    ),
+    userId: z.string().optional().describe(
+      "The new primary owner ID (user's technical identifier). Can be null if userReference is defined.",
+    ),
+    userReference: z.string().optional().describe(
+      "The new primary owner reference (user's reference provided by an identity provider). Can be null if userId is defined.",
+    ),
+    userType: MembershipMemberType$zodSchema.optional().describe(
+      "The type of membership",
+    ),
+  });

@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiPlansPublishAPIPlan: ToolDefinition<typeof args> = {
-  name: "API-plans-publish-api-plan",
+  name: "publish_api_plan",
   description: `Publish an API's plan
 
-Publish the API's plan.
-
-User must have the API_PLAN[UPDATE] permission.`,
+Publish the API's plan.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Publish Api Plan",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansPublishAPIPlan(

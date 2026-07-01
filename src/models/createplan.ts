@@ -10,11 +10,7 @@ export type CreatePlan =
   | (CreatePlanV2 & { definitionVersion: "V2" })
   | (CreatePlanV4 & { definitionVersion: "V4" });
 
-export const CreatePlan$zodSchema: z.ZodType<
-  CreatePlan,
-  z.ZodTypeDef,
-  unknown
-> = z.union([
+export const CreatePlan$zodSchema: z.ZodType<CreatePlan> = z.union([
   CreatePlanV2$zodSchema.and(
     z.object({
       definitionVersion: z.literal("V2"),

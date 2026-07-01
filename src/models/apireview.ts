@@ -6,7 +6,8 @@ import * as z from "zod";
 
 export type ApiReview = { message?: string | undefined };
 
-export const ApiReview$zodSchema: z.ZodType<ApiReview, z.ZodTypeDef, unknown> =
-  z.object({
-    message: z.string().optional(),
-  });
+export const ApiReview$zodSchema: z.ZodType<ApiReview> = z.object({
+  message: z.string().optional().describe(
+    "Optional message from the API reviewer.",
+  ),
+});

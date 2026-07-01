@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 import { PlanMode, PlanMode$zodSchema } from "./planmode.js";
 import {
@@ -12,6 +13,17 @@ import {
 import { PlansResponse, PlansResponse$zodSchema } from "./plansresponse.js";
 import { PlanStatus, PlanStatus$zodSchema } from "./planstatus.js";
 
+export const Field = {
+  Flow: "flow",
+  MinusFlow: "-flow",
+} as const;
+export type Field = ClosedEnum<typeof Field>;
+
+export const Field$zodSchema = z.enum([
+  "flow",
+  "-flow",
+]);
+
 export type ListApiPlansRequest = {
   envId?: string | undefined;
   apiId: string;
@@ -19,51 +31,39 @@ export type ListApiPlansRequest = {
   securities?: Array<PlanSecurityType> | undefined;
   mode?: PlanMode | undefined;
   subscribableBy?: string | undefined;
+  fields?: Array<Field> | undefined;
   page?: number | undefined;
   perPage?: number | undefined;
 };
 
-export const ListApiPlansRequest$zodSchema: z.ZodType<
-  ListApiPlansRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  mode: PlanMode$zodSchema.optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  securities: z.array(PlanSecurityType$zodSchema).describe(
-    "List of security plan type filters",
-  ).optional(),
-  statuses: z.array(PlanStatus$zodSchema).describe("List of status filters")
-    .optional(),
-  subscribableBy: z.string().describe(
-    "Application's identifier. Allow user to get API's plans subscribable by an application.",
-  ).optional(),
-});
+export const ListApiPlansRequest$zodSchema: z.ZodType<ListApiPlansRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    fields: z.array(Field$zodSchema).describe(
+      "Nested fields of data to return in plans.",
+    ).optional(),
+    mode: PlanMode$zodSchema.optional().describe("Mode of plan"),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    securities: z.array(PlanSecurityType$zodSchema).describe(
+      "List of security plan type filters",
+    ).optional(),
+    statuses: z.array(PlanStatus$zodSchema).describe("List of status filters")
+      .optional(),
+    subscribableBy: z.string().describe(
+      "Application's identifier. Allow user to get API's plans subscribable by an application.",
+    ).optional(),
+  });
 
-export type ListApiPlansResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  PlansResponse?: PlansResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListApiPlansResponse = PlansResponse | ErrorT;
 
-export const ListApiPlansResponse$zodSchema: z.ZodType<
-  ListApiPlansResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  PlansResponse: PlansResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const ListApiPlansResponse$zodSchema: z.ZodType<ListApiPlansResponse> = z
+  .union([
+    PlansResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

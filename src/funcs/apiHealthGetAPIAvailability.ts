@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API availability by endpoint or by gateway
  *
  * @remarks
- * Get API Health availability.
+ * Get API availability by endpoint or by gateway
  *
- * User must have the API_HEALTH[READ] permission.
+ * Get API Health availability.
  */
 export function apiHealthGetAPIAvailability(
   client$: GraviteeApimCore,
@@ -118,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiAvailability",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -177,7 +177,7 @@ async function $do(
     M.json(200, GetApiAvailabilityResponse$zodSchema, {
       key: "ApiHealthAvailabilityResponse",
     }),
-    M.json("default", GetApiAvailabilityResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiAvailabilityResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

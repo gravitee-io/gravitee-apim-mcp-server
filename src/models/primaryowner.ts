@@ -15,13 +15,13 @@ export type PrimaryOwner = {
   type?: MembershipMemberType | undefined;
 };
 
-export const PrimaryOwner$zodSchema: z.ZodType<
-  PrimaryOwner,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  displayName: z.string().optional(),
-  email: z.string().optional(),
-  id: z.string().optional(),
-  type: MembershipMemberType$zodSchema.optional(),
+export const PrimaryOwner$zodSchema: z.ZodType<PrimaryOwner> = z.object({
+  displayName: z.string().optional().describe("Owner's name."),
+  email: z.string().optional().describe(
+    "Owner's email. Can be null if owner is a group.",
+  ),
+  id: z.string().optional().describe("Owner's uuid."),
+  type: MembershipMemberType$zodSchema.optional().describe(
+    "The type of membership",
+  ),
 });

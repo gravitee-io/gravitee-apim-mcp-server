@@ -10,9 +10,7 @@ import * as z from "zod";
 export type EndpointDiscoveryServiceConfiguration = {};
 
 export const EndpointDiscoveryServiceConfiguration$zodSchema: z.ZodType<
-  EndpointDiscoveryServiceConfiguration,
-  z.ZodTypeDef,
-  unknown
+  EndpointDiscoveryServiceConfiguration
 > = z.object({}).describe("The configuration of the service");
 
 export type EndpointDiscoveryService = {
@@ -22,12 +20,10 @@ export type EndpointDiscoveryService = {
 };
 
 export const EndpointDiscoveryService$zodSchema: z.ZodType<
-  EndpointDiscoveryService,
-  z.ZodTypeDef,
-  unknown
+  EndpointDiscoveryService
 > = z.object({
   configuration: z.lazy(() => EndpointDiscoveryServiceConfiguration$zodSchema)
-    .optional(),
-  enabled: z.boolean().default(true),
-  provider: z.string().optional(),
+    .optional().describe("The configuration of the service"),
+  enabled: z.boolean().default(true).describe("Is the service enabled or not."),
+  provider: z.string().optional().describe("The provider of the service"),
 });

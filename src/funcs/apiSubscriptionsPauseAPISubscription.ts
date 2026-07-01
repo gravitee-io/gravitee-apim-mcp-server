@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Pause one API's subscription
  *
  * @remarks
- * Pause the API's subscription.
+ * Pause one API's subscription
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Pause the API's subscription.
  */
 export function apiSubscriptionsPauseAPISubscription(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "pauseApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -177,7 +177,9 @@ async function $do(
     M.json(200, PauseApiSubscriptionResponse$zodSchema, {
       key: "Subscription",
     }),
-    M.json("default", PauseApiSubscriptionResponse$zodSchema, { key: "Error" }),
+    M.json("default", PauseApiSubscriptionResponse$zodSchema, {
+      key: "ErrorT",
+    }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -13,10 +13,10 @@ export type ApiAnalyticsAverageMessagesPerRequestResponse = {
 };
 
 export const ApiAnalyticsAverageMessagesPerRequestResponse$zodSchema: z.ZodType<
-  ApiAnalyticsAverageMessagesPerRequestResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiAnalyticsAverageMessagesPerRequestResponse
 > = z.object({
-  average: z.number().optional(),
-  averagesByEntrypoint: z.record(z.number()).optional(),
+  average: z.number().optional().describe(
+    "The rounded global average of messages per request",
+  ),
+  averagesByEntrypoint: z.record(z.string(), z.number()).optional(),
 }).describe("API Analytics for average messages per request by entrypoint.");

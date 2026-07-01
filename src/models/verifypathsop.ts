@@ -15,33 +15,18 @@ export type VerifyPathsRequest = {
   VerifyApiPaths: VerifyApiPaths;
 };
 
-export const VerifyPathsRequest$zodSchema: z.ZodType<
-  VerifyPathsRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  VerifyApiPaths: VerifyApiPaths$zodSchema,
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const VerifyPathsRequest$zodSchema: z.ZodType<VerifyPathsRequest> = z
+  .object({
+    VerifyApiPaths: VerifyApiPaths$zodSchema,
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type VerifyPathsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  VerifyApiPathsResponse?: VerifyApiPathsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type VerifyPathsResponse = VerifyApiPathsResponse | ErrorT;
 
-export const VerifyPathsResponse$zodSchema: z.ZodType<
-  VerifyPathsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  VerifyApiPathsResponse: VerifyApiPathsResponse$zodSchema.optional(),
-});
+export const VerifyPathsResponse$zodSchema: z.ZodType<VerifyPathsResponse> = z
+  .union([
+    VerifyApiPathsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

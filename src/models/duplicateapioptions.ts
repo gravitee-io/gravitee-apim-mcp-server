@@ -3,6 +3,15 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const FilteredField = {
+  Groups: "GROUPS",
+  Plans: "PLANS",
+  Members: "MEMBERS",
+  Pages: "PAGES",
+} as const;
+export type FilteredField = ClosedEnum<typeof FilteredField>;
 
 export const FilteredField$zodSchema = z.enum([
   "GROUPS",
@@ -11,8 +20,6 @@ export const FilteredField$zodSchema = z.enum([
   "PAGES",
 ]);
 
-export type FilteredField = z.infer<typeof FilteredField$zodSchema>;
-
 export type DuplicateApiOptions = {
   contextPath?: string | undefined;
   host?: string | undefined;
@@ -20,13 +27,18 @@ export type DuplicateApiOptions = {
   filteredFields: Array<FilteredField>;
 };
 
-export const DuplicateApiOptions$zodSchema: z.ZodType<
-  DuplicateApiOptions,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  contextPath: z.string().optional(),
-  filteredFields: z.array(FilteredField$zodSchema),
-  host: z.string().optional(),
-  version: z.string().optional(),
-});
+export const DuplicateApiOptions$zodSchema: z.ZodType<DuplicateApiOptions> = z
+  .object({
+    contextPath: z.string().optional().describe(
+      "The context path of the duplicated API (required for HTTP APIs).",
+    ),
+    filteredFields: z.array(FilteredField$zodSchema).describe(
+      "The list of API fields that can be excluded to create the new API.",
+    ),
+    host: z.string().optional().describe(
+      "The host of the duplicated API (required for TCP APIs).",
+    ),
+    version: z.string().optional().describe(
+      "The version of the duplicated API. If it is not defined, the value of the source API is used.",
+    ),
+  });

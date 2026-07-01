@@ -32,13 +32,11 @@ import { Result } from "../types/fp.js";
  * Get API documentation pages
  *
  * @remarks
- * Get API documentation pages.
- * When no parentId is specified, returns all the pages of the API.
+ * Get API documentation pages
  *
- * When parentId is specified (either ID of a folder, or 'ROOT'), only the pages with the given parent are returned,
- * and the breadcrumb of the specified folder is added to the response.
+ * Get API documentation pages. When no parentId is specified, returns all the pages of the API. When parentId is specified (either ID of a folder, or 'ROOT'), only the pages with the given parent are returned, and the breadcrumb of the specified folder is added to the response.
  *
- * User must have the API_DOCUMENTATION[READ] permission.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apiDocumentationGetAPIPages(
   client$: GraviteeApimCore,
@@ -120,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiPages",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -179,7 +177,7 @@ async function $do(
     M.json(200, GetApiPagesResponse$zodSchema, {
       key: "ApiDocumentationPagesResponse",
     }),
-    M.json("default", GetApiPagesResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiPagesResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

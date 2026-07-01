@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Revoke a subscription API Key
  *
  * @remarks
- * Revoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br>
- * A notification will be sent to the subscriber according to his portal notification options.
+ * Revoke a subscription API Key
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Revoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br> A notification will be sent to the subscriber according to his portal notification options.
+ *
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apiSubscriptionsRevokeAPISubscriptionAPIKey(
   client$: GraviteeApimCore,
@@ -124,7 +125,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "revokeApiSubscriptionApiKey",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -183,7 +184,7 @@ async function $do(
       key: "ApiKey",
     }),
     M.json("default", RevokeApiSubscriptionApiKeyResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

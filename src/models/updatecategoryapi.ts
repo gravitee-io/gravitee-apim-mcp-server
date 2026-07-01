@@ -9,10 +9,7 @@ import * as z from "zod";
  */
 export type UpdateCategoryApi = { order: number };
 
-export const UpdateCategoryApi$zodSchema: z.ZodType<
-  UpdateCategoryApi,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  order: z.number(),
-}).describe("Update an API within a Category");
+export const UpdateCategoryApi$zodSchema: z.ZodType<UpdateCategoryApi> = z
+  .object({
+    order: z.number().describe("New order for the specified API"),
+  }).describe("Update an API within a Category");

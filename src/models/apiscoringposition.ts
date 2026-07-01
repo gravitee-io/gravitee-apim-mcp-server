@@ -9,11 +9,12 @@ export type ApiScoringPosition = {
   character?: number | undefined;
 };
 
-export const ApiScoringPosition$zodSchema: z.ZodType<
-  ApiScoringPosition,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  character: z.number().int().optional(),
-  line: z.number().int().optional(),
-});
+export const ApiScoringPosition$zodSchema: z.ZodType<ApiScoringPosition> = z
+  .object({
+    character: z.int().optional().describe(
+      "An integer that represents the character position within the line where the issue starts or ends. The value is zero indexed.",
+    ),
+    line: z.int().optional().describe(
+      "An integer that represents the line number within the line where the issue starts or ends. The value is zero indexed.",
+    ),
+  });

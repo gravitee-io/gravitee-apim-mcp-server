@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 import {
   SubscriptionsResponse,
@@ -13,16 +14,22 @@ import {
   SubscriptionStatus$zodSchema,
 } from "./subscriptionstatus.js";
 
+export const GetApiSubscriptionsExpand = {
+  Api: "api",
+  Application: "application",
+  Plan: "plan",
+  SubscribedBy: "subscribedBy",
+} as const;
+export type GetApiSubscriptionsExpand = ClosedEnum<
+  typeof GetApiSubscriptionsExpand
+>;
+
 export const GetApiSubscriptionsExpand$zodSchema = z.enum([
   "api",
   "application",
   "plan",
   "subscribedBy",
 ]);
-
-export type GetApiSubscriptionsExpand = z.infer<
-  typeof GetApiSubscriptionsExpand$zodSchema
->;
 
 export type GetApiSubscriptionsRequest = {
   envId?: string | undefined;
@@ -37,9 +44,7 @@ export type GetApiSubscriptionsRequest = {
 };
 
 export const GetApiSubscriptionsRequest$zodSchema: z.ZodType<
-  GetApiSubscriptionsRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiSubscriptionsRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   apiKey: z.string().describe(
@@ -54,10 +59,9 @@ export const GetApiSubscriptionsRequest$zodSchema: z.ZodType<
   expands: z.array(GetApiSubscriptionsExpand$zodSchema).describe(
     "Expansion of data to return in subscriptions.",
   ).optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
   planIds: z.array(z.string()).describe("List of plan ids to filter on.")
     .optional(),
@@ -66,22 +70,11 @@ export const GetApiSubscriptionsRequest$zodSchema: z.ZodType<
   ).optional(),
 });
 
-export type GetApiSubscriptionsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  SubscriptionsResponse?: SubscriptionsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiSubscriptionsResponse = SubscriptionsResponse | ErrorT;
 
 export const GetApiSubscriptionsResponse$zodSchema: z.ZodType<
-  GetApiSubscriptionsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  SubscriptionsResponse: SubscriptionsResponse$zodSchema.optional(),
-});
+  GetApiSubscriptionsResponse
+> = z.union([
+  SubscriptionsResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

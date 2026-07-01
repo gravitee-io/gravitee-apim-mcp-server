@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apIsDuplicateApi: ToolDefinition<typeof args> = {
-  name: "AP-is-duplicate-api",
+  name: "duplicate_api",
   description: `Duplicate an API
 
-Create a new API from an existing one.
-Context-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request.
-User must have at least the API_DEFINITION[READ] and ENVIRONMENT_API[CREATE] permissions.`,
+Create a new API from an existing one. Context-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Duplicate Api",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsDuplicateApi(

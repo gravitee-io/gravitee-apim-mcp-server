@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The path operator of the selector
  */
+export const Operator = {
+  Equals: "EQUALS",
+  StartsWith: "STARTS_WITH",
+} as const;
+/**
+ * The path operator of the selector
+ */
+export type Operator = ClosedEnum<typeof Operator>;
+
 export const Operator$zodSchema = z.enum([
   "EQUALS",
   "STARTS_WITH",
 ]).describe("The path operator of the selector");
-
-export type Operator = z.infer<typeof Operator$zodSchema>;

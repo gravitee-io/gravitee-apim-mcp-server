@@ -3,14 +3,33 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * API's type.
  */
-export const ApiType$zodSchema = z.enum([
-  "MESSAGE",
-  "PROXY",
-  "NATIVE",
-]).describe("API's type.");
+export const ApiType = {
+  A2AProxy: "A2A_PROXY",
+  Authz: "AUTHZ",
+  Edge: "EDGE",
+  LlmProxy: "LLM_PROXY",
+  McpProxy: "MCP_PROXY",
+  Message: "MESSAGE",
+  Native: "NATIVE",
+  Proxy: "PROXY",
+} as const;
+/**
+ * API's type.
+ */
+export type ApiType = ClosedEnum<typeof ApiType>;
 
-export type ApiType = z.infer<typeof ApiType$zodSchema>;
+export const ApiType$zodSchema = z.enum([
+  "A2A_PROXY",
+  "AUTHZ",
+  "EDGE",
+  "LLM_PROXY",
+  "MCP_PROXY",
+  "MESSAGE",
+  "NATIVE",
+  "PROXY",
+]).describe("API's type.");

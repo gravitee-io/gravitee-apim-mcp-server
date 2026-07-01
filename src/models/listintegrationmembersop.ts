@@ -17,37 +17,23 @@ export type ListIntegrationMembersRequest = {
 };
 
 export const ListIntegrationMembersRequest$zodSchema: z.ZodType<
-  ListIntegrationMembersRequest,
-  z.ZodTypeDef,
-  unknown
+  ListIntegrationMembersRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   integrationId: z.string().describe("Id of an integration."),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
 });
 
-export type ListIntegrationMembersResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  MembersResponse?: MembersResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListIntegrationMembersResponse = MembersResponse | ErrorT;
 
 export const ListIntegrationMembersResponse$zodSchema: z.ZodType<
-  ListIntegrationMembersResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  MembersResponse: MembersResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  ListIntegrationMembersResponse
+> = z.union([
+  MembersResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

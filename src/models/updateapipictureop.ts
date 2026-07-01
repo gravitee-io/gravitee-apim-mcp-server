@@ -3,7 +3,7 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
+import * as b64$ from "../lib/base64.js";
 
 export type UpdateApiPictureRequest = {
   envId?: string | undefined;
@@ -12,31 +12,13 @@ export type UpdateApiPictureRequest = {
 };
 
 export const UpdateApiPictureRequest$zodSchema: z.ZodType<
-  UpdateApiPictureRequest,
-  z.ZodTypeDef,
-  unknown
+  UpdateApiPictureRequest
 > = z.object({
-  RequestBody: z.string().base64().optional(),
+  RequestBody: z.string().describe("Base64-encoded binary content").transform(
+    b64$.bytesFromBase64,
+  ).optional(),
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-});
-
-export type UpdateApiPictureResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const UpdateApiPictureResponse$zodSchema: z.ZodType<
-  UpdateApiPictureResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

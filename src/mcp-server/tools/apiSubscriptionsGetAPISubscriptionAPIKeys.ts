@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsGetAPISubscriptionAPIKeys: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-get-api-subscription-api-keys",
+  name: "get_api_subscription_api_keys",
   description: `Get subscription's API Keys
 
-Get the subscription API Keys.
-
-User must have the API_SUBSCRIPTION[READ] permission.`,
+Get the subscription API Keys.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Subscription Api Keys",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsGetAPISubscriptionAPIKeys(

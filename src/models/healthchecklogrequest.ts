@@ -13,12 +13,11 @@ export type HealthCheckLogRequest = {
   headers?: { [k: string]: string } | undefined;
 };
 
-export const HealthCheckLogRequest$zodSchema: z.ZodType<
-  HealthCheckLogRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  headers: z.record(z.string()).optional(),
-  method: z.string().optional(),
-  uri: z.string().optional(),
-}).describe("A health check request");
+export const HealthCheckLogRequest$zodSchema: z.ZodType<HealthCheckLogRequest> =
+  z.object({
+    headers: z.record(z.string(), z.string()).optional().describe(
+      "The request headers",
+    ),
+    method: z.string().optional().describe("The http method"),
+    uri: z.string().optional().describe("The uri called"),
+  }).describe("A health check request");

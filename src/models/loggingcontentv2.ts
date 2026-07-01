@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The content of the logging.
  */
+export const LoggingContentV2 = {
+  None: "NONE",
+  Headers: "HEADERS",
+  Payloads: "PAYLOADS",
+  HeadersPayloads: "HEADERS_PAYLOADS",
+} as const;
+/**
+ * The content of the logging.
+ */
+export type LoggingContentV2 = ClosedEnum<typeof LoggingContentV2>;
+
 export const LoggingContentV2$zodSchema = z.enum([
   "NONE",
   "HEADERS",
   "PAYLOADS",
   "HEADERS_PAYLOADS",
 ]).describe("The content of the logging.");
-
-export type LoggingContentV2 = z.infer<typeof LoggingContentV2$zodSchema>;

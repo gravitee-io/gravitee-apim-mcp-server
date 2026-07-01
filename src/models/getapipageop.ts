@@ -12,34 +12,19 @@ export type GetApiPageRequest = {
   pageId: string;
 };
 
-export const GetApiPageRequest$zodSchema: z.ZodType<
-  GetApiPageRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  pageId: z.string().describe("Id of a documentation page."),
-});
+export const GetApiPageRequest$zodSchema: z.ZodType<GetApiPageRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    pageId: z.string().describe("Id of a documentation page."),
+  });
 
-export type GetApiPageResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Page?: Page | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiPageResponse = Page | ErrorT;
 
-export const GetApiPageResponse$zodSchema: z.ZodType<
-  GetApiPageResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Page: Page$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiPageResponse$zodSchema: z.ZodType<GetApiPageResponse> = z
+  .union([
+    Page$zodSchema,
+    ErrorT$zodSchema,
+  ]);

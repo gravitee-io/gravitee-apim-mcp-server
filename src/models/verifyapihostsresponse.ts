@@ -13,10 +13,10 @@ export type VerifyApiHostsResponse = {
 };
 
 export const VerifyApiHostsResponse$zodSchema: z.ZodType<
-  VerifyApiHostsResponse,
-  z.ZodTypeDef,
-  unknown
+  VerifyApiHostsResponse
 > = z.object({
-  ok: z.boolean().optional(),
-  reason: z.string().optional(),
+  ok: z.boolean().optional().describe("Indicates whether the hosts are valid."),
+  reason: z.string().optional().describe(
+    "An optional reason giving details about the result.",
+  ),
 }).describe("Result of the API hosts verification");

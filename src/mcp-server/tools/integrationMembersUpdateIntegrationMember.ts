@@ -13,16 +13,18 @@ const args = {
 export const tool$integrationMembersUpdateIntegrationMember: ToolDefinition<
   typeof args
 > = {
-  name: "integration-members-update-integration-member",
+  name: "update_integration_member",
   description: `Updates a member for an Integration.
 
-Edit a member for an Integration.
-
-Returns a 400 HTTP Error:
- - when the user tries to set a member as PrimaryOwner.
-
-User must have the INTEGRATION_MEMBER[UPDATE] permission.
-`,
+Edit a member for an Integration. Returns a 400 HTTP Error:`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Update Integration Member",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationMembersUpdateIntegrationMember(

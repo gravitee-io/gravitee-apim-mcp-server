@@ -16,12 +16,10 @@ export type ApiLogsResponse = {
   links?: Links | undefined;
 };
 
-export const ApiLogsResponse$zodSchema: z.ZodType<
-  ApiLogsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(ApiLog$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
+export const ApiLogsResponse$zodSchema: z.ZodType<ApiLogsResponse> = z.object({
+  data: z.array(ApiLog$zodSchema).optional().describe("List of API logs."),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
 }).describe("Page of API Logs");

@@ -17,10 +17,10 @@ export type ApiAnalyticsResponseStatusOvertimeResponse = {
 };
 
 export const ApiAnalyticsResponseStatusOvertimeResponse$zodSchema: z.ZodType<
-  ApiAnalyticsResponseStatusOvertimeResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiAnalyticsResponseStatusOvertimeResponse
 > = z.object({
-  data: z.record(z.array(z.number().int())).optional(),
-  timeRange: AnalyticTimeRange$zodSchema.optional(),
+  data: z.record(z.string(), z.array(z.int())).optional().describe(
+    "Status count overt time",
+  ),
+  timeRange: AnalyticTimeRange$zodSchema.optional().describe("A Time range"),
 }).describe("API Analytics for status codes over time.");

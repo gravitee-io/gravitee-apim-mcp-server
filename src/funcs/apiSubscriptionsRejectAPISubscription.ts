@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Reject an API subscription
  *
  * @remarks
+ * Reject an API subscription
+ *
  * Reject an API subscription with an optional reason.
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apiSubscriptionsRejectAPISubscription(
   client$: GraviteeApimCore,
@@ -122,7 +124,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "rejectApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -181,7 +183,7 @@ async function $do(
       key: "Subscription",
     }),
     M.json("default", RejectApiSubscriptionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

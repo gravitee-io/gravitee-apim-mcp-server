@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Duplicate an API
  *
  * @remarks
- * Create a new API from an existing one.
- * Context-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request.
- * User must have at least the API_DEFINITION[READ] and ENVIRONMENT_API[CREATE] permissions.
+ * Duplicate an API
+ *
+ * Create a new API from an existing one. Context-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request.
  */
 export function apIsDuplicateApi(
   client$: GraviteeApimCore,
@@ -116,7 +116,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "duplicateApi",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -172,7 +172,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, DuplicateApiResponse$zodSchema, { key: "Api" }),
-    M.json("default", DuplicateApiResponse$zodSchema, { key: "Error" }),
+    M.json("default", DuplicateApiResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

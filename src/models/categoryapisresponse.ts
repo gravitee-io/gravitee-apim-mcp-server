@@ -16,12 +16,13 @@ export type CategoryApisResponse = {
   links?: Links | undefined;
 };
 
-export const CategoryApisResponse$zodSchema: z.ZodType<
-  CategoryApisResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(CategoryApi$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of APIs within a Category");
+export const CategoryApisResponse$zodSchema: z.ZodType<CategoryApisResponse> = z
+  .object({
+    data: z.array(CategoryApi$zodSchema).optional().describe(
+      "List of APIs within a Category.",
+    ),
+    links: Links$zodSchema.optional().describe("List of links for pagination"),
+    pagination: Pagination$zodSchema.optional().describe(
+      "Generic object to handle pagination data.",
+    ),
+  }).describe("Page of APIs within a Category");

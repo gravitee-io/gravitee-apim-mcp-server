@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$apIsListApis: ToolDefinition<typeof args> = {
-  name: "AP-is-list-apis",
+  name: "list_apis",
   description: `List APIs
 
-Get the list of APIs for a specific environment.<br>
-The results are paginated.
-
-User must have the ENVIRONMENT_API[READ] permission.`,
+Get the list of APIs for a specific environment.<br> The results are paginated.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Apis",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsListApis(

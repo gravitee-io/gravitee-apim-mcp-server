@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Resume a paused API's subscription
  *
  * @remarks
- * Resume a previously paused subscription.
+ * Resume a paused API's subscription
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Resume a previously paused subscription.
  */
 export function apiSubscriptionsResumeAPISubscription(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "resumeApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -178,7 +178,7 @@ async function $do(
       key: "Subscription",
     }),
     M.json("default", ResumeApiSubscriptionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

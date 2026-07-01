@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Plan validation type.
  */
+export const PlanValidation = {
+  Auto: "AUTO",
+  Manual: "MANUAL",
+} as const;
+/**
+ * Plan validation type.
+ */
+export type PlanValidation = ClosedEnum<typeof PlanValidation>;
+
 export const PlanValidation$zodSchema = z.enum([
   "AUTO",
   "MANUAL",
 ]).describe("Plan validation type.");
-
-export type PlanValidation = z.infer<typeof PlanValidation$zodSchema>;

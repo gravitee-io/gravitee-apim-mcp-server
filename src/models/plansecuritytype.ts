@@ -3,10 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Plan security type.
  */
+export const PlanSecurityType = {
+  KeyLess: "KEY_LESS",
+  ApiKey: "API_KEY",
+  Oauth2: "OAUTH2",
+  Jwt: "JWT",
+  Mtls: "MTLS",
+} as const;
+/**
+ * Plan security type.
+ */
+export type PlanSecurityType = ClosedEnum<typeof PlanSecurityType>;
+
 export const PlanSecurityType$zodSchema = z.enum([
   "KEY_LESS",
   "API_KEY",
@@ -14,5 +27,3 @@ export const PlanSecurityType$zodSchema = z.enum([
   "JWT",
   "MTLS",
 ]).describe("Plan security type.");
-
-export type PlanSecurityType = z.infer<typeof PlanSecurityType$zodSchema>;

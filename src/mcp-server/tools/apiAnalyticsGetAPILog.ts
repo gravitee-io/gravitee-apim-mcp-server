@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiAnalyticsGetAPILog: ToolDefinition<typeof args> = {
-  name: "API-analytics-get-api-log",
+  name: "get_api_log",
   description: `Get API log for a request
 
-Get API log for a request.
-
-User must have the API_LOG[READ] permission.`,
+Get API log for a request.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Log",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetAPILog(

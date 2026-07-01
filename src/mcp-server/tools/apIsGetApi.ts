@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apIsGetApi: ToolDefinition<typeof args> = {
-  name: "AP-is-get-api",
+  name: "get_api",
   description: `Get a specific API
 
-Get a specific API.
-
-User must have at least one management (create, update, or delete) permission on the API to access it.`,
+Get a specific API.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsGetApi(

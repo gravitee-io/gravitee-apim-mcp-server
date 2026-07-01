@@ -3,10 +3,28 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The method of the selector
  */
+export const HttpMethod = {
+  Connect: "CONNECT",
+  Delete: "DELETE",
+  Get: "GET",
+  Head: "HEAD",
+  Options: "OPTIONS",
+  Patch: "PATCH",
+  Post: "POST",
+  Put: "PUT",
+  Trace: "TRACE",
+  Other: "OTHER",
+} as const;
+/**
+ * The method of the selector
+ */
+export type HttpMethod = ClosedEnum<typeof HttpMethod>;
+
 export const HttpMethod$zodSchema = z.enum([
   "CONNECT",
   "DELETE",
@@ -19,5 +37,3 @@ export const HttpMethod$zodSchema = z.enum([
   "TRACE",
   "OTHER",
 ]).describe("The method of the selector");
-
-export type HttpMethod = z.infer<typeof HttpMethod$zodSchema>;

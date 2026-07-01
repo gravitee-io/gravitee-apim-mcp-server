@@ -10,9 +10,7 @@ import * as z from "zod";
 export type PageSourceConfiguration = {};
 
 export const PageSourceConfiguration$zodSchema: z.ZodType<
-  PageSourceConfiguration,
-  z.ZodTypeDef,
-  unknown
+  PageSourceConfiguration
 > = z.object({}).describe("Page source's configuration.");
 
 export type PageSource = {
@@ -20,11 +18,10 @@ export type PageSource = {
   configuration?: PageSourceConfiguration | undefined;
 };
 
-export const PageSource$zodSchema: z.ZodType<
-  PageSource,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  configuration: z.lazy(() => PageSourceConfiguration$zodSchema).optional(),
-  type: z.string().optional(),
+export const PageSource$zodSchema: z.ZodType<PageSource> = z.object({
+  configuration: z.lazy(() => PageSourceConfiguration$zodSchema).optional()
+    .describe("Page source's configuration."),
+  type: z.string().optional().describe(
+    "The type of the page source (=fetcher type).",
+  ),
 });

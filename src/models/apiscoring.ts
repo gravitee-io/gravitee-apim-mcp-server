@@ -18,12 +18,10 @@ export type ApiScoring = {
   assets?: Array<ApiScoringAsset> | undefined;
 };
 
-export const ApiScoring$zodSchema: z.ZodType<
-  ApiScoring,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const ApiScoring$zodSchema: z.ZodType<ApiScoring> = z.object({
   assets: z.array(ApiScoringAsset$zodSchema).optional(),
-  createdAt: z.string().datetime({ offset: true }).optional(),
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The date when the scoring has been created.",
+  ),
   summary: ApiScoringSummary$zodSchema.optional(),
 });

@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsCreateAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-create-api-subscription",
+  name: "create_api_subscription",
   description: `Subscribe to an API's plan
 
-Create a new subscription on a given API.
-
-User must have the API_SUBSCRIPTION[CREATE] permission.`,
+Create a new subscription on a given API.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Api Subscription",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsCreateAPISubscription(

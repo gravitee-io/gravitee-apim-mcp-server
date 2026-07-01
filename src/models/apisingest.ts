@@ -6,10 +6,8 @@ import * as z from "zod";
 
 export type ApisIngest = { apiIds: Array<string> };
 
-export const ApisIngest$zodSchema: z.ZodType<
-  ApisIngest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiIds: z.array(z.string()),
+export const ApisIngest$zodSchema: z.ZodType<ApisIngest> = z.object({
+  apiIds: z.array(z.string()).describe(
+    "The list of ids of APIs to ingest. If null or empty, ingest all.",
+  ),
 });

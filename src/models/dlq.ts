@@ -6,6 +6,6 @@ import * as z from "zod";
 
 export type Dlq = { endpoint?: string | undefined };
 
-export const Dlq$zodSchema: z.ZodType<Dlq, z.ZodTypeDef, unknown> = z.object({
-  endpoint: z.string().optional(),
+export const Dlq$zodSchema: z.ZodType<Dlq> = z.object({
+  endpoint: z.string().optional().describe("The endpoint of the DLQ."),
 });

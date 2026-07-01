@@ -18,39 +18,23 @@ export type ListAsyncJobRequest = {
   status: AsyncJobStatus;
 };
 
-export const ListAsyncJobRequest$zodSchema: z.ZodType<
-  ListAsyncJobRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  sourceId: z.string().describe("SourceId to filter"),
-  status: AsyncJobStatus$zodSchema,
-});
+export const ListAsyncJobRequest$zodSchema: z.ZodType<ListAsyncJobRequest> = z
+  .object({
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    sourceId: z.string().describe("SourceId to filter"),
+    status: AsyncJobStatus$zodSchema.describe("Status to filter"),
+  });
 
-export type ListAsyncJobResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  AsyncJobsResponse?: AsyncJobsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListAsyncJobResponse = AsyncJobsResponse | ErrorT;
 
-export const ListAsyncJobResponse$zodSchema: z.ZodType<
-  ListAsyncJobResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  AsyncJobsResponse: AsyncJobsResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const ListAsyncJobResponse$zodSchema: z.ZodType<ListAsyncJobResponse> = z
+  .union([
+    AsyncJobsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

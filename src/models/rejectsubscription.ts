@@ -6,10 +6,9 @@ import * as z from "zod";
 
 export type RejectSubscription = { reason?: string | undefined };
 
-export const RejectSubscription$zodSchema: z.ZodType<
-  RejectSubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  reason: z.string().optional(),
-});
+export const RejectSubscription$zodSchema: z.ZodType<RejectSubscription> = z
+  .object({
+    reason: z.string().optional().describe(
+      "Optional reason explaining why the subscription has been rejected.",
+    ),
+  });

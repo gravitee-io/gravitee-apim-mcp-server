@@ -3,10 +3,17 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const ApisGetExpandsParam = {
+  DeploymentState: "deploymentState",
+  PrimaryOwner: "primaryOwner",
+  Metadata: "metadata",
+} as const;
+export type ApisGetExpandsParam = ClosedEnum<typeof ApisGetExpandsParam>;
 
 export const ApisGetExpandsParam$zodSchema = z.enum([
   "deploymentState",
   "primaryOwner",
+  "metadata",
 ]);
-
-export type ApisGetExpandsParam = z.infer<typeof ApisGetExpandsParam$zodSchema>;

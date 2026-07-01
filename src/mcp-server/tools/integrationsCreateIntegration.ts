@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$integrationsCreateIntegration: ToolDefinition<typeof args> = {
-  name: "integrations-create-integration",
+  name: "create_integration",
   description: `Create an Integration
 
-Create a new Integration.
-
-The response body will not contain Agent Status. To get it you should use getIntegration operation.
-User must have the ENVIRONMENT_INTEGRATION[CREATE] permission.`,
+Create a new Integration. The response body will not contain Agent Status. To get it you should use getIntegration operation.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Integration",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsCreateIntegration(

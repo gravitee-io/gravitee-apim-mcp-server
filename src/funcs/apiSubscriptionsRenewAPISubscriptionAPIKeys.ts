@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * Renew the subscription API Keys.
  *
  * @remarks
- * Renew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br>
- * The newly created API Key is returned in response.
+ * Renew the subscription API Keys.
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Renew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br> The newly created API Key is returned in response.
  */
 export function apiSubscriptionsRenewAPISubscriptionAPIKeys(
   client$: GraviteeApimCore,
@@ -121,7 +120,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "renewApiSubscriptionApiKeys",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -180,7 +179,7 @@ async function $do(
       key: "ApiKey",
     }),
     M.json("default", RenewApiSubscriptionApiKeysResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

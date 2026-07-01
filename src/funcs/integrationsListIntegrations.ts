@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * List Integrations
  *
  * @remarks
- * Get the list of Integration for a specific environment.<br>
- * The results are paginated.
+ * List Integrations
  *
- * User must have the ENVIRONMENT_INTEGRATION[READ] permission.
+ * Get the list of Integration for a specific environment.<br> The results are paginated.
  */
 export function integrationsListIntegrations(
   client$: GraviteeApimCore,
@@ -114,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listIntegrations",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -173,7 +172,7 @@ async function $do(
     M.json(200, ListIntegrationsResponse$zodSchema, {
       key: "IntegrationsResponse",
     }),
-    M.json("default", ListIntegrationsResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListIntegrationsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

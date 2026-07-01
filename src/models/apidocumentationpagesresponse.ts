@@ -15,10 +15,10 @@ export type ApiDocumentationPagesResponse = {
 };
 
 export const ApiDocumentationPagesResponse$zodSchema: z.ZodType<
-  ApiDocumentationPagesResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiDocumentationPagesResponse
 > = z.object({
-  breadcrumb: z.array(Breadcrumb$zodSchema).optional(),
+  breadcrumb: z.array(Breadcrumb$zodSchema).optional().describe(
+    "Breadcrumb to the root folder. Only returned when parentId is specified.",
+  ),
   pages: z.array(Page$zodSchema).optional(),
 }).describe("API documentation pages");

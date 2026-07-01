@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API logs
  *
  * @remarks
- * Get API logs.
+ * Get API logs
  *
- * User must have the API_LOG[READ] permission.
+ * Get API logs.
  */
 export function apiAnalyticsGetAPILogs(
   client$: GraviteeApimCore,
@@ -104,7 +104,9 @@ async function $do(
   );
   const query$ = queryJoin(
     encodeFormQuery({
+      "apiProductIds": payload$.apiProductIds,
       "applicationIds": payload$.applicationIds,
+      "errorKeys": payload$.errorKeys,
       "methods": payload$.methods,
       "planIds": payload$.planIds,
     }, { explode: false }),
@@ -126,7 +128,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiLogs",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -183,7 +185,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiLogsResponse$zodSchema, { key: "ApiLogsResponse" }),
-    M.json("default", GetApiLogsResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiLogsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

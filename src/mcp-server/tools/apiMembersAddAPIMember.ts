@@ -11,16 +11,18 @@ const args = {
 };
 
 export const tool$apiMembersAddAPIMember: ToolDefinition<typeof args> = {
-  name: "API-members-add-api-member",
+  name: "add_api_member",
   description: `Add a member to an API.
 
-Add a new member to an API.
-
-Returns a 400 HTTP Error:
- - when the user tries to set a member as PrimaryOwner.
-
-User must have the API_MEMBER[CREATE] permission.
-`,
+Add a new member to an API. Returns a 400 HTTP Error:`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Add Api Member",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiMembersAddAPIMember(

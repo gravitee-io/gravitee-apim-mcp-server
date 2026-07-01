@@ -3,6 +3,19 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const ApiMetadataSortByParam = {
+  Key: "key",
+  MinusKey: "-key",
+  Name: "name",
+  MinusName: "-name",
+  Format: "format",
+  MinusFormat: "-format",
+  Value: "value",
+  MinusValue: "-value",
+} as const;
+export type ApiMetadataSortByParam = ClosedEnum<typeof ApiMetadataSortByParam>;
 
 export const ApiMetadataSortByParam$zodSchema = z.enum([
   "key",
@@ -14,7 +27,3 @@ export const ApiMetadataSortByParam$zodSchema = z.enum([
   "value",
   "-value",
 ]);
-
-export type ApiMetadataSortByParam = z.infer<
-  typeof ApiMetadataSortByParam$zodSchema
->;

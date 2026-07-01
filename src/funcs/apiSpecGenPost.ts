@@ -33,8 +33,6 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * Starts the API SpecGen
- *
- * User must have the API_DOCUMENTATION[CREATE] permission.
  */
 export function apiSpecGenPost(
   client$: GraviteeApimCore,
@@ -115,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "post",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -171,7 +169,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, PostResponse$zodSchema, { key: "ApiSpecGenRequestState" }),
-    M.json("default", PostResponse$zodSchema, { key: "Error" }),
+    M.json("default", PostResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

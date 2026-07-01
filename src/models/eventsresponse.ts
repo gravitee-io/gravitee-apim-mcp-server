@@ -16,12 +16,10 @@ export type EventsResponse = {
   links?: Links | undefined;
 };
 
-export const EventsResponse$zodSchema: z.ZodType<
-  EventsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Event$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
+export const EventsResponse$zodSchema: z.ZodType<EventsResponse> = z.object({
+  data: z.array(Event$zodSchema).optional().describe("List of events."),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
 }).describe("Page of Event");

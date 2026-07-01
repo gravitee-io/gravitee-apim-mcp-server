@@ -11,12 +11,20 @@ const args = {
 };
 
 export const tool$apIsUpdateApi: ToolDefinition<typeof args> = {
-  name: "AP-is-update-api",
+  name: "update_api",
   description: `Update an API
 
 Update a V2 or a V4 API.
 
-User must have API_DEFINITION[UPDATE] or API_GATEWAY_DEFINITION[UPDATE] permissions.`,
+Fetch the current API first, modify the complete API body, then submit the full update payload.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Update Api",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsUpdateApi(

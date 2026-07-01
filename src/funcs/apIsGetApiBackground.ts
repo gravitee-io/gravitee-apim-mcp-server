@@ -37,9 +37,11 @@ export enum GetApiBackgroundAcceptEnum {
  * Get an API's background picture
  *
  * @remarks
+ * Get an API's background picture
+ *
  * Get the API's background picture.
  *
- * User must have the API_DEFINITION[READ] permission.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apIsGetApiBackground(
   client$: GraviteeApimCore,
@@ -121,7 +123,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiBackground",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -180,7 +182,7 @@ async function $do(
       ctype: "image/*",
       key: "ImageResponse",
     }),
-    M.json("default", GetApiBackgroundResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiBackgroundResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

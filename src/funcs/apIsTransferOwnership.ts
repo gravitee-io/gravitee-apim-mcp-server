@@ -10,6 +10,7 @@ import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,8 +23,6 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   TransferOwnershipRequest,
   TransferOwnershipRequest$zodSchema,
-  TransferOwnershipResponse,
-  TransferOwnershipResponse$zodSchema,
 } from "../models/transferownershipop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -32,15 +31,11 @@ import { Result } from "../types/fp.js";
  * Transfer the ownership of the API
  *
  * @remarks
- * Transfer the ownership of the API to a user, a group or an api member.
+ * Transfer the ownership of the API
  *
- * Return a 404 HTTP Error if API cannot be found.
+ * Transfer the ownership of the API to a user, a group or an api member. Return a 404 HTTP Error if API cannot be found.
  *
- * Return a 400 HTTP Error:
- *  - when user tries to stop an ARCHIVED API
- *  - when the API is already STOPPED.
- *
- * User must have the API_MEMBER[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apIsTransferOwnership(
   client$: GraviteeApimCore,
@@ -48,7 +43,7 @@ export function apIsTransferOwnership(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    TransferOwnershipResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -72,7 +67,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      TransferOwnershipResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -124,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "transferOwnership",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -170,7 +165,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    TransferOwnershipResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -179,8 +174,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, TransferOwnershipResponse$zodSchema),
-    M.json("default", TransferOwnershipResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

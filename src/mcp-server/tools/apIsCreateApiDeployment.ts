@@ -11,13 +11,21 @@ const args = {
 };
 
 export const tool$apIsCreateApiDeployment: ToolDefinition<typeof args> = {
-  name: "AP-is-create-api-deployment",
+  name: "create_api_deployment",
   description: `Request a deployment to gateway instances
 
-Request a deployment for a given API. <br>
-An optional deployment label can be given to the requested deployment.
+Request a deployment for a given API. <br> An optional deployment label can be given to the requested deployment.
 
-User must have the API_DEFINITION[UPDATE] permission.`,
+Deploy after configuration or plan changes and before starting the API.
+Example request body: {"deploymentLabel":"release"}`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Api Deployment",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsCreateApiDeployment(

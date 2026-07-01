@@ -10,6 +10,10 @@ import {
 } from "./endpointgroupv2.js";
 import { Failover, Failover$zodSchema } from "./failover.js";
 import { LoggingV2, LoggingV2$zodSchema } from "./loggingv2.js";
+import {
+  RequestValidation,
+  RequestValidation$zodSchema,
+} from "./requestvalidation.js";
 import { VirtualHost, VirtualHost$zodSchema } from "./virtualhost.js";
 
 export type Proxy = {
@@ -17,20 +21,21 @@ export type Proxy = {
   groups?: Array<EndpointGroupV2> | undefined;
   failover?: Failover | undefined;
   cors?: Cors | undefined;
+  requestValidation?: RequestValidation | undefined;
   logging?: LoggingV2 | undefined;
   stripContextPath?: boolean | undefined;
   preserveHost?: boolean | undefined;
   servers?: Array<string> | undefined;
 };
 
-export const Proxy$zodSchema: z.ZodType<Proxy, z.ZodTypeDef, unknown> = z
-  .object({
-    cors: Cors$zodSchema.optional(),
-    failover: Failover$zodSchema.optional(),
-    groups: z.array(EndpointGroupV2$zodSchema).optional(),
-    logging: LoggingV2$zodSchema.optional(),
-    preserveHost: z.boolean().default(false),
-    servers: z.array(z.string()).optional(),
-    stripContextPath: z.boolean().default(false),
-    virtualHosts: z.array(VirtualHost$zodSchema).optional(),
-  });
+export const Proxy$zodSchema: z.ZodType<Proxy> = z.object({
+  cors: Cors$zodSchema.optional(),
+  failover: Failover$zodSchema.optional(),
+  groups: z.array(EndpointGroupV2$zodSchema).optional(),
+  logging: LoggingV2$zodSchema.optional(),
+  preserveHost: z.boolean().default(false),
+  requestValidation: RequestValidation$zodSchema.optional(),
+  servers: z.array(z.string()).optional(),
+  stripContextPath: z.boolean().default(false),
+  virtualHosts: z.array(VirtualHost$zodSchema).optional(),
+});

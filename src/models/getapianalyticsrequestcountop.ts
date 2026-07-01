@@ -17,43 +17,26 @@ export type GetApiAnalyticsRequestCountRequest = {
 };
 
 export const GetApiAnalyticsRequestCountRequest$zodSchema: z.ZodType<
-  GetApiAnalyticsRequestCountRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiAnalyticsRequestCountRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  from: z.number().int().describe(
-    "The timestamp from which the logs will be returned.\n"
-      + "",
+  from: z.int().describe(
+    "The timestamp from which the logs will be returned.\n",
   ).optional(),
-  to: z.number().int().describe(
-    "The timestamp to which the logs will be returned.\n"
-      + "",
-  ).optional(),
+  to: z.int().describe("The timestamp to which the logs will be returned.\n")
+    .optional(),
 });
 
-export type GetApiAnalyticsRequestCountResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiAnalyticsRequestsCountResponse?:
-    | ApiAnalyticsRequestsCountResponse
-    | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiAnalyticsRequestCountResponse =
+  | ApiAnalyticsRequestsCountResponse
+  | ErrorT;
 
 export const GetApiAnalyticsRequestCountResponse$zodSchema: z.ZodType<
-  GetApiAnalyticsRequestCountResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiAnalyticsRequestsCountResponse: ApiAnalyticsRequestsCountResponse$zodSchema
-    .optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiAnalyticsRequestCountResponse
+> = z.union([
+  ApiAnalyticsRequestsCountResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

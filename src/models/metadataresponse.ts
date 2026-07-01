@@ -16,12 +16,12 @@ export type MetadataResponse = {
   links?: Links | undefined;
 };
 
-export const MetadataResponse$zodSchema: z.ZodType<
-  MetadataResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Metadata$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of metadata");
+export const MetadataResponse$zodSchema: z.ZodType<MetadataResponse> = z.object(
+  {
+    data: z.array(Metadata$zodSchema).optional().describe("List of metadata."),
+    links: Links$zodSchema.optional().describe("List of links for pagination"),
+    pagination: Pagination$zodSchema.optional().describe(
+      "Generic object to handle pagination data.",
+    ),
+  },
+).describe("Page of metadata");

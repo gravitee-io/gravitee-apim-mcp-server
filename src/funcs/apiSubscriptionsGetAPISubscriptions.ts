@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get the API's subscriptions
  *
  * @remarks
- * List subscriptions for a given API, always filtered by a `status` and the possibility to filter by `security`.
+ * Get the API's subscriptions
  *
- * User must have API_SUBSCRIPTION[READ] permissions to access endpoint.
+ * List subscriptions for a given API, always filtered by a `status` and the possibility to filter by `security`.
  */
 export function apiSubscriptionsGetAPISubscriptions(
   client$: GraviteeApimCore,
@@ -126,7 +126,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiSubscriptions",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -185,7 +185,7 @@ async function $do(
     M.json(200, GetApiSubscriptionsResponse$zodSchema, {
       key: "SubscriptionsResponse",
     }),
-    M.json("default", GetApiSubscriptionsResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiSubscriptionsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

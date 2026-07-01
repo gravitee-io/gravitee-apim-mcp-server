@@ -10,12 +10,13 @@ export type Detail = {
   invalidValue?: any | undefined;
 };
 
-export const Detail$zodSchema: z.ZodType<Detail, z.ZodTypeDef, unknown> = z
-  .object({
-    invalidValue: z.any().optional(),
-    location: z.string().optional(),
-    message: z.string().optional(),
-  });
+export const Detail$zodSchema: z.ZodType<Detail> = z.object({
+  invalidValue: z.any().optional().describe("The invalid value."),
+  location: z.string().optional().describe(
+    "The json path of the field in error.",
+  ),
+  message: z.string().optional().describe("The error message"),
+});
 
 /**
  * Generic error response
@@ -28,11 +29,16 @@ export type ErrorT = {
   details?: Array<Detail> | undefined;
 };
 
-export const ErrorT$zodSchema: z.ZodType<ErrorT, z.ZodTypeDef, unknown> = z
-  .object({
-    details: z.array(z.lazy(() => Detail$zodSchema)).optional(),
-    httpStatus: z.number().int().optional(),
-    message: z.string().optional(),
-    parameters: z.record(z.string()).optional(),
-    technicalCode: z.string().optional(),
-  }).describe("Generic error response");
+export const ErrorT$zodSchema: z.ZodType<ErrorT> = z.object({
+  details: z.array(z.lazy(() => Detail$zodSchema)).optional().describe(
+    "A list of details about the error",
+  ),
+  httpStatus: z.int().optional().describe("The error code"),
+  message: z.string().optional().describe("The error message"),
+  parameters: z.record(z.string(), z.string()).optional().describe(
+    "A map of parameters to be used in the error message",
+  ),
+  technicalCode: z.string().optional().describe(
+    "A technical code to identify the error",
+  ),
+}).describe("Generic error response");

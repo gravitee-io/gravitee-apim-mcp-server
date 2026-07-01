@@ -20,11 +20,14 @@ export type Export = {
   apimVersion?: string | undefined;
 };
 
-export const Export$zodSchema: z.ZodType<Export, z.ZodTypeDef, unknown> = z
-  .object({
-    apimVersion: z.string().optional(),
-    date: z.string().datetime({ offset: true }).optional(),
-  });
+export const Export$zodSchema: z.ZodType<Export> = z.object({
+  apimVersion: z.string().optional().describe(
+    "API management version of export.",
+  ),
+  date: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime of export.",
+  ),
+});
 
 export type ExportApiV4Input = {
   export?: Export | undefined;
@@ -38,21 +41,29 @@ export type ExportApiV4Input = {
   apiMedia?: Array<Media> | undefined;
 };
 
-export const ExportApiV4Input$zodSchema: z.ZodType<
-  ExportApiV4Input,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  api: ApiV4Input$zodSchema.optional(),
-  apiBackground: z.string().optional(),
-  apiMedia: z.array(Media$zodSchema).optional(),
-  apiPicture: z.string().optional(),
-  export: z.lazy(() => Export$zodSchema).optional(),
-  members: z.array(Member$zodSchema).optional(),
-  metadata: z.array(Metadata$zodSchema).optional(),
-  pages: z.array(Page$zodSchema).optional(),
-  plans: z.array(PlanV4$zodSchema).optional(),
-});
+export const ExportApiV4Input$zodSchema: z.ZodType<ExportApiV4Input> = z.object(
+  {
+    api: ApiV4Input$zodSchema.optional(),
+    apiBackground: z.string().optional().describe("The API's background."),
+    apiMedia: z.array(Media$zodSchema).optional().describe(
+      "The list of API's media used in pages.",
+    ),
+    apiPicture: z.string().optional().describe("The API's picture."),
+    export: z.lazy(() => Export$zodSchema).optional(),
+    members: z.array(Member$zodSchema).optional().describe(
+      "The list of members associated with this API.",
+    ),
+    metadata: z.array(Metadata$zodSchema).optional().describe(
+      "The list of API's metadata.",
+    ),
+    pages: z.array(Page$zodSchema).optional().describe(
+      "The list of pages associated with this API.",
+    ),
+    plans: z.array(PlanV4$zodSchema).optional().describe(
+      "The list of plans associated with this API.",
+    ),
+  },
+);
 
 export type ExportApiV4Output = {
   export?: Export | undefined;
@@ -66,18 +77,25 @@ export type ExportApiV4Output = {
   apiMedia?: Array<Media> | undefined;
 };
 
-export const ExportApiV4Output$zodSchema: z.ZodType<
-  ExportApiV4Output,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  api: ApiV4Output$zodSchema.optional(),
-  apiBackground: z.string().optional(),
-  apiMedia: z.array(Media$zodSchema).optional(),
-  apiPicture: z.string().optional(),
-  export: z.lazy(() => Export$zodSchema).optional(),
-  members: z.array(Member$zodSchema).optional(),
-  metadata: z.array(Metadata$zodSchema).optional(),
-  pages: z.array(Page$zodSchema).optional(),
-  plans: z.array(PlanV4$zodSchema).optional(),
-});
+export const ExportApiV4Output$zodSchema: z.ZodType<ExportApiV4Output> = z
+  .object({
+    api: ApiV4Output$zodSchema.optional(),
+    apiBackground: z.string().optional().describe("The API's background."),
+    apiMedia: z.array(Media$zodSchema).optional().describe(
+      "The list of API's media used in pages.",
+    ),
+    apiPicture: z.string().optional().describe("The API's picture."),
+    export: z.lazy(() => Export$zodSchema).optional(),
+    members: z.array(Member$zodSchema).optional().describe(
+      "The list of members associated with this API.",
+    ),
+    metadata: z.array(Metadata$zodSchema).optional().describe(
+      "The list of API's metadata.",
+    ),
+    pages: z.array(Page$zodSchema).optional().describe(
+      "The list of pages associated with this API.",
+    ),
+    plans: z.array(PlanV4$zodSchema).optional().describe(
+      "The list of plans associated with this API.",
+    ),
+  });

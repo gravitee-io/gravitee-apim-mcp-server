@@ -11,12 +11,10 @@ export type IngestionJob = {
   status?: AsyncJobStatus | undefined;
 };
 
-export const IngestionJob$zodSchema: z.ZodType<
-  IngestionJob,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  id: z.string().optional(),
-  startedAt: z.string().datetime({ offset: true }).optional(),
-  status: AsyncJobStatus$zodSchema.optional(),
+export const IngestionJob$zodSchema: z.ZodType<IngestionJob> = z.object({
+  id: z.string().optional().describe("Id of the ingestion job"),
+  startedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last datetime when the job was started.",
+  ),
+  status: AsyncJobStatus$zodSchema.optional().describe("Status of the job."),
 });

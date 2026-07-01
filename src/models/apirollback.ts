@@ -6,10 +6,6 @@ import * as z from "zod";
 
 export type ApiRollback = { eventId?: string | undefined };
 
-export const ApiRollback$zodSchema: z.ZodType<
-  ApiRollback,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  eventId: z.string().optional(),
+export const ApiRollback$zodSchema: z.ZodType<ApiRollback> = z.object({
+  eventId: z.string().optional().describe("The event ID to rollback to."),
 });

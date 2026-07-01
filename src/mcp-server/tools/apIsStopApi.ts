@@ -11,16 +11,21 @@ const args = {
 };
 
 export const tool$apIsStopApi: ToolDefinition<typeof args> = {
-  name: "AP-is-stop-api",
+  name: "stop_api",
   description: `Stop an API
 
 Change the API's status to STOPPED.
 
-Return a 400 HTTP Error:
- - when user tries to stop an ARCHIVED API
- - when the API is already STOPPED.
-
-User must have the API_DEFINITION[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.
+Stops gateway instances for the API; use only when traffic should stop.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Stop Api",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsStopApi(

@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get the Integration's members
  *
  * @remarks
- * List the members for a given Integration.
+ * Get the Integration's members
  *
- * User must have the INTEGRATION_MEMBER[READ] permission.
+ * List the members for a given Integration.
  */
 export function integrationMembersListIntegrationMembers(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listIntegrationMembers",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -179,7 +179,7 @@ async function $do(
       key: "MembersResponse",
     }),
     M.json("default", ListIntegrationMembersResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

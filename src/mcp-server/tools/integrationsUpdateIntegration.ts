@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$integrationsUpdateIntegration: ToolDefinition<typeof args> = {
-  name: "integrations-update-integration",
+  name: "update_integration",
   description: `Update Integration
 
-Update specific Integration.
-
-The response body will not contain Agent Status. To get it you should use getIntegration operation.
-User must have ENVIRONMENT_INTEGRATION[UPDATE] permission to access it.`,
+Update specific Integration. The response body will not contain Agent Status. To get it you should use getIntegration operation.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Update Integration",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsUpdateIntegration(

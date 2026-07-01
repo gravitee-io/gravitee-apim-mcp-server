@@ -10,13 +10,10 @@ import * as z from "zod";
 export type SubscriptionConsumerConfigurationEntrypointConfiguration = {};
 
 export const SubscriptionConsumerConfigurationEntrypointConfiguration$zodSchema:
-  z.ZodType<
-    SubscriptionConsumerConfigurationEntrypointConfiguration,
-    z.ZodTypeDef,
-    unknown
-  > = z.object({}).describe(
-    "The configuration to use at subscription time to push to the target service.",
-  );
+  z.ZodType<SubscriptionConsumerConfigurationEntrypointConfiguration> = z
+    .object({}).describe(
+      "The configuration to use at subscription time to push to the target service.",
+    );
 
 /**
  * Consumer configuration associated to the subscription in case it is attached to a push plan.
@@ -30,15 +27,15 @@ export type SubscriptionConsumerConfiguration = {
 };
 
 export const SubscriptionConsumerConfiguration$zodSchema: z.ZodType<
-  SubscriptionConsumerConfiguration,
-  z.ZodTypeDef,
-  unknown
+  SubscriptionConsumerConfiguration
 > = z.object({
-  channel: z.string().optional(),
+  channel: z.string().optional().describe("The channel to consume"),
   entrypointConfiguration: z.lazy(() =>
     SubscriptionConsumerConfigurationEntrypointConfiguration$zodSchema
-  ).optional(),
-  entrypointId: z.string(),
+  ).optional().describe(
+    "The configuration to use at subscription time to push to the target service.",
+  ),
+  entrypointId: z.string().describe("The id of the targeted entrypoint"),
 }).describe(
   "Consumer configuration associated to the subscription in case it is attached to a push plan.",
 );

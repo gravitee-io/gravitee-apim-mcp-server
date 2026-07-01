@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$apIsSearchApis: ToolDefinition<typeof args> = {
-  name: "AP-is-search-apis",
+  name: "search_apis",
   description: `Search APIs
 
-Search APIs for a specific environment.<br>
-The results are paginated and can be sorted.
-
-User must have the ENVIRONMENT_API[READ] permission.`,
+Search APIs for a specific environment.<br> The results are paginated and can be sorted.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Search Apis",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsSearchApis(

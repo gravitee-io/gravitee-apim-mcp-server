@@ -3,49 +3,66 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * 'NEW' if it's new API or 'UPDATE' if we maybe have update
  */
+export const IngestionPreviewResponseState = {
+  New: "NEW",
+  Update: "UPDATE",
+} as const;
+/**
+ * 'NEW' if it's new API or 'UPDATE' if we maybe have update
+ */
+export type IngestionPreviewResponseState = ClosedEnum<
+  typeof IngestionPreviewResponseState
+>;
+
 export const IngestionPreviewResponseState$zodSchema = z.enum([
   "NEW",
   "UPDATE",
 ]).describe("'NEW' if it's new API or 'UPDATE' if we maybe have update");
 
-export type IngestionPreviewResponseState = z.infer<
-  typeof IngestionPreviewResponseState$zodSchema
->;
-
 export type IngestionPreviewResponseApi = {
   id?: string | undefined;
   name?: string | undefined;
+  version?: string | undefined;
   state?: IngestionPreviewResponseState | undefined;
 };
 
 export const IngestionPreviewResponseApi$zodSchema: z.ZodType<
-  IngestionPreviewResponseApi,
-  z.ZodTypeDef,
-  unknown
+  IngestionPreviewResponseApi
 > = z.object({
-  id: z.string().optional(),
-  name: z.string().optional(),
-  state: IngestionPreviewResponseState$zodSchema.optional(),
+  id: z.string().optional().describe("Ingested API uuid"),
+  name: z.string().optional().describe("Ingested API name"),
+  state: IngestionPreviewResponseState$zodSchema.optional().describe(
+    "'NEW' if it's new API or 'UPDATE' if we maybe have update",
+  ),
+  version: z.string().optional().describe("the version of API"),
 });
 
 export type IngestionPreviewResponse = {
   totalCount?: number | undefined;
   newCount?: number | undefined;
   updateCount?: number | undefined;
+  isPartiallyDiscovered?: boolean | undefined;
   apis?: Array<IngestionPreviewResponseApi> | undefined;
 };
 
 export const IngestionPreviewResponse$zodSchema: z.ZodType<
-  IngestionPreviewResponse,
-  z.ZodTypeDef,
-  unknown
+  IngestionPreviewResponse
 > = z.object({
-  apis: z.array(z.lazy(() => IngestionPreviewResponseApi$zodSchema)).optional(),
-  newCount: z.number().optional(),
-  totalCount: z.number().optional(),
-  updateCount: z.number().optional(),
+  apis: z.array(z.lazy(() => IngestionPreviewResponseApi$zodSchema)).optional()
+    .describe("number of new APIs found to ingest"),
+  isPartiallyDiscovered: z.boolean().optional().describe(
+    "flag to tell if apis where only partially discovered due to timeout",
+  ),
+  newCount: z.number().optional().describe(
+    "number of new APIs found to ingest",
+  ),
+  totalCount: z.number().optional().describe("number of APIs found to ingest"),
+  updateCount: z.number().optional().describe(
+    "number of update APIs found to ingest",
+  ),
 });

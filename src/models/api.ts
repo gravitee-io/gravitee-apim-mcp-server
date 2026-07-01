@@ -4,25 +4,23 @@
 
 import * as z from "zod";
 import { ApiFederated, ApiFederated$zodSchema } from "./apifederated.js";
-import { ApiV1, ApiV1$zodSchema } from "./apiv1.js";
+import {
+  ApiFederatedAgent,
+  ApiFederatedAgent$zodSchema,
+} from "./apifederatedagent.js";
 import { ApiV2, ApiV2$zodSchema } from "./apiv2.js";
 import { ApiV4Output, ApiV4Output$zodSchema } from "./apiv4output.js";
 
 export type Api =
-  | (ApiFederated & { definitionVersion: "FEDERATED" })
-  | (ApiV1 & { definitionVersion: "V1" })
+  | (ApiV2 & { definitionVersion: "V2" })
   | (ApiV4Output & { definitionVersion: "V4" })
-  | (ApiV2 & { definitionVersion: "V2" });
+  | (ApiFederated & { definitionVersion: "FEDERATED" })
+  | (ApiFederatedAgent & { definitionVersion: "FEDERATED_AGENT" });
 
-export const Api$zodSchema: z.ZodType<Api, z.ZodTypeDef, unknown> = z.union([
-  ApiFederated$zodSchema.and(
+export const Api$zodSchema: z.ZodType<Api> = z.union([
+  ApiV2$zodSchema.and(
     z.object({
-      definitionVersion: z.literal("FEDERATED"),
-    }).transform((v) => ({ definitionVersion: v.definitionVersion })),
-  ),
-  ApiV1$zodSchema.and(
-    z.object({
-      definitionVersion: z.literal("V1"),
+      definitionVersion: z.literal("V2"),
     }).transform((v) => ({ definitionVersion: v.definitionVersion })),
   ),
   ApiV4Output$zodSchema.and(
@@ -30,9 +28,14 @@ export const Api$zodSchema: z.ZodType<Api, z.ZodTypeDef, unknown> = z.union([
       definitionVersion: z.literal("V4"),
     }).transform((v) => ({ definitionVersion: v.definitionVersion })),
   ),
-  ApiV2$zodSchema.and(
+  ApiFederated$zodSchema.and(
     z.object({
-      definitionVersion: z.literal("V2"),
+      definitionVersion: z.literal("FEDERATED"),
+    }).transform((v) => ({ definitionVersion: v.definitionVersion })),
+  ),
+  ApiFederatedAgent$zodSchema.and(
+    z.object({
+      definitionVersion: z.literal("FEDERATED_AGENT"),
     }).transform((v) => ({ definitionVersion: v.definitionVersion })),
   ),
 ]);

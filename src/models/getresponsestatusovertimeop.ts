@@ -17,43 +17,26 @@ export type GetResponseStatusOvertimeRequest = {
 };
 
 export const GetResponseStatusOvertimeRequest$zodSchema: z.ZodType<
-  GetResponseStatusOvertimeRequest,
-  z.ZodTypeDef,
-  unknown
+  GetResponseStatusOvertimeRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  from: z.number().int().describe(
-    "The timestamp from which the logs will be returned.\n"
-      + "",
+  from: z.int().describe(
+    "The timestamp from which the logs will be returned.\n",
   ).optional(),
-  to: z.number().int().describe(
-    "The timestamp to which the logs will be returned.\n"
-      + "",
-  ).optional(),
+  to: z.int().describe("The timestamp to which the logs will be returned.\n")
+    .optional(),
 });
 
-export type GetResponseStatusOvertimeResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiAnalyticsResponseStatusOvertimeResponse?:
-    | ApiAnalyticsResponseStatusOvertimeResponse
-    | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetResponseStatusOvertimeResponse =
+  | ApiAnalyticsResponseStatusOvertimeResponse
+  | ErrorT;
 
 export const GetResponseStatusOvertimeResponse$zodSchema: z.ZodType<
-  GetResponseStatusOvertimeResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiAnalyticsResponseStatusOvertimeResponse:
-    ApiAnalyticsResponseStatusOvertimeResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetResponseStatusOvertimeResponse
+> = z.union([
+  ApiAnalyticsResponseStatusOvertimeResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

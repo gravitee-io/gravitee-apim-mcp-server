@@ -13,9 +13,8 @@ import { pathToFunc } from "../lib/url.js";
 import {
   DeleteApiRequest,
   DeleteApiRequest$zodSchema,
-  DeleteApiResponse,
-  DeleteApiResponse$zodSchema,
 } from "../models/deleteapiop.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -32,9 +31,11 @@ import { Result } from "../types/fp.js";
  * Delete an API
  *
  * @remarks
+ * Delete an API
+ *
  * Delete a V2 or a V4 API.
  *
- * User must have API_DEFINITION[DELETE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apIsDeleteApi(
   client$: GraviteeApimCore,
@@ -42,7 +43,7 @@ export function apIsDeleteApi(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    DeleteApiResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -66,7 +67,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      DeleteApiResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -116,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "deleteApi",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -163,7 +164,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    DeleteApiResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -172,8 +173,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, DeleteApiResponse$zodSchema),
-    M.json("default", DeleteApiResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

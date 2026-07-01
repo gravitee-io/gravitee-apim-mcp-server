@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$groupsListGroups: ToolDefinition<typeof args> = {
-  name: "groups-list-groups",
+  name: "list_groups",
   description: `List of environment groups
 
-List the groups of a given environment.
-
-User must have the ENVIRONMENT_GROUP[READ] permission.
-`,
+List the groups of a given environment.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Groups",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await groupsListGroups(

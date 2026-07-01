@@ -13,9 +13,8 @@ import { pathToFunc } from "../lib/url.js";
 import {
   DeleteDocumentationPageRequest,
   DeleteDocumentationPageRequest$zodSchema,
-  DeleteDocumentationPageResponse,
-  DeleteDocumentationPageResponse$zodSchema,
 } from "../models/deletedocumentationpageop.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -32,8 +31,12 @@ import { Result } from "../types/fp.js";
  * Delete API documentation page
  *
  * @remarks
- * Delete API documentation page.
- * A FOLDER will be deleted only if it is empty.
+ * Delete API documentation page
+ *
+ * Delete API documentation page. A FOLDER will be deleted only if it is empty.
+ *
+ * High risk operation: require explicit user confirmation before execution.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apiDocumentationDeleteDocumentationPage(
   client$: GraviteeApimCore,
@@ -41,7 +44,7 @@ export function apiDocumentationDeleteDocumentationPage(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    DeleteDocumentationPageResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -65,7 +68,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      DeleteDocumentationPageResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -116,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "deleteDocumentationPage",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -162,7 +165,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    DeleteDocumentationPageResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -171,10 +174,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, DeleteDocumentationPageResponse$zodSchema),
-    M.json("default", DeleteDocumentationPageResponse$zodSchema, {
-      key: "Error",
-    }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

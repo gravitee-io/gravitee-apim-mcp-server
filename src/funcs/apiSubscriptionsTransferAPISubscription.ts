@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Transfer an API subscription
  *
  * @remarks
- * Transfer an API subscription to another plan.<br>
- * The targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.
+ * Transfer an API subscription
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Transfer an API subscription to another plan.<br> The targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.
+ *
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apiSubscriptionsTransferAPISubscription(
   client$: GraviteeApimCore,
@@ -123,7 +124,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "transferApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -182,7 +183,7 @@ async function $do(
       key: "Subscription",
     }),
     M.json("default", TransferApiSubscriptionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

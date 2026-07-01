@@ -11,20 +11,18 @@ const args = {
 };
 
 export const tool$apIsExportApiDefinition: ToolDefinition<typeof args> = {
-  name: "AP-is-export-api-definition",
+  name: "export_api_definition",
   description: `Export an API
 
-⚠️ Support only v4 API for the moment. ⚠️
-
-Export an API to a JSON file.
-
-User must have at least the API_DEFINITION[READ] permission.<br>
-User should also have these permissions for specific data:
- - API_DEFINITION[READ] for the API
- - API_MEMBER[READ] for the API's members
- - API_PLAN[READ] for the API's plans
- - API_METADATA[READ] for the API's metadata
- - API_DOCUMENTATION[READ] for the API's documentation pages`,
+⚠️ Support only v4 API for the moment. ⚠️ Export an API to a JSON file. User should also have these permissions for specific data: - API_DEFINITION[READ] for the API - API_MEMBER[READ] for the API's members - API_PLAN[READ] for the API's plans`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Export Api Definition",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsExportApiDefinition(

@@ -13,9 +13,8 @@ import { pathToFunc } from "../lib/url.js";
 import {
   DeleteIntegrationRequest,
   DeleteIntegrationRequest$zodSchema,
-  DeleteIntegrationResponse,
-  DeleteIntegrationResponse$zodSchema,
 } from "../models/deleteintegrationop.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -32,10 +31,11 @@ import { Result } from "../types/fp.js";
  * Delete Integration
  *
  * @remarks
- * Delete specific integration
+ * Delete Integration
  *
- * To delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission.
- * Deletion is not possible if there is any federated API associated.
+ * Delete specific integration To delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission. Deletion is not possible if there is any federated API associated.
+ *
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function integrationsDeleteIntegration(
   client$: GraviteeApimCore,
@@ -43,7 +43,7 @@ export function integrationsDeleteIntegration(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    DeleteIntegrationResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -67,7 +67,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      DeleteIntegrationResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -116,7 +116,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "deleteIntegration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -162,7 +162,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    DeleteIntegrationResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -171,8 +171,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, DeleteIntegrationResponse$zodSchema),
-    M.json("default", DeleteIntegrationResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

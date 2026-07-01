@@ -17,11 +17,7 @@ export type ApiServicesV2 = {
   healthCheck?: HealthCheckService | undefined;
 };
 
-export const ApiServicesV2$zodSchema: z.ZodType<
-  ApiServicesV2,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const ApiServicesV2$zodSchema: z.ZodType<ApiServicesV2> = z.object({
   dynamicProperty: DynamicPropertyService$zodSchema.optional(),
   healthCheck: HealthCheckService$zodSchema.optional(),
 });

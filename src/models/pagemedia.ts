@@ -10,9 +10,10 @@ export type PageMedia = {
   attachedAt?: string | undefined;
 };
 
-export const PageMedia$zodSchema: z.ZodType<PageMedia, z.ZodTypeDef, unknown> =
-  z.object({
-    attachedAt: z.string().datetime({ offset: true }).optional(),
-    hash: z.string().optional(),
-    name: z.string().optional(),
-  });
+export const PageMedia$zodSchema: z.ZodType<PageMedia> = z.object({
+  attachedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "Media's attachment date.",
+  ),
+  hash: z.string().optional().describe("Media's hash."),
+  name: z.string().optional().describe("Media's name."),
+});

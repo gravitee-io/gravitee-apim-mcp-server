@@ -10,11 +10,8 @@ export type EndpointGroupServices = {
   healthCheck?: ServiceV4 | undefined;
 };
 
-export const EndpointGroupServices$zodSchema: z.ZodType<
-  EndpointGroupServices,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  discovery: ServiceV4$zodSchema.optional(),
-  healthCheck: ServiceV4$zodSchema.optional(),
-});
+export const EndpointGroupServices$zodSchema: z.ZodType<EndpointGroupServices> =
+  z.object({
+    discovery: ServiceV4$zodSchema.optional(),
+    healthCheck: ServiceV4$zodSchema.optional(),
+  });

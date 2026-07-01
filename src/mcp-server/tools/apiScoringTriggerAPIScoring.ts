@@ -11,10 +11,18 @@ const args = {
 };
 
 export const tool$apiScoringTriggerAPIScoring: ToolDefinition<typeof args> = {
-  name: "API-scoring-trigger-api-scoring",
+  name: "trigger_api_scoring",
   description: `Trigger API Scoring
 
 Trigger API Scoring.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Trigger Api Scoring",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiScoringTriggerAPIScoring(

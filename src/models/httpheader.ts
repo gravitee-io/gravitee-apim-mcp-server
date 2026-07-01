@@ -9,11 +9,7 @@ export type HttpHeader = {
   value?: string | undefined;
 };
 
-export const HttpHeader$zodSchema: z.ZodType<
-  HttpHeader,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  name: z.string().optional(),
-  value: z.string().optional(),
+export const HttpHeader$zodSchema: z.ZodType<HttpHeader> = z.object({
+  name: z.string().optional().describe("The name of the header"),
+  value: z.string().optional().describe("The value of the header"),
 });

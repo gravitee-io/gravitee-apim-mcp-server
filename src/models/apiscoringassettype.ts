@@ -3,14 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the asset.
  */
+export const ApiScoringAssetType = {
+  Asyncapi: "ASYNCAPI",
+  GraviteeDefinition: "GRAVITEE_DEFINITION",
+  Swagger: "SWAGGER",
+} as const;
+/**
+ * The type of the asset.
+ */
+export type ApiScoringAssetType = ClosedEnum<typeof ApiScoringAssetType>;
+
 export const ApiScoringAssetType$zodSchema = z.enum([
   "ASYNCAPI",
   "GRAVITEE_DEFINITION",
   "SWAGGER",
 ]).describe("The type of the asset.");
-
-export type ApiScoringAssetType = z.infer<typeof ApiScoringAssetType$zodSchema>;

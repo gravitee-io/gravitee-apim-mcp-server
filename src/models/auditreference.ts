@@ -3,10 +3,22 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the auditable element
  */
+export const AuditReferenceType = {
+  Api: "API",
+  Application: "APPLICATION",
+  Environment: "ENVIRONMENT",
+  Organization: "ORGANIZATION",
+} as const;
+/**
+ * The type of the auditable element
+ */
+export type AuditReferenceType = ClosedEnum<typeof AuditReferenceType>;
+
 export const AuditReferenceType$zodSchema = z.enum([
   "API",
   "APPLICATION",
@@ -14,20 +26,16 @@ export const AuditReferenceType$zodSchema = z.enum([
   "ORGANIZATION",
 ]).describe("The type of the auditable element");
 
-export type AuditReferenceType = z.infer<typeof AuditReferenceType$zodSchema>;
-
 export type AuditReference = {
   id?: string | undefined;
   type?: AuditReferenceType | undefined;
   name?: string | undefined;
 };
 
-export const AuditReference$zodSchema: z.ZodType<
-  AuditReference,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  id: z.string().optional(),
-  name: z.string().optional(),
-  type: AuditReferenceType$zodSchema.optional(),
+export const AuditReference$zodSchema: z.ZodType<AuditReference> = z.object({
+  id: z.string().optional().describe("The id of the auditable element."),
+  name: z.string().optional().describe("The name of the auditable element"),
+  type: AuditReferenceType$zodSchema.optional().describe(
+    "The type of the auditable element",
+  ),
 });

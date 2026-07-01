@@ -6,11 +6,12 @@ import * as z from "zod";
 
 export type VerifySubscription = { applicationId: string; apiKey: string };
 
-export const VerifySubscription$zodSchema: z.ZodType<
-  VerifySubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiKey: z.string(),
-  applicationId: z.string(),
-});
+export const VerifySubscription$zodSchema: z.ZodType<VerifySubscription> = z
+  .object({
+    apiKey: z.string().describe(
+      "The API Key that needs to be verified. Should not contain: ^ # % @ \\\\ / ; = ? | ~ , (space)",
+    ),
+    applicationId: z.string().describe(
+      "The id of the application subscribing.",
+    ),
+  });

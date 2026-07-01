@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * List the API's plans
  *
  * @remarks
- * List plans for a given API, always filtered by a `status` and the possibility to filter by `security`.<br>
- * The results are paginated.
+ * List the API's plans
  *
- * User must have API_PLAN[READ] permissions to access endpoint.
+ * List plans for a given API, always filtered by a `status` and the possibility to filter by `security`.<br> The results are paginated.
  */
 export function apiPlansListAPIPlans(
   client$: GraviteeApimCore,
@@ -105,6 +104,7 @@ async function $do(
   );
   const query$ = queryJoin(
     encodeFormQuery({
+      "fields": payload$.fields,
       "securities": payload$.securities,
       "statuses": payload$.statuses,
     }, { explode: false }),
@@ -126,7 +126,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listApiPlans",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -183,7 +183,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, ListApiPlansResponse$zodSchema, { key: "PlansResponse" }),
-    M.json("default", ListApiPlansResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListApiPlansResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

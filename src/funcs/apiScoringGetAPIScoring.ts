@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API Scoring
  *
  * @remarks
- * Get API Scoring.
+ * Get API Scoring
  *
- * Return a 404 HTTP Response status if API was never evaluated.
+ * Get API Scoring. Return a 404 HTTP Response status if API was never evaluated.
  */
 export function apiScoringGetAPIScoring(
   client$: GraviteeApimCore,
@@ -113,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiScoring",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -169,7 +169,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiScoringResponse$zodSchema, { key: "ApiScoring" }),
-    M.json("default", GetApiScoringResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiScoringResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

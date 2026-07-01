@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * Create an Integration
  *
  * @remarks
- * Create a new Integration.
+ * Create an Integration
  *
- * The response body will not contain Agent Status. To get it you should use getIntegration operation.
- * User must have the ENVIRONMENT_INTEGRATION[CREATE] permission.
+ * Create a new Integration. The response body will not contain Agent Status. To get it you should use getIntegration operation.
  */
 export function integrationsCreateIntegration(
   client$: GraviteeApimCore,
@@ -113,7 +112,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createIntegration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -169,7 +168,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(201, CreateIntegrationResponse$zodSchema, { key: "Integration" }),
-    M.json("default", CreateIntegrationResponse$zodSchema, { key: "Error" }),
+    M.json("default", CreateIntegrationResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -16,12 +16,13 @@ export type SubscriptionsResponse = {
   links?: Links | undefined;
 };
 
-export const SubscriptionsResponse$zodSchema: z.ZodType<
-  SubscriptionsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Subscription$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of API subscriptions");
+export const SubscriptionsResponse$zodSchema: z.ZodType<SubscriptionsResponse> =
+  z.object({
+    data: z.array(Subscription$zodSchema).optional().describe(
+      "List of API subscriptions.",
+    ),
+    links: Links$zodSchema.optional().describe("List of links for pagination"),
+    pagination: Pagination$zodSchema.optional().describe(
+      "Generic object to handle pagination data.",
+    ),
+  }).describe("Page of API subscriptions");

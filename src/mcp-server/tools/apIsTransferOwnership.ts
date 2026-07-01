@@ -11,18 +11,20 @@ const args = {
 };
 
 export const tool$apIsTransferOwnership: ToolDefinition<typeof args> = {
-  name: "AP-is-transfer-ownership",
+  name: "transfer_ownership",
   description: `Transfer the ownership of the API
 
-Transfer the ownership of the API to a user, a group or an api member.
+Transfer the ownership of the API to a user, a group or an api member. Return a 404 HTTP Error if API cannot be found.
 
-Return a 404 HTTP Error if API cannot be found.
-
-Return a 400 HTTP Error:
- - when user tries to stop an ARCHIVED API
- - when the API is already STOPPED.
-
-User must have the API_MEMBER[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Transfer Ownership",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsTransferOwnership(

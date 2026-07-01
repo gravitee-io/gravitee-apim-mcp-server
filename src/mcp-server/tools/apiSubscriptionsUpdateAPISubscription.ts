@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsUpdateAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-update-api-subscription",
+  name: "update_api_subscription",
   description: `Update one API's subscription
 
-Update the API's subscription.
-
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+Update the API's subscription.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Update Api Subscription",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsUpdateAPISubscription(

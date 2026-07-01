@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Export API subscriptions as CSV
  *
  * @remarks
- * Export API subscriptions to a CSV file.
+ * Export API subscriptions as CSV
  *
- * User must have the API_SUBSCRIPTION[READ] permission.
+ * Export API subscriptions to a CSV file.
  */
 export function apiSubscriptionsExportAPISubscriptions(
   client$: GraviteeApimCore,
@@ -127,7 +127,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "exportApiSubscriptions",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -185,7 +185,7 @@ async function $do(
   >(
     M.nil(200, ExportApiSubscriptionsResponse$zodSchema, { hdrs: true }),
     M.json("default", ExportApiSubscriptionsResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

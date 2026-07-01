@@ -13,12 +13,20 @@ const args = {
 export const tool$apiSubscriptionsRejectAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-reject-api-subscription",
+  name: "reject_api_subscription",
   description: `Reject an API subscription
 
 Reject an API subscription with an optional reason.
 
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Reject Api Subscription",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsRejectAPISubscription(

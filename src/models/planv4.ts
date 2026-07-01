@@ -19,6 +19,7 @@ export type PlanV4 = {
   name?: string | undefined;
   description?: string | undefined;
   apiId?: string | undefined;
+  apiProductId?: string | undefined;
   security?: PlanSecurity | undefined;
   mode?: PlanMode | undefined;
   characteristics?: Array<string> | undefined;
@@ -39,32 +40,74 @@ export type PlanV4 = {
   updatedAt?: string | undefined;
   validation?: PlanValidation | undefined;
   flows?: Array<FlowV4> | undefined;
+  bootstrapPort?: number | undefined;
+  brokerRangeStart?: number | undefined;
+  brokerRangeEnd?: number | undefined;
 };
 
-export const PlanV4$zodSchema: z.ZodType<PlanV4, z.ZodTypeDef, unknown> = z
-  .object({
-    apiId: z.string().optional(),
-    characteristics: z.array(z.string()).optional(),
-    closedAt: z.string().datetime({ offset: true }).optional(),
-    commentMessage: z.string().optional(),
-    commentRequired: z.boolean().optional(),
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    crossId: z.string().optional(),
-    definitionVersion: DefinitionVersion$zodSchema,
-    description: z.string().optional(),
-    excludedGroups: z.array(z.string()).optional(),
-    flows: z.array(FlowV4$zodSchema).optional(),
-    generalConditions: z.string().optional(),
-    id: z.string().optional(),
-    mode: PlanMode$zodSchema.optional(),
-    name: z.string().optional(),
-    order: z.number().int().optional(),
-    publishedAt: z.string().datetime({ offset: true }).optional(),
-    security: PlanSecurity$zodSchema.optional(),
-    selectionRule: z.string().optional(),
-    status: PlanStatus$zodSchema.optional(),
-    tags: z.array(z.string()).optional(),
-    type: PlanType$zodSchema.optional(),
-    updatedAt: z.string().datetime({ offset: true }).optional(),
-    validation: PlanValidation$zodSchema.optional(),
-  });
+export const PlanV4$zodSchema: z.ZodType<PlanV4> = z.object({
+  apiId: z.string().optional().describe("Id of the API owning the plan."),
+  apiProductId: z.string().optional().describe(
+    "Id of the API Product owning the plan. Present only when the plan belongs to an API Product (omitted for API plans).",
+  ),
+  bootstrapPort: z.int().optional().describe(
+    "Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.",
+  ),
+  brokerRangeEnd: z.int().optional().describe(
+    "End of broker port range for port-based routing (native Kafka APIs only).",
+  ),
+  brokerRangeStart: z.int().optional().describe(
+    "Start of broker port range for port-based routing (native Kafka APIs only).",
+  ),
+  characteristics: z.array(z.string()).optional(),
+  closedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the plan was closed.",
+  ),
+  commentMessage: z.string().optional().describe(
+    "A message from the API Publisher that is displayed to the consumer at subscription time.",
+  ),
+  commentRequired: z.boolean().optional().describe(
+    "A flag indicating if the consumer has to write a \"consumer message\" or if he/she can leave the field blank.",
+  ),
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last datetime when the plan was created.",
+  ),
+  crossId: z.string().optional().describe(
+    "Plan's crossId. Identifies plan across environments.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "Plan's description. A short description of your plan.",
+  ),
+  excludedGroups: z.array(z.string()).optional().describe(
+    "Groups of users which are not allowed to subscribe to this plan.",
+  ),
+  flows: z.array(FlowV4$zodSchema).optional(),
+  generalConditions: z.string().optional(),
+  id: z.string().optional().describe("Plan's uuid."),
+  mode: PlanMode$zodSchema.optional().describe(
+    "The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).",
+  ),
+  name: z.string().optional().describe(
+    "Plan's name. Duplicate names can exists.",
+  ),
+  order: z.int().optional(),
+  publishedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last datetime when the plan was published.",
+  ),
+  security: PlanSecurity$zodSchema.optional(),
+  selectionRule: z.string().optional(),
+  status: PlanStatus$zodSchema.optional().describe("Plan status."),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this plan.",
+  ),
+  type: PlanType$zodSchema.optional().describe("Plan type."),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last datetime when the plan was updated.",
+  ),
+  validation: PlanValidation$zodSchema.optional().describe(
+    "Plan validation type.",
+  ),
+});

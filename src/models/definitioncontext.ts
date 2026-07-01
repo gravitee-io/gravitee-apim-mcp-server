@@ -3,18 +3,26 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The origin of the API.
  */
+export const DefinitionContextOrigin = {
+  Management: "MANAGEMENT",
+  Kubernetes: "KUBERNETES",
+} as const;
+/**
+ * The origin of the API.
+ */
+export type DefinitionContextOrigin = ClosedEnum<
+  typeof DefinitionContextOrigin
+>;
+
 export const DefinitionContextOrigin$zodSchema = z.enum([
   "MANAGEMENT",
   "KUBERNETES",
 ]).describe("The origin of the API.");
-
-export type DefinitionContextOrigin = z.infer<
-  typeof DefinitionContextOrigin$zodSchema
->;
 
 /**
  * The mode of the API.
@@ -25,16 +33,27 @@ export type DefinitionContextOrigin = z.infer<
  *
  * @deprecated enum: This will be removed in a future release, please migrate away from it as soon as possible.
  */
+export const Mode = {
+  FullyManaged: "FULLY_MANAGED",
+  ApiDefinitionOnly: "API_DEFINITION_ONLY",
+} as const;
+/**
+ * The mode of the API.
+ *
+ * @remarks
+ * fully_managed: Mode indicating the api is fully managed by the origin and so, only the origin should be able to manage the api.
+ * api_definition_only: Mode indicating the api is partially managed by the origin and so, only the origin should be able to manage the api definition part of the api. This includes everything regarding the definition of the apis (plans, flows, metadata, ...)
+ *
+ * @deprecated enum: This will be removed in a future release, please migrate away from it as soon as possible.
+ */
+export type Mode = ClosedEnum<typeof Mode>;
+
 export const Mode$zodSchema = z.enum([
   "FULLY_MANAGED",
   "API_DEFINITION_ONLY",
 ]).describe(
-  "The mode of the API.\n"
-    + "fully_managed: Mode indicating the api is fully managed by the origin and so, only the origin should be able to manage the api.\n"
-    + "api_definition_only: Mode indicating the api is partially managed by the origin and so, only the origin should be able to manage the api definition part of the api. This includes everything regarding the definition of the apis (plans, flows, metadata, ...)",
+  "The mode of the API.\nfully_managed: Mode indicating the api is fully managed by the origin and so, only the origin should be able to manage the api.\napi_definition_only: Mode indicating the api is partially managed by the origin and so, only the origin should be able to manage the api definition part of the api. This includes everything regarding the definition of the apis (plans, flows, metadata, ...)",
 );
-
-export type Mode = z.infer<typeof Mode$zodSchema>;
 
 /**
  * syncFrom stands for where the Gateway should source the API definition from.
@@ -46,19 +65,28 @@ export type Mode = z.infer<typeof Mode$zodSchema>;
  * Defining MANAGEMENT as source for sync is useful e.g. when a single operator should operate
  * on gateways deployed on multiple kubernetes clusters.
  */
+export const SyncFrom = {
+  Management: "MANAGEMENT",
+  Kubernetes: "KUBERNETES",
+} as const;
+/**
+ * syncFrom stands for where the Gateway should source the API definition from.
+ *
+ * @remarks
+ * If the value is KUBERNETES, then the gateway will sync the definition by listening to changes
+ * issued on a kubernetes config map. If the value is MANAGEMENT, then the gateway will sync
+ * the definition using the same datastore as APIM.
+ * Defining MANAGEMENT as source for sync is useful e.g. when a single operator should operate
+ * on gateways deployed on multiple kubernetes clusters.
+ */
+export type SyncFrom = ClosedEnum<typeof SyncFrom>;
+
 export const SyncFrom$zodSchema = z.enum([
   "MANAGEMENT",
   "KUBERNETES",
 ]).describe(
-  "syncFrom stands for where the Gateway should source the API definition from. \n"
-    + "If the value is KUBERNETES, then the gateway will sync the definition by listening to changes\n"
-    + "issued on a kubernetes config map. If the value is MANAGEMENT, then the gateway will sync\n"
-    + "the definition using the same datastore as APIM. \n"
-    + "Defining MANAGEMENT as source for sync is useful e.g. when a single operator should operate\n"
-    + "on gateways deployed on multiple kubernetes clusters.",
+  "syncFrom stands for where the Gateway should source the API definition from. \nIf the value is KUBERNETES, then the gateway will sync the definition by listening to changes\nissued on a kubernetes config map. If the value is MANAGEMENT, then the gateway will sync\nthe definition using the same datastore as APIM. \nDefining MANAGEMENT as source for sync is useful e.g. when a single operator should operate\non gateways deployed on multiple kubernetes clusters.",
 );
-
-export type SyncFrom = z.infer<typeof SyncFrom$zodSchema>;
 
 /**
  * the context where the api definition was created. Deprecated in favor of OriginContext.
@@ -71,14 +99,17 @@ export type DefinitionContext = {
   syncFrom?: SyncFrom | undefined;
 };
 
-export const DefinitionContext$zodSchema: z.ZodType<
-  DefinitionContext,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  mode: Mode$zodSchema.optional(),
-  origin: DefinitionContextOrigin$zodSchema.optional(),
-  syncFrom: SyncFrom$zodSchema.optional(),
-}).describe(
-  "the context where the api definition was created. Deprecated in favor of OriginContext.",
-);
+export const DefinitionContext$zodSchema: z.ZodType<DefinitionContext> = z
+  .object({
+    mode: Mode$zodSchema.optional().describe(
+      "The mode of the API.\nfully_managed: Mode indicating the api is fully managed by the origin and so, only the origin should be able to manage the api.\napi_definition_only: Mode indicating the api is partially managed by the origin and so, only the origin should be able to manage the api definition part of the api. This includes everything regarding the definition of the apis (plans, flows, metadata, ...)",
+    ),
+    origin: DefinitionContextOrigin$zodSchema.optional().describe(
+      "The origin of the API.",
+    ),
+    syncFrom: SyncFrom$zodSchema.optional().describe(
+      "syncFrom stands for where the Gateway should source the API definition from. \nIf the value is KUBERNETES, then the gateway will sync the definition by listening to changes\nissued on a kubernetes config map. If the value is MANAGEMENT, then the gateway will sync\nthe definition using the same datastore as APIM. \nDefining MANAGEMENT as source for sync is useful e.g. when a single operator should operate\non gateways deployed on multiple kubernetes clusters.",
+    ),
+  }).describe(
+    "the context where the api definition was created. Deprecated in favor of OriginContext.",
+  );

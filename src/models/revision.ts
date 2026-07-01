@@ -9,8 +9,9 @@ export type Revision = {
   revision?: number | undefined;
 };
 
-export const Revision$zodSchema: z.ZodType<Revision, z.ZodTypeDef, unknown> = z
-  .object({
-    id: z.string().optional(),
-    revision: z.number().int().optional(),
-  });
+export const Revision$zodSchema: z.ZodType<Revision> = z.object({
+  id: z.string().optional().describe(
+    "Id of the page used to fill the content attributes.",
+  ),
+  revision: z.int().optional().describe("Revision number."),
+});

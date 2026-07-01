@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type RemoveIntegrationMemberRequest = {
   envId?: string | undefined;
@@ -12,31 +11,11 @@ export type RemoveIntegrationMemberRequest = {
 };
 
 export const RemoveIntegrationMemberRequest$zodSchema: z.ZodType<
-  RemoveIntegrationMemberRequest,
-  z.ZodTypeDef,
-  unknown
+  RemoveIntegrationMemberRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   integrationId: z.string().describe("Id of an integration."),
-  memberId: z.string().describe("Id of an API member."),
-});
-
-export type RemoveIntegrationMemberResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const RemoveIntegrationMemberResponse$zodSchema: z.ZodType<
-  RemoveIntegrationMemberResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
+  memberId: z.string().describe("The memberId path parameter."),
 });

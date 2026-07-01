@@ -13,9 +13,7 @@ export type DeprecateApiPlanRequest = {
 };
 
 export const DeprecateApiPlanRequest$zodSchema: z.ZodType<
-  DeprecateApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
+  DeprecateApiPlanRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -24,22 +22,11 @@ export const DeprecateApiPlanRequest$zodSchema: z.ZodType<
   planId: z.string().describe("Id of a plan."),
 });
 
-export type DeprecateApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Plan?: Plan | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type DeprecateApiPlanResponse = Plan | ErrorT;
 
 export const DeprecateApiPlanResponse$zodSchema: z.ZodType<
-  DeprecateApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Plan: Plan$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  DeprecateApiPlanResponse
+> = z.union([
+  Plan$zodSchema,
+  ErrorT$zodSchema,
+]);

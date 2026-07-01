@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Accept an API subscription
  *
  * @remarks
- * Accept an API subscription with an optional starting / ending dates and reason.
+ * Accept an API subscription
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * Accept an API subscription with an optional starting / ending dates and reason.
  */
 export function apiSubscriptionsAcceptAPISubscription(
   client$: GraviteeApimCore,
@@ -122,7 +122,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "acceptApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -181,7 +181,7 @@ async function $do(
       key: "Subscription",
     }),
     M.json("default", AcceptApiSubscriptionResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

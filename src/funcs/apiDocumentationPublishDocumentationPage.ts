@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Publish API Documentation Page
  *
  * @remarks
+ * Publish API Documentation Page
+ *
  * Publish API Documentation Page. Returns the published page.
  *
- * User must have the API_DOCUMENTATION[UPDATE] permission.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apiDocumentationPublishDocumentationPage(
   client$: GraviteeApimCore,
@@ -119,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "publishDocumentationPage",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -176,7 +178,7 @@ async function $do(
   >(
     M.json(200, PublishDocumentationPageResponse$zodSchema, { key: "Page" }),
     M.json("default", PublishDocumentationPageResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

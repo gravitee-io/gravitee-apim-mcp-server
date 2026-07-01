@@ -32,6 +32,8 @@ import { Result } from "../types/fp.js";
  * Ingest APIs for a specific Integration
  *
  * @remarks
+ * Ingest APIs for a specific Integration
+ *
  * Ingest all APIs for a specific Integration.
  */
 export function integrationsIngestIntegration(
@@ -114,7 +116,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "ingestIntegration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -172,7 +174,7 @@ async function $do(
     M.json(200, IngestIntegrationResponse$zodSchema, {
       key: "IntegrationIngestionResponse",
     }),
-    M.json("default", IngestIntegrationResponse$zodSchema, { key: "Error" }),
+    M.json("default", IngestIntegrationResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -13,13 +13,18 @@ const args = {
 export const tool$apiAnalyticsGetAPIAnalyticsRequestCount: ToolDefinition<
   typeof args
 > = {
-  name: "API-analytics-get-api-analytics-request-count",
+  name: "get_api_analytics_request_count",
   description: `Get API Analytics requests count
 
-Get API analytics request count.
-TCP Proxy APIs are not supported.
-
-User must have the API_ANALYTICS[READ] permission.`,
+Get API analytics request count. TCP Proxy APIs are not supported.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Analytics Request Count",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetAPIAnalyticsRequestCount(

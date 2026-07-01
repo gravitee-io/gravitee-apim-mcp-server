@@ -3,41 +3,55 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { IngestionJob, IngestionJob$zodSchema } from "./ingestionjob.js";
+import {
+  IntegrationWellKnownUrl,
+  IntegrationWellKnownUrl$zodSchema,
+} from "./integrationwellknownurl.js";
 import { PrimaryOwner, PrimaryOwner$zodSchema } from "./primaryowner.js";
 
 /**
- * Agent connection status
+ * Agent connection status (not for A2A)
  */
+export const AgentStatus = {
+  Connected: "CONNECTED",
+  Disconnected: "DISCONNECTED",
+} as const;
+/**
+ * Agent connection status (not for A2A)
+ */
+export type AgentStatus = ClosedEnum<typeof AgentStatus>;
+
 export const AgentStatus$zodSchema = z.enum([
   "CONNECTED",
   "DISCONNECTED",
-]).describe("Agent connection status");
-
-export type AgentStatus = z.infer<typeof AgentStatus$zodSchema>;
+]).describe("Agent connection status (not for A2A)");
 
 export type Integration = {
   id?: string | undefined;
   name?: string | undefined;
   description?: string | undefined;
   provider?: string | undefined;
-  agentStatus?: AgentStatus | undefined;
-  pendingJob?: IngestionJob | undefined;
   primaryOwner?: PrimaryOwner | undefined;
   groups?: Array<string> | undefined;
+  agentStatus?: AgentStatus | undefined;
+  pendingJob?: IngestionJob | undefined;
+  wellKnownUrls?: Array<IntegrationWellKnownUrl> | undefined;
 };
 
-export const Integration$zodSchema: z.ZodType<
-  Integration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  agentStatus: AgentStatus$zodSchema.optional(),
-  description: z.string().optional(),
-  groups: z.array(z.string()).optional(),
-  id: z.string().optional(),
-  name: z.string().optional(),
+export const Integration$zodSchema: z.ZodType<Integration> = z.object({
+  agentStatus: AgentStatus$zodSchema.optional().describe(
+    "Agent connection status (not for A2A)",
+  ),
+  description: z.string().optional().describe("Description of the integration"),
+  groups: z.array(z.string()).optional().describe("A list of group ids"),
+  id: z.string().optional().describe("Id of the integration"),
+  name: z.string().optional().describe("Name of the integration"),
   pendingJob: IngestionJob$zodSchema.optional(),
   primaryOwner: PrimaryOwner$zodSchema.optional(),
-  provider: z.string().optional(),
+  provider: z.string().optional().describe("Provider of this integration"),
+  wellKnownUrls: z.array(IntegrationWellKnownUrl$zodSchema).optional().describe(
+    "A2A well-known URLs (only for A2A provider)",
+  ),
 });

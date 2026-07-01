@@ -3,11 +3,13 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const ApisSearchExpandsParam = {
+  DeploymentState: "deploymentState",
+} as const;
+export type ApisSearchExpandsParam = ClosedEnum<typeof ApisSearchExpandsParam>;
 
 export const ApisSearchExpandsParam$zodSchema = z.enum([
   "deploymentState",
 ]);
-
-export type ApisSearchExpandsParam = z.infer<
-  typeof ApisSearchExpandsParam$zodSchema
->;

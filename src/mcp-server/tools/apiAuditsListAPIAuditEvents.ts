@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiAuditsListAPIAuditEvents: ToolDefinition<typeof args> = {
-  name: "API-audits-list-api-audit-events",
+  name: "list_api_audit_events",
   description: `List available audit event type for API
 
-List available audit event type for API.
-
-User must have the API_AUDIT[READ] permission.`,
+List available audit event type for API.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Api Audit Events",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAuditsListAPIAuditEvents(

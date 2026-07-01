@@ -3,12 +3,19 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The case of the failover.
  */
+export const FailoverCase = {
+  Timeout: "TIMEOUT",
+} as const;
+/**
+ * The case of the failover.
+ */
+export type FailoverCase = ClosedEnum<typeof FailoverCase>;
+
 export const FailoverCase$zodSchema = z.enum([
   "TIMEOUT",
 ]).describe("The case of the failover.");
-
-export type FailoverCase = z.infer<typeof FailoverCase$zodSchema>;

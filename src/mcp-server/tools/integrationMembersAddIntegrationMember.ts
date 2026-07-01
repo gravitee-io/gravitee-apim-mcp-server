@@ -13,16 +13,18 @@ const args = {
 export const tool$integrationMembersAddIntegrationMember: ToolDefinition<
   typeof args
 > = {
-  name: "integration-members-add-integration-member",
+  name: "add_integration_member",
   description: `Add a member to an Integration.
 
-Add a new member to an Integration.
-
-Returns a 400 HTTP Error:
-- when the user tries to set a member as PrimaryOwner.
-
-User must have the INTEGRATION_MEMBER[CREATE] permission.
-`,
+Add a new member to an Integration. Returns a 400 HTTP Error:`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Add Integration Member",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationMembersAddIntegrationMember(

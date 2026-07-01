@@ -9,31 +9,30 @@ import { PEMKeyStore, PEMKeyStore$zodSchema } from "./pemkeystore.js";
 import { Pkcs12KeyStore, Pkcs12KeyStore$zodSchema } from "./pkcs12keystore.js";
 
 export type KeyStore =
-  | (NoneKeyStore & { type: "NONE" })
   | (JKSKeyStore & { type: "JKS" })
+  | (PEMKeyStore & { type: "PEM" })
   | (Pkcs12KeyStore & { type: "PKCS12" })
-  | (PEMKeyStore & { type: "PEM" });
+  | (NoneKeyStore & { type: "NONE" });
 
-export const KeyStore$zodSchema: z.ZodType<KeyStore, z.ZodTypeDef, unknown> = z
-  .union([
-    NoneKeyStore$zodSchema.and(
-      z.object({
-        type: z.literal("NONE"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    JKSKeyStore$zodSchema.and(
-      z.object({
-        type: z.literal("JKS"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    Pkcs12KeyStore$zodSchema.and(
-      z.object({
-        type: z.literal("PKCS12"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    PEMKeyStore$zodSchema.and(
-      z.object({
-        type: z.literal("PEM"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-  ]);
+export const KeyStore$zodSchema: z.ZodType<KeyStore> = z.union([
+  JKSKeyStore$zodSchema.and(
+    z.object({
+      type: z.literal("JKS"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  PEMKeyStore$zodSchema.and(
+    z.object({
+      type: z.literal("PEM"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  Pkcs12KeyStore$zodSchema.and(
+    z.object({
+      type: z.literal("PKCS12"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  NoneKeyStore$zodSchema.and(
+    z.object({
+      type: z.literal("NONE"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+]);

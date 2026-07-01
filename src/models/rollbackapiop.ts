@@ -4,7 +4,6 @@
 
 import * as z from "zod";
 import { ApiRollback, ApiRollback$zodSchema } from "./apirollback.js";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type RollbackApiRequest = {
   envId?: string | undefined;
@@ -12,32 +11,11 @@ export type RollbackApiRequest = {
   ApiRollback: ApiRollback;
 };
 
-export const RollbackApiRequest$zodSchema: z.ZodType<
-  RollbackApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiRollback: ApiRollback$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
-
-export type RollbackApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const RollbackApiResponse$zodSchema: z.ZodType<
-  RollbackApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const RollbackApiRequest$zodSchema: z.ZodType<RollbackApiRequest> = z
+  .object({
+    ApiRollback: ApiRollback$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });

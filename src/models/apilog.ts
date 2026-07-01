@@ -4,6 +4,10 @@
 
 import * as z from "zod";
 import {
+  ApiLogDiagnostic,
+  ApiLogDiagnostic$zodSchema,
+} from "./apilogdiagnostic.js";
+import {
   BaseApplication,
   BaseApplication$zodSchema,
 } from "./baseapplication.js";
@@ -21,18 +25,59 @@ export type ApiLog = {
   transactionId?: string | undefined;
   status?: number | undefined;
   requestEnded?: boolean | undefined;
+  gatewayResponseTime?: number | undefined;
+  uri?: string | undefined;
+  endpoint?: string | undefined;
+  message?: string | undefined;
+  errorKey?: string | undefined;
+  errorComponentName?: string | undefined;
+  errorComponentType?: string | undefined;
+  warnings?: Array<ApiLogDiagnostic> | undefined;
+  additionalMetrics?: { [k: string]: any } | undefined;
+  apiProductId?: string | undefined;
+  apiProductName?: string | undefined;
 };
 
-export const ApiLog$zodSchema: z.ZodType<ApiLog, z.ZodTypeDef, unknown> = z
-  .object({
-    application: BaseApplication$zodSchema.optional(),
-    clientIdentifier: z.string().optional(),
-    id: z.string().optional(),
-    method: HttpMethod$zodSchema.optional(),
-    plan: BasePlan$zodSchema.optional(),
-    requestEnded: z.boolean().optional(),
-    requestId: z.string().optional(),
-    status: z.number().int().optional(),
-    timestamp: z.string().datetime({ offset: true }).optional(),
-    transactionId: z.string().optional(),
-  });
+export const ApiLog$zodSchema: z.ZodType<ApiLog> = z.object({
+  additionalMetrics: z.record(z.string(), z.any()).optional().describe(
+    "A map of string keys to values",
+  ),
+  apiProductId: z.string().optional().describe(
+    "The ID of the API Product associated with this log entry. Absent when the request is not associated with any API Product.",
+  ),
+  apiProductName: z.string().optional().describe(
+    "The human-readable name of the API Product. Absent when no API Product is associated or the product cannot be resolved.",
+  ),
+  application: BaseApplication$zodSchema.optional(),
+  clientIdentifier: z.string().optional().describe(
+    "The client identifier of the request.",
+  ),
+  endpoint: z.string().optional().describe("The endpoint URL."),
+  errorComponentName: z.string().optional().describe(
+    "The name of the component that generated the error.",
+  ),
+  errorComponentType: z.string().optional().describe(
+    "The type of the component that generated the error.",
+  ),
+  errorKey: z.string().optional().describe("The error key."),
+  gatewayResponseTime: z.int().optional().describe("The response time in ms"),
+  id: z.string().optional().describe("The internal UUID of the Log."),
+  message: z.string().optional().describe("The error message."),
+  method: HttpMethod$zodSchema.optional().describe(
+    "The method of the selector",
+  ),
+  plan: BasePlan$zodSchema.optional(),
+  requestEnded: z.boolean().optional().describe(
+    "The flag indicating if the request has ended.",
+  ),
+  requestId: z.string().optional().describe("The id of the request."),
+  status: z.int().optional().describe("The response's status."),
+  timestamp: z.iso.datetime({ offset: true }).optional().describe(
+    "The date (as timestamp) of the log.",
+  ),
+  transactionId: z.string().optional().describe("The id of the transaction."),
+  uri: z.string().optional().describe("URI of the request."),
+  warnings: z.array(ApiLogDiagnostic$zodSchema).optional().describe(
+    "The warning diagnotics",
+  ),
+});

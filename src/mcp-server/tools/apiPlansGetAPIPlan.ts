@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiPlansGetAPIPlan: ToolDefinition<typeof args> = {
-  name: "API-plans-get-api-plan",
+  name: "get_api_plan",
   description: `Get one API's plan
 
-Get the API's plan by its identifier.
-
-User must have the API_PLAN[READ] permission.`,
+Get the API's plan by its identifier.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Plan",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansGetAPIPlan(

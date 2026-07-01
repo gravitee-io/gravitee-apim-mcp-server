@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type DeleteApiPlanRequest = {
   envId?: string | undefined;
@@ -11,32 +10,11 @@ export type DeleteApiPlanRequest = {
   planId: string;
 };
 
-export const DeleteApiPlanRequest$zodSchema: z.ZodType<
-  DeleteApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  planId: z.string().describe("Id of a plan."),
-});
-
-export type DeleteApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const DeleteApiPlanResponse$zodSchema: z.ZodType<
-  DeleteApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const DeleteApiPlanRequest$zodSchema: z.ZodType<DeleteApiPlanRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    planId: z.string().describe("Id of a plan."),
+  });

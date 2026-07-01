@@ -11,12 +11,20 @@ const args = {
 };
 
 export const tool$apiPlansDeleteAPIPlan: ToolDefinition<typeof args> = {
-  name: "API-plans-delete-api-plan",
+  name: "delete_api_plan",
   description: `Delete one API's plan
 
 Delete the API's plan.
 
-User must have the API_PLAN[DELETE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Delete Api Plan",
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansDeleteAPIPlan(

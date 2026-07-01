@@ -11,9 +11,7 @@ import { SpecGenState, SpecGenState$zodSchema } from "./specgenstate.js";
 export type ApiSpecGenRequestState = { state?: SpecGenState | undefined };
 
 export const ApiSpecGenRequestState$zodSchema: z.ZodType<
-  ApiSpecGenRequestState,
-  z.ZodTypeDef,
-  unknown
+  ApiSpecGenRequestState
 > = z.object({
-  state: SpecGenState$zodSchema.optional(),
+  state: SpecGenState$zodSchema.optional().describe("API SpecGen state value"),
 }).describe("API SpecGen state.");

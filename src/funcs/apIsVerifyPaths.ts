@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Verify HTTP API paths
  *
  * @remarks
- * Verify paths before creating or updating a HTTP API.<br>
- * This will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br>
- * The result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)
+ * Verify HTTP API paths
+ *
+ * Verify paths before creating or updating a HTTP API.<br> This will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br> The result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)
  */
 export function apIsVerifyPaths(
   client$: GraviteeApimCore,
@@ -110,7 +110,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "verifyPaths",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -168,7 +168,7 @@ async function $do(
     M.json(200, VerifyPathsResponse$zodSchema, {
       key: "VerifyApiPathsResponse",
     }),
-    M.json("default", VerifyPathsResponse$zodSchema, { key: "Error" }),
+    M.json("default", VerifyPathsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

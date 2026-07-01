@@ -13,9 +13,7 @@ export type EndpointGroupServicesV2 = {
 };
 
 export const EndpointGroupServicesV2$zodSchema: z.ZodType<
-  EndpointGroupServicesV2,
-  z.ZodTypeDef,
-  unknown
+  EndpointGroupServicesV2
 > = z.object({
   discovery: EndpointDiscoveryService$zodSchema.optional(),
 });

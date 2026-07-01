@@ -21,9 +21,7 @@ export type ExportApiSubscriptionsRequest = {
 };
 
 export const ExportApiSubscriptionsRequest$zodSchema: z.ZodType<
-  ExportApiSubscriptionsRequest,
-  z.ZodTypeDef,
-  unknown
+  ExportApiSubscriptionsRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   apiKey: z.string().describe(
@@ -35,10 +33,9 @@ export const ExportApiSubscriptionsRequest$zodSchema: z.ZodType<
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
   planIds: z.array(z.string()).describe("List of plan ids to filter on.")
     .optional(),
@@ -48,21 +45,13 @@ export const ExportApiSubscriptionsRequest$zodSchema: z.ZodType<
 });
 
 export type ExportApiSubscriptionsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
   Headers: { [k: string]: Array<string> };
+  Result?: ErrorT | undefined;
 };
 
 export const ExportApiSubscriptionsResponse$zodSchema: z.ZodType<
-  ExportApiSubscriptionsResponse,
-  z.ZodTypeDef,
-  unknown
+  ExportApiSubscriptionsResponse
 > = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Headers: z.record(z.array(z.string())),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
+  Headers: z.record(z.string(), z.array(z.string())).default({}),
+  Result: ErrorT$zodSchema.optional(),
 });
