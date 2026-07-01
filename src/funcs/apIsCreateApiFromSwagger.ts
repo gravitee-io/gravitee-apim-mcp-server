@@ -32,11 +32,9 @@ import { Result } from "../types/fp.js";
  * Import API definition
  *
  * @remarks
- * ⚠️ Support only v4 API for the moment. ⚠️<br>
- * Create an API by importing from an Open API descriptor. <br>
- * This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`
+ * Import API definition
  *
- * User must have the ENVIRONMENT_API[CREATE] permission.
+ * ⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by importing from an Open API descriptor. <br> This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`
  */
 export function apIsCreateApiFromSwagger(
   client$: GraviteeApimCore,
@@ -114,7 +112,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createApiFromSwagger",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -170,7 +168,9 @@ async function $do(
     | ConnectionError
   >(
     M.json(201, CreateApiFromSwaggerResponse$zodSchema, { key: "ApiV4" }),
-    M.json("default", CreateApiFromSwaggerResponse$zodSchema, { key: "Error" }),
+    M.json("default", CreateApiFromSwaggerResponse$zodSchema, {
+      key: "ErrorT",
+    }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

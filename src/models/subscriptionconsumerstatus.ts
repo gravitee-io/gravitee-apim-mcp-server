@@ -3,16 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The status of the subscription manageable by the api consumer.
  */
+export const SubscriptionConsumerStatus = {
+  Started: "STARTED",
+  Stopped: "STOPPED",
+  Failure: "FAILURE",
+} as const;
+/**
+ * The status of the subscription manageable by the api consumer.
+ */
+export type SubscriptionConsumerStatus = ClosedEnum<
+  typeof SubscriptionConsumerStatus
+>;
+
 export const SubscriptionConsumerStatus$zodSchema = z.enum([
   "STARTED",
   "STOPPED",
   "FAILURE",
 ]).describe("The status of the subscription manageable by the api consumer.");
-
-export type SubscriptionConsumerStatus = z.infer<
-  typeof SubscriptionConsumerStatus$zodSchema
->;

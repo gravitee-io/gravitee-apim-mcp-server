@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API log for a request
  *
  * @remarks
- * Get API log for a request.
+ * Get API log for a request
  *
- * User must have the API_LOG[READ] permission.
+ * Get API log for a request.
  */
 export function apiAnalyticsGetAPILog(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiLog",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +175,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiLogResponse$zodSchema, { key: "ApiLogResponse" }),
-    M.json("default", GetApiLogResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiLogResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

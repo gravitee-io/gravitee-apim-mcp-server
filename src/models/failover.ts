@@ -11,9 +11,10 @@ export type Failover = {
   cases?: Array<FailoverCase> | undefined;
 };
 
-export const Failover$zodSchema: z.ZodType<Failover, z.ZodTypeDef, unknown> = z
-  .object({
-    cases: z.array(FailoverCase$zodSchema).optional(),
-    maxAttempts: z.number().int().default(1),
-    retryTimeout: z.number().int().default(10000),
-  });
+export const Failover$zodSchema: z.ZodType<Failover> = z.object({
+  cases: z.array(FailoverCase$zodSchema).optional().describe(
+    "The list of cases associated with this failover.",
+  ),
+  maxAttempts: z.int().default(1).describe("The maximum number of attempts."),
+  retryTimeout: z.int().default(10000).describe("The retry timeout in ms"),
+});

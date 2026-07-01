@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Plan type.
  */
+export const PlanType = {
+  Api: "API",
+  Catalog: "CATALOG",
+} as const;
+/**
+ * Plan type.
+ */
+export type PlanType = ClosedEnum<typeof PlanType>;
+
 export const PlanType$zodSchema = z.enum([
   "API",
   "CATALOG",
 ]).describe("Plan type.");
-
-export type PlanType = z.infer<typeof PlanType$zodSchema>;

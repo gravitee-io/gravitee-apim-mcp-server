@@ -16,48 +16,30 @@ export type GetApiAuditsRequest = {
   events?: Array<string> | undefined;
 };
 
-export const GetApiAuditsRequest$zodSchema: z.ZodType<
-  GetApiAuditsRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  events: z.array(z.string()).describe("List of Audit event name to filter on.")
-    .optional(),
-  from: z.number().int().describe(
-    "The timestamp from which the logs will be returned.\n"
-      + "",
-  ).optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  to: z.number().int().describe(
-    "The timestamp to which the logs will be returned.\n"
-      + "",
-  ).optional(),
-});
+export const GetApiAuditsRequest$zodSchema: z.ZodType<GetApiAuditsRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    events: z.array(z.string()).describe(
+      "List of Audit event name to filter on.",
+    ).optional(),
+    from: z.int().describe(
+      "The timestamp from which the logs will be returned.\n",
+    ).optional(),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    to: z.int().describe("The timestamp to which the logs will be returned.\n")
+      .optional(),
+  });
 
-export type GetApiAuditsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  AuditsResponse?: AuditsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiAuditsResponse = AuditsResponse | ErrorT;
 
-export const GetApiAuditsResponse$zodSchema: z.ZodType<
-  GetApiAuditsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  AuditsResponse: AuditsResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiAuditsResponse$zodSchema: z.ZodType<GetApiAuditsResponse> = z
+  .union([
+    AuditsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

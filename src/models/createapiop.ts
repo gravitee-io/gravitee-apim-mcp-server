@@ -12,33 +12,19 @@ export type CreateApiRequest = {
   CreateApiV4: CreateApiV4;
 };
 
-export const CreateApiRequest$zodSchema: z.ZodType<
-  CreateApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  CreateApiV4: CreateApiV4$zodSchema,
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const CreateApiRequest$zodSchema: z.ZodType<CreateApiRequest> = z.object(
+  {
+    CreateApiV4: CreateApiV4$zodSchema,
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  },
+);
 
-export type CreateApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiV4?: ApiV4Output | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateApiResponse = ApiV4Output | ErrorT;
 
-export const CreateApiResponse$zodSchema: z.ZodType<
-  CreateApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiV4: ApiV4Output$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const CreateApiResponse$zodSchema: z.ZodType<CreateApiResponse> = z
+  .union([
+    ApiV4Output$zodSchema,
+    ErrorT$zodSchema,
+  ]);

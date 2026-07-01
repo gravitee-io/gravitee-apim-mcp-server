@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Close an API's plan
  *
  * @remarks
+ * Close an API's plan
+ *
  * Close the API's plan.
  *
- * User must have the API_PLAN[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apiPlansCloseAPIPlan(
   client$: GraviteeApimCore,
@@ -119,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "closeApiPlan",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +177,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, CloseApiPlanResponse$zodSchema, { key: "Plan" }),
-    M.json("default", CloseApiPlanResponse$zodSchema, { key: "Error" }),
+    M.json("default", CloseApiPlanResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

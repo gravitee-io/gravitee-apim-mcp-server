@@ -3,8 +3,19 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 import { Subscription, Subscription$zodSchema } from "./subscription.js";
+
+export const GetApiSubscriptionExpand = {
+  Api: "api",
+  Application: "application",
+  Plan: "plan",
+  SubscribedBy: "subscribedBy",
+} as const;
+export type GetApiSubscriptionExpand = ClosedEnum<
+  typeof GetApiSubscriptionExpand
+>;
 
 export const GetApiSubscriptionExpand$zodSchema = z.enum([
   "api",
@@ -12,10 +23,6 @@ export const GetApiSubscriptionExpand$zodSchema = z.enum([
   "plan",
   "subscribedBy",
 ]);
-
-export type GetApiSubscriptionExpand = z.infer<
-  typeof GetApiSubscriptionExpand$zodSchema
->;
 
 export type GetApiSubscriptionRequest = {
   envId?: string | undefined;
@@ -25,9 +32,7 @@ export type GetApiSubscriptionRequest = {
 };
 
 export const GetApiSubscriptionRequest$zodSchema: z.ZodType<
-  GetApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiSubscriptionRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -39,22 +44,11 @@ export const GetApiSubscriptionRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type GetApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Subscription?: Subscription | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiSubscriptionResponse = Subscription | ErrorT;
 
 export const GetApiSubscriptionResponse$zodSchema: z.ZodType<
-  GetApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  Subscription: Subscription$zodSchema.optional(),
-});
+  GetApiSubscriptionResponse
+> = z.union([
+  Subscription$zodSchema,
+  ErrorT$zodSchema,
+]);

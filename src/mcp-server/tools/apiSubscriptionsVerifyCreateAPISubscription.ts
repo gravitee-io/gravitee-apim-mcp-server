@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsVerifyCreateAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-verify-create-api-subscription",
+  name: "verify_create_api_subscription",
   description: `Check a subscription can be created
 
-Check a subscription can be created with given API Key, and application.
-
-User must have the API_SUBSCRIPTION[CREATE] permission.`,
+Check a subscription can be created with given API Key, and application.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Verify Create Api Subscription",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsVerifyCreateAPISubscription(

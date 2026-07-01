@@ -12,11 +12,10 @@ export type Property = {
   encryptable?: boolean | undefined;
 };
 
-export const Property$zodSchema: z.ZodType<Property, z.ZodTypeDef, unknown> = z
-  .object({
-    dynamic: z.boolean().optional(),
-    encryptable: z.boolean().optional(),
-    encrypted: z.boolean().optional(),
-    key: z.string(),
-    value: z.string(),
-  });
+export const Property$zodSchema: z.ZodType<Property> = z.object({
+  dynamic: z.boolean().optional(),
+  encryptable: z.boolean().optional(),
+  encrypted: z.boolean().optional(),
+  key: z.string(),
+  value: z.string(),
+});

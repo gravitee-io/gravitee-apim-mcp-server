@@ -31,17 +31,17 @@ export type EndpointGroupV2 = {
   headers?: Array<HttpHeader> | undefined;
 };
 
-export const EndpointGroupV2$zodSchema: z.ZodType<
-  EndpointGroupV2,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  endpoints: z.array(EndpointV2$zodSchema).optional(),
-  headers: z.array(HttpHeader$zodSchema).optional(),
+export const EndpointGroupV2$zodSchema: z.ZodType<EndpointGroupV2> = z.object({
+  endpoints: z.array(EndpointV2$zodSchema).optional().describe(
+    "The list of endpoints associated with this endpoint group.",
+  ),
+  headers: z.array(HttpHeader$zodSchema).optional().describe(
+    "The list of headers associated with this endpoint group.",
+  ),
   httpClientOptions: HttpClientOptions$zodSchema.optional(),
   httpClientSslOptions: HttpClientSslOptions$zodSchema.optional(),
   httpProxy: HttpProxy$zodSchema.optional(),
   loadBalancer: LoadBalancer$zodSchema.optional(),
-  name: z.string().optional(),
+  name: z.string().optional().describe("Endpoint group's name."),
   services: EndpointGroupServicesV2$zodSchema.optional(),
 });

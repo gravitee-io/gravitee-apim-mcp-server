@@ -9,11 +9,11 @@ export type ApiScoringError = {
   path?: Array<string> | undefined;
 };
 
-export const ApiScoringError$zodSchema: z.ZodType<
-  ApiScoringError,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  code: z.string().optional(),
-  path: z.array(z.string()).optional(),
+export const ApiScoringError$zodSchema: z.ZodType<ApiScoringError> = z.object({
+  code: z.string().optional().describe(
+    "code of the api scoring validation error",
+  ),
+  path: z.array(z.string()).optional().describe(
+    "Path to the specific place in document where problem occurred",
+  ),
 });

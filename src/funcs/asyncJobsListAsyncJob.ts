@@ -32,6 +32,8 @@ import { Result } from "../types/fp.js";
  * List Async Jobs
  *
  * @remarks
+ * List Async Jobs
+ *
  * Get the list of AsyncJobs.
  */
 export function asyncJobsListAsyncJob(
@@ -113,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listAsyncJob",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -170,7 +172,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, ListAsyncJobResponse$zodSchema, { key: "AsyncJobsResponse" }),
-    M.json("default", ListAsyncJobResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListAsyncJobResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

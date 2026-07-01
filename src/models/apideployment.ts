@@ -6,10 +6,8 @@ import * as z from "zod";
 
 export type ApiDeployment = { deploymentLabel?: string | undefined };
 
-export const ApiDeployment$zodSchema: z.ZodType<
-  ApiDeployment,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  deploymentLabel: z.string().optional(),
+export const ApiDeployment$zodSchema: z.ZodType<ApiDeployment> = z.object({
+  deploymentLabel: z.string().optional().describe(
+    "Label for an Api deployment. Duplicate names can exists.",
+  ),
 });

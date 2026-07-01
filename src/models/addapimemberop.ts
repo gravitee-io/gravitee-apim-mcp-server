@@ -13,34 +13,19 @@ export type AddApiMemberRequest = {
   AddMember: AddMember;
 };
 
-export const AddApiMemberRequest$zodSchema: z.ZodType<
-  AddApiMemberRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  AddMember: AddMember$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const AddApiMemberRequest$zodSchema: z.ZodType<AddApiMemberRequest> = z
+  .object({
+    AddMember: AddMember$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type AddApiMemberResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Member?: Member | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type AddApiMemberResponse = Member | ErrorT;
 
-export const AddApiMemberResponse$zodSchema: z.ZodType<
-  AddApiMemberResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Member: Member$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const AddApiMemberResponse$zodSchema: z.ZodType<AddApiMemberResponse> = z
+  .union([
+    Member$zodSchema,
+    ErrorT$zodSchema,
+  ]);

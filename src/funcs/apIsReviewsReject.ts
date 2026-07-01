@@ -10,6 +10,7 @@ import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,8 +23,6 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   ReviewsRejectRequest,
   ReviewsRejectRequest$zodSchema,
-  ReviewsRejectResponse,
-  ReviewsRejectResponse$zodSchema,
 } from "../models/reviewsrejectop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -34,11 +33,7 @@ import { Result } from "../types/fp.js";
  * @remarks
  * Reject a review
  *
- * Return a 400 HTTP Error:
- *  - when user tries to change reviews state of an ARCHIVED API
- *  - when user tries to change reviews state of an API that is not in review
- *
- * User must have the API_REVIEWS[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apIsReviewsReject(
   client$: GraviteeApimCore,
@@ -46,7 +41,7 @@ export function apIsReviewsReject(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    ReviewsRejectResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -70,7 +65,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      ReviewsRejectResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -120,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "reviewsReject",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -166,7 +161,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    ReviewsRejectResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -175,8 +170,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, ReviewsRejectResponse$zodSchema),
-    M.json("default", ReviewsRejectResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

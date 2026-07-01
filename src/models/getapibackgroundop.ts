@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import * as b64$ from "../lib/base64.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type GetApiBackgroundRequest = {
@@ -11,9 +12,7 @@ export type GetApiBackgroundRequest = {
 };
 
 export const GetApiBackgroundRequest$zodSchema: z.ZodType<
-  GetApiBackgroundRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiBackgroundRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -21,22 +20,13 @@ export const GetApiBackgroundRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type GetApiBackgroundResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ImageResponse?: Uint8Array | string | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiBackgroundResponse = Uint8Array | string | ErrorT;
 
 export const GetApiBackgroundResponse$zodSchema: z.ZodType<
-  GetApiBackgroundResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  ImageResponse: z.string().base64().describe("An image").optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiBackgroundResponse
+> = z.union([
+  z.string().describe("Base64-encoded binary content").transform(
+    b64$.bytesFromBase64,
+  ),
+  ErrorT$zodSchema,
+]);

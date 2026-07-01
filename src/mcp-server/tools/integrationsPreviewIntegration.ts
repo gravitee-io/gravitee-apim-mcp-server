@@ -12,13 +12,18 @@ const args = {
 
 export const tool$integrationsPreviewIntegration: ToolDefinition<typeof args> =
   {
-    name: "integrations-preview-integration",
+    name: "preview_integration",
     description: `Preview APIs to ingest for a specific Integration
 
-Preview APIs to ingest before actual ingestion.
-
-User must have both the ENVIRONMENT_INTEGRATION[READ] and the ENVIRONMENT_API[CREATE] permission 
-to perform ingestion preview.`,
+Preview APIs to ingest before actual ingestion. to perform ingestion preview.`,
+    scopes: ["read"],
+    annotations: {
+      "title": "Preview Integration",
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
     args,
     tool: async (client, args, ctx) => {
       const [result, apiCall] = await integrationsPreviewIntegration(

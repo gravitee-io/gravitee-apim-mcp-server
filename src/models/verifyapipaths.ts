@@ -7,11 +7,7 @@ import { Path, Path$zodSchema } from "./path.js";
 
 export type VerifyApiPaths = { apiId?: string | undefined; paths: Array<Path> };
 
-export const VerifyApiPaths$zodSchema: z.ZodType<
-  VerifyApiPaths,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const VerifyApiPaths$zodSchema: z.ZodType<VerifyApiPaths> = z.object({
   apiId: z.string().optional(),
   paths: z.array(Path$zodSchema),
 });

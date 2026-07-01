@@ -16,9 +16,7 @@ export type CreateApiFromSwaggerRequest = {
 };
 
 export const CreateApiFromSwaggerRequest$zodSchema: z.ZodType<
-  CreateApiFromSwaggerRequest,
-  z.ZodTypeDef,
-  unknown
+  CreateApiFromSwaggerRequest
 > = z.object({
   ImportSwaggerDescriptor: ImportSwaggerDescriptor$zodSchema,
   envId: z.string().default("DEFAULT").describe(
@@ -26,22 +24,11 @@ export const CreateApiFromSwaggerRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type CreateApiFromSwaggerResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiV4?: ApiV4Output | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateApiFromSwaggerResponse = ApiV4Output | ErrorT;
 
 export const CreateApiFromSwaggerResponse$zodSchema: z.ZodType<
-  CreateApiFromSwaggerResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiV4: ApiV4Output$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  CreateApiFromSwaggerResponse
+> = z.union([
+  ApiV4Output$zodSchema,
+  ErrorT$zodSchema,
+]);

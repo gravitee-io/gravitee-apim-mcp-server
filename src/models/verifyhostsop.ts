@@ -15,33 +15,18 @@ export type VerifyHostsRequest = {
   VerifyApiHosts: VerifyApiHosts;
 };
 
-export const VerifyHostsRequest$zodSchema: z.ZodType<
-  VerifyHostsRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  VerifyApiHosts: VerifyApiHosts$zodSchema,
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const VerifyHostsRequest$zodSchema: z.ZodType<VerifyHostsRequest> = z
+  .object({
+    VerifyApiHosts: VerifyApiHosts$zodSchema,
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type VerifyHostsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  VerifyApiHostsResponse?: VerifyApiHostsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type VerifyHostsResponse = VerifyApiHostsResponse | ErrorT;
 
-export const VerifyHostsResponse$zodSchema: z.ZodType<
-  VerifyHostsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  VerifyApiHostsResponse: VerifyApiHostsResponse$zodSchema.optional(),
-});
+export const VerifyHostsResponse$zodSchema: z.ZodType<VerifyHostsResponse> = z
+  .union([
+    VerifyApiHostsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API Messages logs
  *
  * @remarks
- * Get API Messages logs.
+ * Get API Messages logs
  *
- * User must have the API_LOG[READ] permission.
+ * Get API Messages logs. Allow filtering.
  */
 export function apiAnalyticsGetAPIMessageLogs(
   client$: GraviteeApimCore,
@@ -98,19 +98,18 @@ async function $do(
       explode: false,
       charEncoding: "percent",
     }),
-    requestId: encodeSimple("requestId", payload$.requestId, {
-      explode: false,
-      charEncoding: "percent",
-    }),
   };
-  const path$ = pathToFunc(
-    "/environments/{envId}/apis/{apiId}/logs/{requestId}/messages",
-  )(
+  const path$ = pathToFunc("/environments/{envId}/apis/{apiId}/logs/messages")(
     pathParams$,
   );
   const query$ = encodeFormQuery({
+    "connectorId": payload$.connectorId,
+    "connectorType": payload$.connectorType,
+    "from": payload$.from,
+    "operation": payload$.operation,
     "page": payload$.page,
     "perPage": payload$.perPage,
+    "to": payload$.to,
   });
 
   const headers$ = new Headers(compactMap({
@@ -123,7 +122,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiMessageLogs",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -182,7 +181,7 @@ async function $do(
     M.json(200, GetApiMessageLogsResponse$zodSchema, {
       key: "ApiMessageLogsResponse",
     }),
-    M.json("default", GetApiMessageLogsResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiMessageLogsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get metadata pertaining to API
  *
  * @remarks
- * Get the metadata that pertains to an API. Can be global and API metadata.
+ * Get metadata pertaining to API
  *
- * User must have the API_METADATA[READ] permission.
+ * Get the metadata that pertains to an API. Can be global and API metadata.
  */
 export function apIsGetApiMetadata(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiMetadata",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -176,7 +176,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiMetadataResponse$zodSchema, { key: "MetadataResponse" }),
-    M.json("default", GetApiMetadataResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiMetadataResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

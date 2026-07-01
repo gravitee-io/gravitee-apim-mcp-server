@@ -3,14 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * API Scoring status.
  */
+export const ScoringStatus = {
+  Success: "SUCCESS",
+  Pending: "PENDING",
+  Error: "ERROR",
+} as const;
+/**
+ * API Scoring status.
+ */
+export type ScoringStatus = ClosedEnum<typeof ScoringStatus>;
+
 export const ScoringStatus$zodSchema = z.enum([
   "SUCCESS",
   "PENDING",
   "ERROR",
 ]).describe("API Scoring status.");
-
-export type ScoringStatus = z.infer<typeof ScoringStatus$zodSchema>;

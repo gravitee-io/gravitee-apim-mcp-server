@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * List a group's members
  *
  * @remarks
- * List the members of a given group.
+ * List a group's members
  *
- * User must have the GROUP_MEMBER[READ] permission.
+ * List the members of a given group.
  */
 export function groupsListGroupMembers(
   client$: GraviteeApimCore,
@@ -117,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listGroupMembers",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +174,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, ListGroupMembersResponse$zodSchema, { key: "MembersResponse" }),
-    M.json("default", ListGroupMembersResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListGroupMembersResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

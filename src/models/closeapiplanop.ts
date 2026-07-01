@@ -12,34 +12,19 @@ export type CloseApiPlanRequest = {
   planId: string;
 };
 
-export const CloseApiPlanRequest$zodSchema: z.ZodType<
-  CloseApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  planId: z.string().describe("Id of a plan."),
-});
+export const CloseApiPlanRequest$zodSchema: z.ZodType<CloseApiPlanRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    planId: z.string().describe("Id of a plan."),
+  });
 
-export type CloseApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Plan?: Plan | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CloseApiPlanResponse = Plan | ErrorT;
 
-export const CloseApiPlanResponse$zodSchema: z.ZodType<
-  CloseApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Plan: Plan$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const CloseApiPlanResponse$zodSchema: z.ZodType<CloseApiPlanResponse> = z
+  .union([
+    Plan$zodSchema,
+    ErrorT$zodSchema,
+  ]);

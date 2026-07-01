@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API Analytics average messages per request
  *
  * @remarks
- * Get API analytics average messages per request.
+ * Get API Analytics average messages per request
  *
- * User must have the API_ANALYTICS[READ] permission.
+ * Get API analytics average messages per request.
  */
 export function apiAnalyticsGetAverageMessagesPerRequest(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getAverageMessagesPerRequest",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -179,7 +179,7 @@ async function $do(
       key: "ApiAnalyticsAverageMessagesPerRequestResponse",
     }),
     M.json("default", GetAverageMessagesPerRequestResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

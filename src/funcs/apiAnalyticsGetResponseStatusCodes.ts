@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Get API Analytics response status counts
  *
  * @remarks
+ * Get API Analytics response status counts
+ *
  * Get API analytics response status counts. Response statuses are grouped by endpoint and status code hundreds.
  *
- * User must have the API_ANALYTICS[READ] permission.
+ * @deprecated method: This will be removed in a future release, please migrate away from it as soon as possible.
  */
 export function apiAnalyticsGetResponseStatusCodes(
   client$: GraviteeApimCore,
@@ -119,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getResponseStatusCodes",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -179,7 +181,7 @@ async function $do(
       key: "ApiAnalyticsResponseStatusRangesResponse",
     }),
     M.json("default", GetResponseStatusCodesResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

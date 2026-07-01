@@ -15,22 +15,33 @@ export type FlowV4 = {
   response?: Array<StepV4> | undefined;
   subscribe?: Array<StepV4> | undefined;
   publish?: Array<StepV4> | undefined;
-  connect?: Array<StepV4> | undefined;
+  entrypointConnect?: Array<StepV4> | undefined;
   interact?: Array<StepV4> | undefined;
   tags?: Array<string> | undefined;
 };
 
-export const FlowV4$zodSchema: z.ZodType<FlowV4, z.ZodTypeDef, unknown> = z
-  .object({
-    connect: z.array(StepV4$zodSchema).optional(),
-    enabled: z.boolean().default(true),
-    id: z.string().optional(),
-    interact: z.array(StepV4$zodSchema).optional(),
-    name: z.string().optional(),
-    publish: z.array(StepV4$zodSchema).optional(),
-    request: z.array(StepV4$zodSchema).optional(),
-    response: z.array(StepV4$zodSchema).optional(),
-    selectors: z.array(Selector$zodSchema).optional(),
-    subscribe: z.array(StepV4$zodSchema).optional(),
-    tags: z.array(z.string()).optional(),
-  });
+export const FlowV4$zodSchema: z.ZodType<FlowV4> = z.object({
+  enabled: z.boolean().default(true).describe("Is the flow enabled."),
+  entrypointConnect: z.array(StepV4$zodSchema).optional().describe(
+    "Flow step used for NATIVE APIs entrypoint connect phase",
+  ),
+  id: z.string().optional().describe("Flow's uuid."),
+  interact: z.array(StepV4$zodSchema).optional().describe(
+    "Flow step used for NATIVE APIs",
+  ),
+  name: z.string().optional().describe("Flow's name."),
+  publish: z.array(StepV4$zodSchema).optional().describe(
+    "Flow step used for MESSAGE and NATIVE APIs",
+  ),
+  request: z.array(StepV4$zodSchema).optional().describe(
+    "Flow step used for PROXY and MESSAGE APIs",
+  ),
+  response: z.array(StepV4$zodSchema).optional().describe(
+    "Flow step used for PROXY and MESSAGE APIs",
+  ),
+  selectors: z.array(Selector$zodSchema).optional(),
+  subscribe: z.array(StepV4$zodSchema).optional().describe(
+    "Flow step used for MESSAGE and NATIVE APIs",
+  ),
+  tags: z.array(z.string()).optional().describe("Flow's tags."),
+});

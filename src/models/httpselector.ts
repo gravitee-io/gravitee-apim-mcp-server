@@ -3,19 +3,30 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { HttpMethod, HttpMethod$zodSchema } from "./httpmethod.js";
 import { Operator, Operator$zodSchema } from "./operator.js";
 
 /**
  * Selector type.
  */
+export const HttpSelectorType = {
+  Http: "HTTP",
+  Channel: "CHANNEL",
+  Condition: "CONDITION",
+  Mcp: "MCP",
+} as const;
+/**
+ * Selector type.
+ */
+export type HttpSelectorType = ClosedEnum<typeof HttpSelectorType>;
+
 export const HttpSelectorType$zodSchema = z.enum([
   "HTTP",
   "CHANNEL",
   "CONDITION",
+  "MCP",
 ]).describe("Selector type.");
-
-export type HttpSelectorType = z.infer<typeof HttpSelectorType$zodSchema>;
 
 export type HttpSelector = {
   type: HttpSelectorType;
@@ -24,13 +35,11 @@ export type HttpSelector = {
   methods?: Array<HttpMethod> | undefined;
 };
 
-export const HttpSelector$zodSchema: z.ZodType<
-  HttpSelector,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const HttpSelector$zodSchema: z.ZodType<HttpSelector> = z.object({
   methods: z.array(HttpMethod$zodSchema).optional(),
-  path: z.string().default("/"),
-  pathOperator: Operator$zodSchema.default("STARTS_WITH"),
-  type: HttpSelectorType$zodSchema,
+  path: z.string().default("/").describe("The path of the selector"),
+  pathOperator: Operator$zodSchema.default("STARTS_WITH").describe(
+    "The path operator of the selector",
+  ),
+  type: HttpSelectorType$zodSchema.describe("Selector type."),
 });

@@ -7,10 +7,6 @@ import { TrustStoreType, TrustStoreType$zodSchema } from "./truststoretype.js";
 
 export type NoneTrustStore = { type: TrustStoreType };
 
-export const NoneTrustStore$zodSchema: z.ZodType<
-  NoneTrustStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  type: TrustStoreType$zodSchema,
+export const NoneTrustStore$zodSchema: z.ZodType<NoneTrustStore> = z.object({
+  type: TrustStoreType$zodSchema.describe("The type of the trust store."),
 });

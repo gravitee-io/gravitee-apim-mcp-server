@@ -32,10 +32,12 @@ import { Result } from "../types/fp.js";
  * Create an API
  *
  * @remarks
- * ⚠️ Support only v4 API for the moment. ⚠️<br>
- * Create a new API.
+ * Create an API
  *
- * User must have the ENVIRONMENT_API[CREATE] permission.
+ * ⚠️ Support only v4 API for the moment. ⚠️<br> Create a new API.
+ *
+ * For V4 PROXY APIs, provide listeners with HTTP paths and an http-proxy entrypoint, plus endpointGroups with an http-proxy endpoint.
+ * Example request body: {"name":"My API","apiVersion":"1.0","definitionVersion":"V4","type":"PROXY","listeners":[{"type":"HTTP","paths":[{"path":"/my-api"}],"entrypoints":[{"type":"http-proxy"}]}],"endpointGroups":[{"name":"default","type":"http-proxy","endpoints":[{"name":"backend","type":"http-proxy","configuration":{"target":"https://backend.example.com"}}]}]}
  */
 export function apIsCreateApi(
   client$: GraviteeApimCore,
@@ -111,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createApi",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -167,7 +169,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(201, CreateApiResponse$zodSchema, { key: "ApiV4" }),
-    M.json("default", CreateApiResponse$zodSchema, { key: "Error" }),
+    M.json("default", CreateApiResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

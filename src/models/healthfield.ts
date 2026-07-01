@@ -3,10 +3,15 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
+
+export const HealthField = {
+  Endpoint: "endpoint",
+  Gateway: "gateway",
+} as const;
+export type HealthField = ClosedEnum<typeof HealthField>;
 
 export const HealthField$zodSchema = z.enum([
   "endpoint",
   "gateway",
 ]);
-
-export type HealthField = z.infer<typeof HealthField$zodSchema>;

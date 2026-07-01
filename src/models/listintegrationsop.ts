@@ -16,36 +16,22 @@ export type ListIntegrationsRequest = {
 };
 
 export const ListIntegrationsRequest$zodSchema: z.ZodType<
-  ListIntegrationsRequest,
-  z.ZodTypeDef,
-  unknown
+  ListIntegrationsRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
 });
 
-export type ListIntegrationsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  IntegrationsResponse?: IntegrationsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListIntegrationsResponse = IntegrationsResponse | ErrorT;
 
 export const ListIntegrationsResponse$zodSchema: z.ZodType<
-  ListIntegrationsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  IntegrationsResponse: IntegrationsResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  ListIntegrationsResponse
+> = z.union([
+  IntegrationsResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

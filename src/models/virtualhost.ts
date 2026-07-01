@@ -10,12 +10,10 @@ export type VirtualHost = {
   overrideEntrypoint?: boolean | undefined;
 };
 
-export const VirtualHost$zodSchema: z.ZodType<
-  VirtualHost,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  host: z.string().optional(),
-  overrideEntrypoint: z.boolean().default(false),
-  path: z.string().default("/"),
+export const VirtualHost$zodSchema: z.ZodType<VirtualHost> = z.object({
+  host: z.string().optional().describe("The host of the virtual host"),
+  overrideEntrypoint: z.boolean().default(false).describe(
+    "Override the entrypoint or not",
+  ),
+  path: z.string().default("/").describe("The path of the virtual host"),
 });

@@ -20,56 +20,45 @@ export type GetApiLogsRequest = {
   applicationIds?: Array<string> | undefined;
   planIds?: Array<string> | undefined;
   methods?: Array<HttpMethod> | undefined;
+  apiProductIds?: Array<string> | undefined;
+  errorKeys?: Array<string> | undefined;
 };
 
-export const GetApiLogsRequest$zodSchema: z.ZodType<
-  GetApiLogsRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  applicationIds: z.array(z.string()).describe(
-    "List of application ids to filter on.",
-  ).optional(),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  from: z.number().int().describe(
-    "The timestamp from which the logs will be returned.\n"
-      + "",
-  ).optional(),
-  methods: z.array(HttpMethod$zodSchema).describe(
-    "List of HTTP request methods to filter on.",
-  ).optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  planIds: z.array(z.string()).describe("List of plan ids to filter on.")
-    .optional(),
-  to: z.number().int().describe(
-    "The timestamp to which the logs will be returned.\n"
-      + "",
-  ).optional(),
-});
+export const GetApiLogsRequest$zodSchema: z.ZodType<GetApiLogsRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    apiProductIds: z.array(z.string()).describe(
+      "Filter by API Product IDs. Only supported for v4 APIs.",
+    ).optional(),
+    applicationIds: z.array(z.string()).describe(
+      "List of application ids to filter on.",
+    ).optional(),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    errorKeys: z.array(z.string()).describe(
+      "Return only connection logs whose error key matches any of the supplied values. For Native Kafka APIs with connection logging enabled and debug disabled, this filter is AND-composed with the default failed-connections-only filter.",
+    ).optional(),
+    from: z.int().describe(
+      "The timestamp from which the logs will be returned.\n",
+    ).optional(),
+    methods: z.array(HttpMethod$zodSchema).describe(
+      "List of HTTP request methods to filter on.",
+    ).optional(),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    planIds: z.array(z.string()).describe("List of plan ids to filter on.")
+      .optional(),
+    to: z.int().describe("The timestamp to which the logs will be returned.\n")
+      .optional(),
+  });
 
-export type GetApiLogsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiLogsResponse?: ApiLogsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiLogsResponse = ApiLogsResponse | ErrorT;
 
-export const GetApiLogsResponse$zodSchema: z.ZodType<
-  GetApiLogsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiLogsResponse: ApiLogsResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiLogsResponse$zodSchema: z.ZodType<GetApiLogsResponse> = z
+  .union([
+    ApiLogsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

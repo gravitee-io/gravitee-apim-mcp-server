@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get the current deployment of an API
  *
  * @remarks
- * Get the current deployment of an API.
+ * Get the current deployment of an API
  *
- * User must have the API_DEFINITION[READ] permission.
+ * Get the current deployment of an API.
  */
 export function apIsGetCurrentApiDeployment(
   client$: GraviteeApimCore,
@@ -115,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getCurrentApiDeployment",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -172,7 +172,7 @@ async function $do(
   >(
     M.json(200, GetCurrentApiDeploymentResponse$zodSchema, { key: "object" }),
     M.json("default", GetCurrentApiDeploymentResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

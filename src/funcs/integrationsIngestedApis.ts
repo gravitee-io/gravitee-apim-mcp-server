@@ -22,8 +22,8 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   IngestedApisRequest,
   IngestedApisRequest$zodSchema,
-  IngestedApisResponse,
-  IngestedApisResponse$zodSchema,
+  IngestedApisResponse1,
+  IngestedApisResponse1$zodSchema,
 } from "../models/ingestedapisop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get list of ingested APIs associated to integration
  *
  * @remarks
- * Get a list of all APIs that were ingested from 3rd party provider using this integration.
+ * Get list of ingested APIs associated to integration
  *
- * User must have the ENVIRONMENT_INTEGRATION[READ] permission.
+ * Get a list of all APIs that were ingested from 3rd party provider using this integration.
  */
 export function integrationsIngestedApis(
   client$: GraviteeApimCore,
@@ -42,7 +42,7 @@ export function integrationsIngestedApis(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    IngestedApisResponse,
+    IngestedApisResponse1,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -66,7 +66,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      IngestedApisResponse,
+      IngestedApisResponse1,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "ingestedApis",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -166,7 +166,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    IngestedApisResponse,
+    IngestedApisResponse1,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -175,10 +175,10 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.json(200, IngestedApisResponse$zodSchema, {
+    M.json(200, IngestedApisResponse1$zodSchema, {
       key: "IngestedApisResponse",
     }),
-    M.json("default", IngestedApisResponse$zodSchema, { key: "Error" }),
+    M.json("default", IngestedApisResponse1$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

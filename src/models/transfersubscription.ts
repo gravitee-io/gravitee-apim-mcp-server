@@ -6,10 +6,9 @@ import * as z from "zod";
 
 export type TransferSubscription = { planId?: string | undefined };
 
-export const TransferSubscription$zodSchema: z.ZodType<
-  TransferSubscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  planId: z.string().optional(),
-});
+export const TransferSubscription$zodSchema: z.ZodType<TransferSubscription> = z
+  .object({
+    planId: z.string().optional().describe(
+      "The plan identifier to transfer the subscription to.",
+    ),
+  });

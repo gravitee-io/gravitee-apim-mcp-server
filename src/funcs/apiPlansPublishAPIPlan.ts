@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Publish an API's plan
  *
  * @remarks
- * Publish the API's plan.
+ * Publish an API's plan
  *
- * User must have the API_PLAN[UPDATE] permission.
+ * Publish the API's plan.
  */
 export function apiPlansPublishAPIPlan(
   client$: GraviteeApimCore,
@@ -119,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "publishApiPlan",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -175,7 +175,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, PublishApiPlanResponse$zodSchema, { key: "Plan" }),
-    M.json("default", PublishApiPlanResponse$zodSchema, { key: "Error" }),
+    M.json("default", PublishApiPlanResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -16,9 +16,7 @@ export type GetApiHealthLogsRequest = {
 };
 
 export const GetApiHealthLogsRequest$zodSchema: z.ZodType<
-  GetApiHealthLogsRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiHealthLogsRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -27,22 +25,11 @@ export const GetApiHealthLogsRequest$zodSchema: z.ZodType<
   success: z.boolean().describe("Filter logs by success status").optional(),
 });
 
-export type GetApiHealthLogsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiHealthLogsResponse?: ApiHealthLogsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiHealthLogsResponse = ApiHealthLogsResponse | ErrorT;
 
 export const GetApiHealthLogsResponse$zodSchema: z.ZodType<
-  GetApiHealthLogsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiHealthLogsResponse: ApiHealthLogsResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiHealthLogsResponse
+> = z.union([
+  ApiHealthLogsResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

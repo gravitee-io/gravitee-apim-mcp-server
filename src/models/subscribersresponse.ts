@@ -19,12 +19,13 @@ export type SubscribersResponse = {
   links?: Links | undefined;
 };
 
-export const SubscribersResponse$zodSchema: z.ZodType<
-  SubscribersResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(BaseApplication$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of API subscribers");
+export const SubscribersResponse$zodSchema: z.ZodType<SubscribersResponse> = z
+  .object({
+    data: z.array(BaseApplication$zodSchema).optional().describe(
+      "List of API subscribers.",
+    ),
+    links: Links$zodSchema.optional().describe("List of links for pagination"),
+    pagination: Pagination$zodSchema.optional().describe(
+      "Generic object to handle pagination data.",
+    ),
+  }).describe("Page of API subscribers");

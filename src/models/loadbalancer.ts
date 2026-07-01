@@ -3,10 +3,22 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Load balancer type.
  */
+export const LoadBalancerType = {
+  Random: "RANDOM",
+  RoundRobin: "ROUND_ROBIN",
+  WeightedRandom: "WEIGHTED_RANDOM",
+  WeightedRoundRobin: "WEIGHTED_ROUND_ROBIN",
+} as const;
+/**
+ * Load balancer type.
+ */
+export type LoadBalancerType = ClosedEnum<typeof LoadBalancerType>;
+
 export const LoadBalancerType$zodSchema = z.enum([
   "RANDOM",
   "ROUND_ROBIN",
@@ -14,14 +26,10 @@ export const LoadBalancerType$zodSchema = z.enum([
   "WEIGHTED_ROUND_ROBIN",
 ]).describe("Load balancer type.");
 
-export type LoadBalancerType = z.infer<typeof LoadBalancerType$zodSchema>;
-
 export type LoadBalancer = { type?: LoadBalancerType | undefined };
 
-export const LoadBalancer$zodSchema: z.ZodType<
-  LoadBalancer,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  type: LoadBalancerType$zodSchema.default("ROUND_ROBIN"),
+export const LoadBalancer$zodSchema: z.ZodType<LoadBalancer> = z.object({
+  type: LoadBalancerType$zodSchema.default("ROUND_ROBIN").describe(
+    "Load balancer type.",
+  ),
 });

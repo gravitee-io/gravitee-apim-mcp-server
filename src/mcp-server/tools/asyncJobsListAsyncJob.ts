@@ -11,10 +11,18 @@ const args = {
 };
 
 export const tool$asyncJobsListAsyncJob: ToolDefinition<typeof args> = {
-  name: "async-jobs-list-async-job",
+  name: "list_async_job",
   description: `List Async Jobs
 
 Get the list of AsyncJobs.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Async Job",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await asyncJobsListAsyncJob(

@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * Preview APIs to ingest for a specific Integration
  *
  * @remarks
- * Preview APIs to ingest before actual ingestion.
+ * Preview APIs to ingest for a specific Integration
  *
- * User must have both the ENVIRONMENT_INTEGRATION[READ] and the ENVIRONMENT_API[CREATE] permission
- * to perform ingestion preview.
+ * Preview APIs to ingest before actual ingestion. to perform ingestion preview.
  */
 export function integrationsPreviewIntegration(
   client$: GraviteeApimCore,
@@ -116,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "previewIntegration",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +173,7 @@ async function $do(
     M.json(200, PreviewIntegrationResponse$zodSchema, {
       key: "IngestionPreviewResponse",
     }),
-    M.json("default", PreviewIntegrationResponse$zodSchema, { key: "Error" }),
+    M.json("default", PreviewIntegrationResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

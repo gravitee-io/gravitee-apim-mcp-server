@@ -3,7 +3,9 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { BaseApi, BaseApi$zodSchema } from "./baseapi.js";
+import { BaseApiProduct, BaseApiProduct$zodSchema } from "./baseapiproduct.js";
 import {
   BaseApplication,
   BaseApplication$zodSchema,
@@ -26,16 +28,24 @@ import {
 /**
  * The origin of the subscription.
  */
+export const SubscriptionOrigin = {
+  Kubernetes: "KUBERNETES",
+  Management: "MANAGEMENT",
+} as const;
+/**
+ * The origin of the subscription.
+ */
+export type SubscriptionOrigin = ClosedEnum<typeof SubscriptionOrigin>;
+
 export const SubscriptionOrigin$zodSchema = z.enum([
   "KUBERNETES",
   "MANAGEMENT",
 ]).describe("The origin of the subscription.");
 
-export type SubscriptionOrigin = z.infer<typeof SubscriptionOrigin$zodSchema>;
-
 export type Subscription = {
   id?: string | undefined;
   api?: BaseApi | undefined;
+  apiProduct?: BaseApiProduct | undefined;
   plan?: BasePlan | undefined;
   application?: BaseApplication | undefined;
   consumerMessage?: string | undefined;
@@ -59,32 +69,68 @@ export type Subscription = {
   origin?: SubscriptionOrigin | undefined;
 };
 
-export const Subscription$zodSchema: z.ZodType<
-  Subscription,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const Subscription$zodSchema: z.ZodType<Subscription> = z.object({
   api: BaseApi$zodSchema.optional(),
+  apiProduct: BaseApiProduct$zodSchema.optional(),
   application: BaseApplication$zodSchema.optional(),
-  closedAt: z.string().datetime({ offset: true }).optional(),
-  consumerConfiguration: SubscriptionConsumerConfiguration$zodSchema.optional(),
-  consumerMessage: z.string().optional(),
-  consumerPausedAt: z.string().datetime({ offset: true }).optional(),
-  consumerStatus: SubscriptionConsumerStatus$zodSchema.optional(),
-  createdAt: z.string().datetime({ offset: true }).optional(),
-  daysToExpirationOnLastNotification: z.number().int().optional(),
-  endingAt: z.string().datetime({ offset: true }).optional(),
-  failureCause: z.string().optional(),
-  id: z.string().optional(),
-  metadata: z.record(z.string()).optional(),
-  origin: SubscriptionOrigin$zodSchema.optional(),
-  pausedAt: z.string().datetime({ offset: true }).optional(),
+  closedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription was closed.",
+  ),
+  consumerConfiguration: SubscriptionConsumerConfiguration$zodSchema.optional()
+    .describe(
+      "Consumer configuration associated to the subscription in case it is attached to a push plan.",
+    ),
+  consumerMessage: z.string().optional().describe(
+    "Message given by the api consumer when subscribing to the api.",
+  ),
+  consumerPausedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription was paused by the api consumer.",
+  ),
+  consumerStatus: SubscriptionConsumerStatus$zodSchema.optional().describe(
+    "The status of the subscription manageable by the api consumer.",
+  ),
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription was created.",
+  ),
+  daysToExpirationOnLastNotification: z.int().optional().describe(
+    "Number of days before the expiration of this subscription when the last pre-expiration notification was sent.",
+  ),
+  endingAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription ends. No ending date means the subscription never ends.",
+  ),
+  failureCause: z.string().optional().describe(
+    "Details about the last failure encountered on this subscription.",
+  ),
+  id: z.string().optional().describe("Subscription's uuid."),
+  metadata: z.record(z.string(), z.string()).optional().describe(
+    "A list of metadata associated to this subscription.",
+  ),
+  origin: SubscriptionOrigin$zodSchema.optional().describe(
+    "The origin of the subscription.",
+  ),
+  pausedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription was paused by the api publisher.",
+  ),
   plan: BasePlan$zodSchema.optional(),
-  processedAt: z.string().datetime({ offset: true }).optional(),
-  processedBy: BaseUser$zodSchema.optional(),
-  publisherMessage: z.string().optional(),
-  startingAt: z.string().datetime({ offset: true }).optional(),
-  status: SubscriptionStatus$zodSchema.optional(),
-  subscribedBy: BaseUser$zodSchema.optional(),
-  updatedAt: z.string().datetime({ offset: true }).optional(),
+  processedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription was processed.",
+  ),
+  processedBy: BaseUser$zodSchema.optional().describe(
+    "Base information about a user.",
+  ),
+  publisherMessage: z.string().optional().describe(
+    "Message given by the api publisher when accepting or rejecting the subscription.",
+  ),
+  startingAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the subscription starts. No starting date means the subscription starts immediately.",
+  ),
+  status: SubscriptionStatus$zodSchema.optional().describe(
+    "The status of the subscription manageable by the api publisher.",
+  ),
+  subscribedBy: BaseUser$zodSchema.optional().describe(
+    "Base information about a user.",
+  ),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last datetime when the subscription was updated.",
+  ),
 });

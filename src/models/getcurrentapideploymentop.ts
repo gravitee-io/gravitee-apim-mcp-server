@@ -11,9 +11,7 @@ export type GetCurrentApiDeploymentRequest = {
 };
 
 export const GetCurrentApiDeploymentRequest$zodSchema: z.ZodType<
-  GetCurrentApiDeploymentRequest,
-  z.ZodTypeDef,
-  unknown
+  GetCurrentApiDeploymentRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -27,28 +25,16 @@ export const GetCurrentApiDeploymentRequest$zodSchema: z.ZodType<
 export type GetCurrentApiDeploymentResponseBody = {};
 
 export const GetCurrentApiDeploymentResponseBody$zodSchema: z.ZodType<
-  GetCurrentApiDeploymentResponseBody,
-  z.ZodTypeDef,
-  unknown
+  GetCurrentApiDeploymentResponseBody
 > = z.object({}).describe("Current API deployment found");
 
-export type GetCurrentApiDeploymentResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  object?: GetCurrentApiDeploymentResponseBody | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetCurrentApiDeploymentResponse =
+  | GetCurrentApiDeploymentResponseBody
+  | ErrorT;
 
 export const GetCurrentApiDeploymentResponse$zodSchema: z.ZodType<
-  GetCurrentApiDeploymentResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  object: z.lazy(() => GetCurrentApiDeploymentResponseBody$zodSchema)
-    .optional(),
-});
+  GetCurrentApiDeploymentResponse
+> = z.union([
+  z.lazy(() => GetCurrentApiDeploymentResponseBody$zodSchema),
+  ErrorT$zodSchema,
+]);

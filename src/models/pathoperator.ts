@@ -10,11 +10,9 @@ export type PathOperator = {
   operator?: Operator | undefined;
 };
 
-export const PathOperator$zodSchema: z.ZodType<
-  PathOperator,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  operator: Operator$zodSchema.default("STARTS_WITH"),
-  path: z.string().optional(),
+export const PathOperator$zodSchema: z.ZodType<PathOperator> = z.object({
+  operator: Operator$zodSchema.default("STARTS_WITH").describe(
+    "The path operator of the selector",
+  ),
+  path: z.string().optional().describe("The path of the selector"),
 });

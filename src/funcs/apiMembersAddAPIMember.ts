@@ -32,12 +32,9 @@ import { Result } from "../types/fp.js";
  * Add a member to an API.
  *
  * @remarks
- * Add a new member to an API.
+ * Add a member to an API.
  *
- * Returns a 400 HTTP Error:
- *  - when the user tries to set a member as PrimaryOwner.
- *
- * User must have the API_MEMBER[CREATE] permission.
+ * Add a new member to an API. Returns a 400 HTTP Error:
  */
 export function apiMembersAddAPIMember(
   client$: GraviteeApimCore,
@@ -117,7 +114,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "addApiMember",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -173,7 +170,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(201, AddApiMemberResponse$zodSchema, { key: "Member" }),
-    M.json("default", AddApiMemberResponse$zodSchema, { key: "Error" }),
+    M.json("default", AddApiMemberResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

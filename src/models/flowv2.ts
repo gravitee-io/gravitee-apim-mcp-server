@@ -22,16 +22,17 @@ export type FlowV2 = {
   stage?: FlowStage | undefined;
 };
 
-export const FlowV2$zodSchema: z.ZodType<FlowV2, z.ZodTypeDef, unknown> = z
-  .object({
-    condition: z.string().optional(),
-    consumers: z.array(Consumer$zodSchema).optional(),
-    enabled: z.boolean().default(true),
-    id: z.string().optional(),
-    methods: z.array(HttpMethod$zodSchema).optional(),
-    name: z.string().optional(),
-    pathOperator: PathOperator$zodSchema.optional(),
-    post: z.array(BaseStep$zodSchema).optional(),
-    pre: z.array(BaseStep$zodSchema).optional(),
-    stage: FlowStage$zodSchema.optional(),
-  });
+export const FlowV2$zodSchema: z.ZodType<FlowV2> = z.object({
+  condition: z.string().optional().describe(
+    "The condition to evaluate to determine if the flow should be executed.",
+  ),
+  consumers: z.array(Consumer$zodSchema).optional(),
+  enabled: z.boolean().default(true).describe("Is the flow enabled."),
+  id: z.string().optional().describe("Flow's uuid."),
+  methods: z.array(HttpMethod$zodSchema).optional(),
+  name: z.string().optional().describe("Flow's name."),
+  pathOperator: PathOperator$zodSchema.optional(),
+  post: z.array(BaseStep$zodSchema).optional(),
+  pre: z.array(BaseStep$zodSchema).optional(),
+  stage: FlowStage$zodSchema.optional().describe("The stage of the flow."),
+});

@@ -11,10 +11,18 @@ const args = {
 };
 
 export const tool$integrationsIngestIntegration: ToolDefinition<typeof args> = {
-  name: "integrations-ingest-integration",
+  name: "ingest_integration",
   description: `Ingest APIs for a specific Integration
 
 Ingest all APIs for a specific Integration.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Ingest Integration",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsIngestIntegration(

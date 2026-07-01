@@ -13,12 +13,20 @@ const args = {
 export const tool$apiSubscriptionsCloseAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-close-api-subscription",
+  name: "close_api_subscription",
   description: `Close one API's subscription
 
 Close the API's subscription.
 
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Close Api Subscription",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsCloseAPISubscription(

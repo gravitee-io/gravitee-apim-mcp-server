@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Update one API's plan
  *
  * @remarks
- * Update the API's plan.
+ * Update one API's plan
  *
- * User must have the API_PLAN[UPDATE] permission.
+ * Update the API's plan.
  */
 export function apiPlansUpdateAPIPlan(
   client$: GraviteeApimCore,
@@ -118,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "updateApiPlan",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +174,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, UpdateApiPlanResponse$zodSchema, { key: "Plan" }),
-    M.json("default", UpdateApiPlanResponse$zodSchema, { key: "Error" }),
+    M.json("default", UpdateApiPlanResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

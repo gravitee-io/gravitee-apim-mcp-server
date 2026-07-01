@@ -17,29 +17,56 @@ export type Group = {
   lockApiRole?: boolean | undefined;
   applicationRole?: string | undefined;
   lockApplicationRole?: boolean | undefined;
+  lockApiProductRole?: boolean | undefined;
   systemInvitation?: boolean | undefined;
   emailInvitation?: boolean | undefined;
   disableMembershipNotifications?: boolean | undefined;
   primaryOwner?: boolean | undefined;
   apiPrimaryOwner?: string | undefined;
+  apiProductPrimaryOwner?: string | undefined;
 };
 
-export const Group$zodSchema: z.ZodType<Group, z.ZodTypeDef, unknown> = z
-  .object({
-    apiPrimaryOwner: z.string().optional(),
-    apiRole: z.string().optional(),
-    applicationRole: z.string().optional(),
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    disableMembershipNotifications: z.boolean().optional(),
-    emailInvitation: z.boolean().optional(),
-    eventRules: z.array(GroupEvent$zodSchema).optional(),
-    id: z.string().optional(),
-    lockApiRole: z.boolean().optional(),
-    lockApplicationRole: z.boolean().optional(),
-    manageable: z.boolean().optional(),
-    maxInvitation: z.number().int().optional(),
-    name: z.string().optional(),
-    primaryOwner: z.boolean().optional(),
-    systemInvitation: z.boolean().optional(),
-    updatedAt: z.string().datetime({ offset: true }).optional(),
-  });
+export const Group$zodSchema: z.ZodType<Group> = z.object({
+  apiPrimaryOwner: z.string().optional().describe(
+    "The group member id with API primary owner role.",
+  ),
+  apiProductPrimaryOwner: z.string().optional().describe(
+    "The group member id with API Product primary owner role.",
+  ),
+  apiRole: z.string().optional().describe("The Api role of the group."),
+  applicationRole: z.string().optional().describe(
+    "The Application role of the group.",
+  ),
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "Group's creation date.",
+  ),
+  disableMembershipNotifications: z.boolean().optional().describe(
+    "Notifications of new members are disabled.",
+  ),
+  emailInvitation: z.boolean().optional().describe("Email invitation enabled."),
+  eventRules: z.array(GroupEvent$zodSchema).optional().describe(
+    "Event rules for the group.",
+  ),
+  id: z.string().optional().describe("Group's uuid."),
+  lockApiProductRole: z.boolean().optional().describe(
+    "Api Product role cannot be changed.",
+  ),
+  lockApiRole: z.boolean().optional().describe("Api role cannot be changed."),
+  lockApplicationRole: z.boolean().optional().describe(
+    "Application role cannot be changed.",
+  ),
+  manageable: z.boolean().optional().describe("Current user can manage group."),
+  maxInvitation: z.int().optional().describe(
+    "Maximum number of group members.",
+  ),
+  name: z.string().optional().describe("Group's name."),
+  primaryOwner: z.boolean().optional().describe(
+    "Group's members contain one primary owner.",
+  ),
+  systemInvitation: z.boolean().optional().describe(
+    "Invitation via user search enabled.",
+  ),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "Group's last updated date.",
+  ),
+});

@@ -13,9 +13,7 @@ export type ResumeApiSubscriptionRequest = {
 };
 
 export const ResumeApiSubscriptionRequest$zodSchema: z.ZodType<
-  ResumeApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  ResumeApiSubscriptionRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -24,22 +22,11 @@ export const ResumeApiSubscriptionRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type ResumeApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Subscription?: Subscription | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ResumeApiSubscriptionResponse = Subscription | ErrorT;
 
 export const ResumeApiSubscriptionResponse$zodSchema: z.ZodType<
-  ResumeApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  Subscription: Subscription$zodSchema.optional(),
-});
+  ResumeApiSubscriptionResponse
+> = z.union([
+  Subscription$zodSchema,
+  ErrorT$zodSchema,
+]);

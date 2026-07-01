@@ -16,12 +16,13 @@ export type IntegrationsResponse = {
   links?: Links | undefined;
 };
 
-export const IntegrationsResponse$zodSchema: z.ZodType<
-  IntegrationsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Integration$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
-}).describe("Page of integrations");
+export const IntegrationsResponse$zodSchema: z.ZodType<IntegrationsResponse> = z
+  .object({
+    data: z.array(Integration$zodSchema).optional().describe(
+      "List of Integrations.",
+    ),
+    links: Links$zodSchema.optional().describe("List of links for pagination"),
+    pagination: Pagination$zodSchema.optional().describe(
+      "Generic object to handle pagination data.",
+    ),
+  }).describe("Page of integrations");

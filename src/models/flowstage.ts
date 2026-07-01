@@ -3,14 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The stage of the flow.
  */
+export const FlowStage = {
+  Platform: "PLATFORM",
+  Plan: "PLAN",
+  Api: "API",
+} as const;
+/**
+ * The stage of the flow.
+ */
+export type FlowStage = ClosedEnum<typeof FlowStage>;
+
 export const FlowStage$zodSchema = z.enum([
   "PLATFORM",
   "PLAN",
   "API",
 ]).describe("The stage of the flow.");
-
-export type FlowStage = z.infer<typeof FlowStage$zodSchema>;

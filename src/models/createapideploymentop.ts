@@ -4,7 +4,6 @@
 
 import * as z from "zod";
 import { ApiDeployment, ApiDeployment$zodSchema } from "./apideployment.js";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type CreateApiDeploymentRequest = {
   envId?: string | undefined;
@@ -13,31 +12,11 @@ export type CreateApiDeploymentRequest = {
 };
 
 export const CreateApiDeploymentRequest$zodSchema: z.ZodType<
-  CreateApiDeploymentRequest,
-  z.ZodTypeDef,
-  unknown
+  CreateApiDeploymentRequest
 > = z.object({
   ApiDeployment: ApiDeployment$zodSchema.optional(),
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-});
-
-export type CreateApiDeploymentResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const CreateApiDeploymentResponse$zodSchema: z.ZodType<
-  CreateApiDeploymentResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

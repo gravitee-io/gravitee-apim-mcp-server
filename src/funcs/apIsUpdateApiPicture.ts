@@ -10,6 +10,7 @@ import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,8 +23,6 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   UpdateApiPictureRequest,
   UpdateApiPictureRequest$zodSchema,
-  UpdateApiPictureResponse,
-  UpdateApiPictureResponse$zodSchema,
 } from "../models/updateapipictureop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -32,9 +31,11 @@ import { Result } from "../types/fp.js";
  * Update an API's picture
  *
  * @remarks
+ * Update an API's picture
+ *
  * Update the API's picture.
  *
- * User must have the API_DEFINITION[UPDATE] permission.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apIsUpdateApiPicture(
   client$: GraviteeApimCore,
@@ -42,7 +43,7 @@ export function apIsUpdateApiPicture(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    UpdateApiPictureResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -66,7 +67,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      UpdateApiPictureResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -114,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "updateApiPicture",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -160,7 +161,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    UpdateApiPictureResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -169,8 +170,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, UpdateApiPictureResponse$zodSchema),
-    M.json("default", UpdateApiPictureResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

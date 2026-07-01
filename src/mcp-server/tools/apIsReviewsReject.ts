@@ -11,16 +11,18 @@ const args = {
 };
 
 export const tool$apIsReviewsReject: ToolDefinition<typeof args> = {
-  name: "AP-is-reviews-reject",
+  name: "reviews_reject",
   description: `Reject a review
 
-Reject a review
-
-Return a 400 HTTP Error:
- - when user tries to change reviews state of an ARCHIVED API
- - when user tries to change reviews state of an API that is not in review
-
-User must have the API_REVIEWS[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Reviews Reject",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsReviewsReject(

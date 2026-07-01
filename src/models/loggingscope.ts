@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The scope of the logging.
  */
+export const LoggingScope = {
+  None: "NONE",
+  Request: "REQUEST",
+  Response: "RESPONSE",
+  RequestResponse: "REQUEST_RESPONSE",
+} as const;
+/**
+ * The scope of the logging.
+ */
+export type LoggingScope = ClosedEnum<typeof LoggingScope>;
+
 export const LoggingScope$zodSchema = z.enum([
   "NONE",
   "REQUEST",
   "RESPONSE",
   "REQUEST_RESPONSE",
 ]).describe("The scope of the logging.");
-
-export type LoggingScope = z.infer<typeof LoggingScope$zodSchema>;

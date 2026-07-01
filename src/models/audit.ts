@@ -12,14 +12,14 @@ export type AuditProperty = {
   name?: string | undefined;
 };
 
-export const AuditProperty$zodSchema: z.ZodType<
-  AuditProperty,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  key: z.string().optional(),
-  name: z.string().optional(),
-  value: z.string().optional(),
+export const AuditProperty$zodSchema: z.ZodType<AuditProperty> = z.object({
+  key: z.string().optional().describe("The key of the property."),
+  name: z.string().optional().describe(
+    "The name of the entity identified by the value.",
+  ),
+  value: z.string().optional().describe(
+    "The value of the property. Usually an id of an entity.",
+  ),
 });
 
 export type Audit = {
@@ -34,15 +34,19 @@ export type Audit = {
   patch?: string | undefined;
 };
 
-export const Audit$zodSchema: z.ZodType<Audit, z.ZodTypeDef, unknown> = z
-  .object({
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    environmentId: z.string().optional(),
-    event: z.string().optional(),
-    id: z.string().optional(),
-    organizationId: z.string().optional(),
-    patch: z.string().optional(),
-    properties: z.array(z.lazy(() => AuditProperty$zodSchema)).optional(),
-    reference: AuditReference$zodSchema.optional(),
-    user: BaseUser$zodSchema.optional(),
-  });
+export const Audit$zodSchema: z.ZodType<Audit> = z.object({
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The date when the audit has been created.",
+  ),
+  environmentId: z.string().optional().describe("The id of the environment."),
+  event: z.string().optional().describe("The audit event."),
+  id: z.string().optional().describe("The internal UUID of the audit."),
+  organizationId: z.string().optional().describe("The id of the organization."),
+  patch: z.string().optional().describe("The JSON Patch of the modification."),
+  properties: z.array(z.lazy(() => AuditProperty$zodSchema)).optional()
+    .describe("Properties of the audits."),
+  reference: AuditReference$zodSchema.optional(),
+  user: BaseUser$zodSchema.optional().describe(
+    "Base information about a user.",
+  ),
+});

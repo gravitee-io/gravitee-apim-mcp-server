@@ -7,7 +7,6 @@ import {
   ApiTransferOwnership,
   ApiTransferOwnership$zodSchema,
 } from "./apitransferownership.js";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type TransferOwnershipRequest = {
   envId?: string | undefined;
@@ -16,31 +15,11 @@ export type TransferOwnershipRequest = {
 };
 
 export const TransferOwnershipRequest$zodSchema: z.ZodType<
-  TransferOwnershipRequest,
-  z.ZodTypeDef,
-  unknown
+  TransferOwnershipRequest
 > = z.object({
   ApiTransferOwnership: ApiTransferOwnership$zodSchema,
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-});
-
-export type TransferOwnershipResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const TransferOwnershipResponse$zodSchema: z.ZodType<
-  TransferOwnershipResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

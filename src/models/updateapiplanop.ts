@@ -14,35 +14,20 @@ export type UpdateApiPlanRequest = {
   UpdatePlan: UpdatePlan;
 };
 
-export const UpdateApiPlanRequest$zodSchema: z.ZodType<
-  UpdateApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  UpdatePlan: UpdatePlan$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  planId: z.string().describe("Id of a plan."),
-});
+export const UpdateApiPlanRequest$zodSchema: z.ZodType<UpdateApiPlanRequest> = z
+  .object({
+    UpdatePlan: UpdatePlan$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    planId: z.string().describe("Id of a plan."),
+  });
 
-export type UpdateApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Plan?: Plan | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type UpdateApiPlanResponse = Plan | ErrorT;
 
-export const UpdateApiPlanResponse$zodSchema: z.ZodType<
-  UpdateApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Plan: Plan$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const UpdateApiPlanResponse$zodSchema: z.ZodType<UpdateApiPlanResponse> =
+  z.union([
+    Plan$zodSchema,
+    ErrorT$zodSchema,
+  ]);

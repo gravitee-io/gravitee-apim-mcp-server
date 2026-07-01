@@ -11,16 +11,18 @@ const args = {
 };
 
 export const tool$apiMembersUpdateAPIMember: ToolDefinition<typeof args> = {
-  name: "API-members-update-api-member",
+  name: "update_api_member",
   description: `Updates a member for an API.
 
-Edit a member for an API.
-
-Returns a 400 HTTP Error:
- - when the user tries to set a member as PrimaryOwner.
-
-User must have the API_MEMBER[UPDATE] permission.
-`,
+Edit a member for an API. Returns a 400 HTTP Error:`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Update Api Member",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiMembersUpdateAPIMember(

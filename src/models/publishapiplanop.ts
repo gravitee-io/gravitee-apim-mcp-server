@@ -12,34 +12,20 @@ export type PublishApiPlanRequest = {
   planId: string;
 };
 
-export const PublishApiPlanRequest$zodSchema: z.ZodType<
-  PublishApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  planId: z.string().describe("Id of a plan."),
-});
+export const PublishApiPlanRequest$zodSchema: z.ZodType<PublishApiPlanRequest> =
+  z.object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    planId: z.string().describe("Id of a plan."),
+  });
 
-export type PublishApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Plan?: Plan | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type PublishApiPlanResponse = Plan | ErrorT;
 
 export const PublishApiPlanResponse$zodSchema: z.ZodType<
-  PublishApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Plan: Plan$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  PublishApiPlanResponse
+> = z.union([
+  Plan$zodSchema,
+  ErrorT$zodSchema,
+]);

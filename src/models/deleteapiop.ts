@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type DeleteApiRequest = {
   envId?: string | undefined;
@@ -11,35 +10,14 @@ export type DeleteApiRequest = {
   closePlans?: boolean | undefined;
 };
 
-export const DeleteApiRequest$zodSchema: z.ZodType<
-  DeleteApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  closePlans: z.boolean().describe(
-    "Set to true to force deletion by closing API plans.<br>\n"
-      + "⚠️ Closed plans can't be reopened and every active subscriptions will also be closed. ⚠️",
-  ).optional(),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
-
-export type DeleteApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const DeleteApiResponse$zodSchema: z.ZodType<
-  DeleteApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const DeleteApiRequest$zodSchema: z.ZodType<DeleteApiRequest> = z.object(
+  {
+    apiId: z.string().describe("Id of an API."),
+    closePlans: z.boolean().describe(
+      "Set to true to force deletion by closing API plans.<br>\n⚠️ Closed plans can't be reopened and every active subscriptions will also be closed. ⚠️",
+    ).optional(),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  },
+);

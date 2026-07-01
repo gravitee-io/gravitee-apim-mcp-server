@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type DeleteApiPictureRequest = {
   envId?: string | undefined;
@@ -11,30 +10,10 @@ export type DeleteApiPictureRequest = {
 };
 
 export const DeleteApiPictureRequest$zodSchema: z.ZodType<
-  DeleteApiPictureRequest,
-  z.ZodTypeDef,
-  unknown
+  DeleteApiPictureRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-});
-
-export type DeleteApiPictureResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const DeleteApiPictureResponse$zodSchema: z.ZodType<
-  DeleteApiPictureResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

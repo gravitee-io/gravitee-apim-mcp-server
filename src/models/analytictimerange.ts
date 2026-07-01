@@ -13,12 +13,11 @@ export type AnalyticTimeRange = {
   interval?: number | undefined;
 };
 
-export const AnalyticTimeRange$zodSchema: z.ZodType<
-  AnalyticTimeRange,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  from: z.number().int().optional(),
-  interval: z.number().int().optional(),
-  to: z.number().int().optional(),
-}).describe("A Time range");
+export const AnalyticTimeRange$zodSchema: z.ZodType<AnalyticTimeRange> = z
+  .object({
+    from: z.int().optional().describe("The timestamp starting the time range"),
+    interval: z.int().optional().describe(
+      "The interval in milliseconds splitting the data",
+    ),
+    to: z.int().optional().describe("The timestamp ending the time range"),
+  }).describe("A Time range");

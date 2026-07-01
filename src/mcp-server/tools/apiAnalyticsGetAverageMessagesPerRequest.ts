@@ -13,12 +13,18 @@ const args = {
 export const tool$apiAnalyticsGetAverageMessagesPerRequest: ToolDefinition<
   typeof args
 > = {
-  name: "API-analytics-get-average-messages-per-request",
+  name: "get_average_messages_per_request",
   description: `Get API Analytics average messages per request
 
-Get API analytics average messages per request.
-
-User must have the API_ANALYTICS[READ] permission.`,
+Get API analytics average messages per request.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Average Messages Per Request",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetAverageMessagesPerRequest(

@@ -35,22 +35,28 @@ export type HttpEndpointV2 = {
   headers?: Array<HttpHeader> | undefined;
 };
 
-export const HttpEndpointV2$zodSchema: z.ZodType<
-  HttpEndpointV2,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  backup: z.boolean().default(false),
-  headers: z.array(HttpHeader$zodSchema).optional(),
+export const HttpEndpointV2$zodSchema: z.ZodType<HttpEndpointV2> = z.object({
+  backup: z.boolean().default(false).describe(
+    "Is the endpoint a backup or not.",
+  ),
+  headers: z.array(HttpHeader$zodSchema).optional().describe(
+    "The list of headers associated with this endpoint.",
+  ),
   healthCheck: EndpointHealthCheckService$zodSchema.optional(),
   httpClientOptions: HttpClientOptions$zodSchema.optional(),
   httpClientSslOptions: HttpClientSslOptions$zodSchema.optional(),
   httpProxy: HttpProxy$zodSchema.optional(),
-  inherit: z.boolean().default(false),
-  name: z.string().optional(),
-  status: EndpointStatus$zodSchema.optional(),
-  target: z.string().optional(),
-  tenants: z.array(z.string()).optional(),
-  type: z.string(),
-  weight: z.number().int().default(1),
+  inherit: z.boolean().default(false).describe(
+    "Inherit the configuration of the parent endpoint group.",
+  ),
+  name: z.string().optional().describe("The name of the endpoint"),
+  status: EndpointStatus$zodSchema.optional().describe(
+    "The status of the endpoint.",
+  ),
+  target: z.string().optional().describe("The target of the endpoint"),
+  tenants: z.array(z.string()).optional().describe(
+    "The list of tenants associated with this endpoint.",
+  ),
+  type: z.string().describe("The type of the endpoint."),
+  weight: z.int().default(1).describe("The weight of the endpoint"),
 });

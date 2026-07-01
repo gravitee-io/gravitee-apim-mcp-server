@@ -11,33 +11,19 @@ export type GetIntegrationRequest = {
   integrationId: string;
 };
 
-export const GetIntegrationRequest$zodSchema: z.ZodType<
-  GetIntegrationRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  integrationId: z.string().describe("Id of an integration."),
-});
+export const GetIntegrationRequest$zodSchema: z.ZodType<GetIntegrationRequest> =
+  z.object({
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    integrationId: z.string().describe("Id of an integration."),
+  });
 
-export type GetIntegrationResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Integration?: Integration | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetIntegrationResponse = Integration | ErrorT;
 
 export const GetIntegrationResponse$zodSchema: z.ZodType<
-  GetIntegrationResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Integration: Integration$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetIntegrationResponse
+> = z.union([
+  Integration$zodSchema,
+  ErrorT$zodSchema,
+]);

@@ -3,28 +3,36 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The origin of the API.
  */
+export const BaseOriginContextOrigin = {
+  Management: "MANAGEMENT",
+  Kubernetes: "KUBERNETES",
+  Integration: "INTEGRATION",
+} as const;
+/**
+ * The origin of the API.
+ */
+export type BaseOriginContextOrigin = ClosedEnum<
+  typeof BaseOriginContextOrigin
+>;
+
 export const BaseOriginContextOrigin$zodSchema = z.enum([
   "MANAGEMENT",
   "KUBERNETES",
   "INTEGRATION",
 ]).describe("The origin of the API.");
 
-export type BaseOriginContextOrigin = z.infer<
-  typeof BaseOriginContextOrigin$zodSchema
->;
-
 export type BaseOriginContext = {
   origin?: BaseOriginContextOrigin | undefined;
 };
 
-export const BaseOriginContext$zodSchema: z.ZodType<
-  BaseOriginContext,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  origin: BaseOriginContextOrigin$zodSchema.optional(),
-});
+export const BaseOriginContext$zodSchema: z.ZodType<BaseOriginContext> = z
+  .object({
+    origin: BaseOriginContextOrigin$zodSchema.optional().describe(
+      "The origin of the API.",
+    ),
+  });

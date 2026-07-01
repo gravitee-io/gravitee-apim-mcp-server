@@ -15,37 +15,21 @@ export type GetApiPagesRequest = {
   parentId?: string | undefined;
 };
 
-export const GetApiPagesRequest$zodSchema: z.ZodType<
-  GetApiPagesRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  parentId: z.string().describe(
-    "Id of the parent folder or 'ROOT' for the top folder.",
-  ).optional(),
-});
+export const GetApiPagesRequest$zodSchema: z.ZodType<GetApiPagesRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    parentId: z.string().describe(
+      "Id of the parent folder or 'ROOT' for the top folder.",
+    ).optional(),
+  });
 
-export type GetApiPagesResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiDocumentationPagesResponse?: ApiDocumentationPagesResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiPagesResponse = ApiDocumentationPagesResponse | ErrorT;
 
-export const GetApiPagesResponse$zodSchema: z.ZodType<
-  GetApiPagesResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiDocumentationPagesResponse: ApiDocumentationPagesResponse$zodSchema
-    .optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiPagesResponse$zodSchema: z.ZodType<GetApiPagesResponse> = z
+  .union([
+    ApiDocumentationPagesResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

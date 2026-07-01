@@ -10,10 +10,12 @@ export type VerifySubscriptionResponse = {
 };
 
 export const VerifySubscriptionResponse$zodSchema: z.ZodType<
-  VerifySubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
+  VerifySubscriptionResponse
 > = z.object({
-  ok: z.boolean().optional(),
-  reason: z.string().optional(),
+  ok: z.boolean().optional().describe(
+    "Indicates whether the creation can be done or not.",
+  ),
+  reason: z.string().optional().describe(
+    "An optional reason giving details about the result.",
+  ),
 });

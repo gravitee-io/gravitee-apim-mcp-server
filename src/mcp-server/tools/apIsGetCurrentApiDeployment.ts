@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apIsGetCurrentApiDeployment: ToolDefinition<typeof args> = {
-  name: "AP-is-get-current-api-deployment",
+  name: "get_current_api_deployment",
   description: `Get the current deployment of an API
 
-Get the current deployment of an API.
-
-User must have the API_DEFINITION[READ] permission.`,
+Get the current deployment of an API.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Current Api Deployment",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsGetCurrentApiDeployment(

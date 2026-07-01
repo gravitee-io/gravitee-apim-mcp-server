@@ -14,14 +14,15 @@ export type HealthCheckRequest = {
   fromRoot?: boolean | undefined;
 };
 
-export const HealthCheckRequest$zodSchema: z.ZodType<
-  HealthCheckRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  body: z.string().optional(),
-  fromRoot: z.boolean().default(false),
-  headers: z.array(HttpHeader$zodSchema).optional(),
-  method: HttpMethod$zodSchema.optional(),
-  path: z.string().optional(),
-});
+export const HealthCheckRequest$zodSchema: z.ZodType<HealthCheckRequest> = z
+  .object({
+    body: z.string().optional().describe("The body of the request"),
+    fromRoot: z.boolean().default(false).describe(
+      "Is the request from the root or not",
+    ),
+    headers: z.array(HttpHeader$zodSchema).optional(),
+    method: HttpMethod$zodSchema.optional().describe(
+      "The method of the selector",
+    ),
+    path: z.string().optional().describe("The path of the request"),
+  });

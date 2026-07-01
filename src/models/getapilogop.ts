@@ -12,34 +12,20 @@ export type GetApiLogRequest = {
   requestId: string;
 };
 
-export const GetApiLogRequest$zodSchema: z.ZodType<
-  GetApiLogRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  requestId: z.string().describe("Id of a request."),
-});
+export const GetApiLogRequest$zodSchema: z.ZodType<GetApiLogRequest> = z.object(
+  {
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    requestId: z.string().describe("Id of a request."),
+  },
+);
 
-export type GetApiLogResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiLogResponse?: ApiLogResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiLogResponse = ApiLogResponse | ErrorT;
 
-export const GetApiLogResponse$zodSchema: z.ZodType<
-  GetApiLogResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiLogResponse: ApiLogResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiLogResponse$zodSchema: z.ZodType<GetApiLogResponse> = z
+  .union([
+    ApiLogResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

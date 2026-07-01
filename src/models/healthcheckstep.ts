@@ -18,12 +18,8 @@ export type HealthCheckStep = {
   response?: HealthCheckResponse | undefined;
 };
 
-export const HealthCheckStep$zodSchema: z.ZodType<
-  HealthCheckStep,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  name: z.string().default("default-step"),
+export const HealthCheckStep$zodSchema: z.ZodType<HealthCheckStep> = z.object({
+  name: z.string().default("default-step").describe("The name of the step"),
   request: HealthCheckRequest$zodSchema.optional(),
   response: HealthCheckResponse$zodSchema.optional(),
 });

@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * List of environment groups
  *
  * @remarks
- * List the groups of a given environment.
+ * List of environment groups
  *
- * User must have the ENVIRONMENT_GROUP[READ] permission.
+ * List the groups of a given environment.
  */
 export function groupsListGroups(
   client$: GraviteeApimCore,
@@ -113,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listGroups",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -170,7 +170,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, ListGroupsResponse$zodSchema, { key: "GroupsResponse" }),
-    M.json("default", ListGroupsResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListGroupsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

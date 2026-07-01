@@ -3,15 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of membership
  */
+export const MembershipMemberType = {
+  User: "USER",
+  Group: "GROUP",
+} as const;
+/**
+ * The type of membership
+ */
+export type MembershipMemberType = ClosedEnum<typeof MembershipMemberType>;
+
 export const MembershipMemberType$zodSchema = z.enum([
   "USER",
   "GROUP",
 ]).describe("The type of membership");
-
-export type MembershipMemberType = z.infer<
-  typeof MembershipMemberType$zodSchema
->;

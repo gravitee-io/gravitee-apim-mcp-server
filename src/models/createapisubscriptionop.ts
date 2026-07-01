@@ -17,9 +17,7 @@ export type CreateApiSubscriptionRequest = {
 };
 
 export const CreateApiSubscriptionRequest$zodSchema: z.ZodType<
-  CreateApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  CreateApiSubscriptionRequest
 > = z.object({
   CreateSubscription: CreateSubscription$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -28,22 +26,11 @@ export const CreateApiSubscriptionRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type CreateApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Subscription?: Subscription | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateApiSubscriptionResponse = Subscription | ErrorT;
 
 export const CreateApiSubscriptionResponse$zodSchema: z.ZodType<
-  CreateApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  Subscription: Subscription$zodSchema.optional(),
-});
+  CreateApiSubscriptionResponse
+> = z.union([
+  Subscription$zodSchema,
+  ErrorT$zodSchema,
+]);

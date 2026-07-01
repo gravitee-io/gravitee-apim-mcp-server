@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { AccessControl, AccessControl$zodSchema } from "./accesscontrol.js";
 import { PageSource, PageSource$zodSchema } from "./pagesource.js";
 import { Visibility, Visibility$zodSchema } from "./visibility.js";
@@ -10,6 +11,20 @@ import { Visibility, Visibility$zodSchema } from "./visibility.js";
 /**
  * The type of documentation to update.
  */
+export const UpdateDocumentationType = {
+  Folder: "FOLDER",
+  Markdown: "MARKDOWN",
+  Swagger: "SWAGGER",
+  Asyncapi: "ASYNCAPI",
+  Asciidoc: "ASCIIDOC",
+} as const;
+/**
+ * The type of documentation to update.
+ */
+export type UpdateDocumentationType = ClosedEnum<
+  typeof UpdateDocumentationType
+>;
+
 export const UpdateDocumentationType$zodSchema = z.enum([
   "FOLDER",
   "MARKDOWN",
@@ -17,10 +32,6 @@ export const UpdateDocumentationType$zodSchema = z.enum([
   "ASYNCAPI",
   "ASCIIDOC",
 ]).describe("The type of documentation to update.");
-
-export type UpdateDocumentationType = z.infer<
-  typeof UpdateDocumentationType$zodSchema
->;
 
 export type UpdateDocumentation = {
   type: UpdateDocumentationType;
@@ -33,17 +44,24 @@ export type UpdateDocumentation = {
   source?: PageSource | undefined;
 };
 
-export const UpdateDocumentation$zodSchema: z.ZodType<
-  UpdateDocumentation,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  accessControls: z.array(AccessControl$zodSchema).optional(),
-  configuration: z.record(z.string()).optional(),
-  excludedAccessControls: z.boolean().optional(),
-  name: z.string(),
-  order: z.number().int().default(0),
-  source: PageSource$zodSchema.optional(),
-  type: UpdateDocumentationType$zodSchema,
-  visibility: Visibility$zodSchema.optional(),
-});
+export const UpdateDocumentation$zodSchema: z.ZodType<UpdateDocumentation> = z
+  .object({
+    accessControls: z.array(AccessControl$zodSchema).optional().describe(
+      "List of access controls.",
+    ),
+    configuration: z.record(z.string(), z.string()).optional().describe(
+      "Configuration of a page",
+    ),
+    excludedAccessControls: z.boolean().optional().describe(
+      "Flag to restrict access to user matching the restrictions.",
+    ),
+    name: z.string().describe("Page's name."),
+    order: z.int().default(0).describe("Page's order."),
+    source: PageSource$zodSchema.optional(),
+    type: UpdateDocumentationType$zodSchema.describe(
+      "The type of documentation to update.",
+    ),
+    visibility: Visibility$zodSchema.default("PRIVATE").describe(
+      "The visibility of the resource regarding the portal.",
+    ),
+  });

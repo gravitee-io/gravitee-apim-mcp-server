@@ -10,9 +10,7 @@ import * as z from "zod";
 export type ApiLogResponseContentHeaders = {};
 
 export const ApiLogResponseContentHeaders$zodSchema: z.ZodType<
-  ApiLogResponseContentHeaders,
-  z.ZodTypeDef,
-  unknown
+  ApiLogResponseContentHeaders
 > = z.object({}).describe("The list of headers associated with this message.");
 
 /**
@@ -24,12 +22,10 @@ export type ApiLogResponseContent = {
   body?: string | undefined;
 };
 
-export const ApiLogResponseContent$zodSchema: z.ZodType<
-  ApiLogResponseContent,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  body: z.string().optional(),
-  headers: z.lazy(() => ApiLogResponseContentHeaders$zodSchema).optional(),
-  status: z.number().int().optional(),
-}).describe("The log response content.");
+export const ApiLogResponseContent$zodSchema: z.ZodType<ApiLogResponseContent> =
+  z.object({
+    body: z.string().optional().describe("The response's body."),
+    headers: z.lazy(() => ApiLogResponseContentHeaders$zodSchema).optional()
+      .describe("The list of headers associated with this message."),
+    status: z.int().optional().describe("The response's status."),
+  }).describe("The log response content.");

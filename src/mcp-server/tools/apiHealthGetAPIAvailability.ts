@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiHealthGetAPIAvailability: ToolDefinition<typeof args> = {
-  name: "API-health-get-api-availability",
+  name: "get_api_availability",
   description: `Get API availability by endpoint or by gateway
 
-Get API Health availability. 
-
-User must have the API_HEALTH[READ] permission.`,
+Get API Health availability.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Availability",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiHealthGetAPIAvailability(

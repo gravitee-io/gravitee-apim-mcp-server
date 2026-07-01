@@ -13,9 +13,7 @@ export type PauseApiSubscriptionRequest = {
 };
 
 export const PauseApiSubscriptionRequest$zodSchema: z.ZodType<
-  PauseApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  PauseApiSubscriptionRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -24,22 +22,11 @@ export const PauseApiSubscriptionRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type PauseApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Subscription?: Subscription | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type PauseApiSubscriptionResponse = Subscription | ErrorT;
 
 export const PauseApiSubscriptionResponse$zodSchema: z.ZodType<
-  PauseApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  Subscription: Subscription$zodSchema.optional(),
-});
+  PauseApiSubscriptionResponse
+> = z.union([
+  Subscription$zodSchema,
+  ErrorT$zodSchema,
+]);

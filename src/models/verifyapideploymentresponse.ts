@@ -10,10 +10,12 @@ export type VerifyApiDeploymentResponse = {
 };
 
 export const VerifyApiDeploymentResponse$zodSchema: z.ZodType<
-  VerifyApiDeploymentResponse,
-  z.ZodTypeDef,
-  unknown
+  VerifyApiDeploymentResponse
 > = z.object({
-  ok: z.boolean().optional(),
-  reason: z.string().optional(),
+  ok: z.boolean().optional().describe(
+    "Indicates whether the deployment can be done or not.",
+  ),
+  reason: z.string().optional().describe(
+    "An optional reason giving details about the result.",
+  ),
 });

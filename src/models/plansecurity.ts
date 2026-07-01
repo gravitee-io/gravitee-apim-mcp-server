@@ -11,9 +11,7 @@ import {
 export type PlanSecurityConfiguration = {};
 
 export const PlanSecurityConfiguration$zodSchema: z.ZodType<
-  PlanSecurityConfiguration,
-  z.ZodTypeDef,
-  unknown
+  PlanSecurityConfiguration
 > = z.object({});
 
 export type PlanSecurity = {
@@ -21,11 +19,7 @@ export type PlanSecurity = {
   configuration?: PlanSecurityConfiguration | undefined;
 };
 
-export const PlanSecurity$zodSchema: z.ZodType<
-  PlanSecurity,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const PlanSecurity$zodSchema: z.ZodType<PlanSecurity> = z.object({
   configuration: z.lazy(() => PlanSecurityConfiguration$zodSchema).optional(),
-  type: PlanSecurityType$zodSchema,
+  type: PlanSecurityType$zodSchema.describe("Plan security type."),
 });

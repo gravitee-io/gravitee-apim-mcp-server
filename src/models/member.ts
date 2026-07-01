@@ -11,9 +11,10 @@ export type Member = {
   roles?: Array<Role> | undefined;
 };
 
-export const Member$zodSchema: z.ZodType<Member, z.ZodTypeDef, unknown> = z
-  .object({
-    displayName: z.string().optional(),
-    id: z.string().optional(),
-    roles: z.array(Role$zodSchema).optional(),
-  });
+export const Member$zodSchema: z.ZodType<Member> = z.object({
+  displayName: z.string().optional().describe("Member's name."),
+  id: z.string().optional().describe("Member's uuid."),
+  roles: z.array(Role$zodSchema).optional().describe(
+    "The list of roles for this Member.",
+  ),
+});

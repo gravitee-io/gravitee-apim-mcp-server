@@ -55,33 +55,62 @@ export type UpdateApiV4 = {
   flowExecution?: FlowExecution | undefined;
   flows?: Array<FlowV4> | undefined;
   services?: ApiServices | undefined;
+  allowedInApiProducts?: boolean | undefined;
+  allowMultiJwtOauth2Subscriptions?: boolean | undefined;
 };
 
-export const UpdateApiV4$zodSchema: z.ZodType<
-  UpdateApiV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const UpdateApiV4$zodSchema: z.ZodType<UpdateApiV4> = z.object({
+  allowMultiJwtOauth2Subscriptions: z.boolean().default(false).describe(
+    "Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).",
+  ),
+  allowedInApiProducts: z.boolean().default(false).describe(
+    "Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.",
+  ),
   analytics: Analytics$zodSchema.optional(),
-  apiVersion: z.string(),
-  categories: z.array(z.string()).optional(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
-  disableMembershipNotifications: z.boolean().default(false),
+  apiVersion: z.string().describe(
+    "API's version. It's a simple string only used in the portal.",
+  ),
+  categories: z.array(z.string()).optional().describe(
+    "The list of category ids or keys associated with this API.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "API's description. A short description of your API.",
+  ),
+  disableMembershipNotifications: z.boolean().default(false).describe(
+    "Disable membership notifications.",
+  ),
   endpointGroups: z.array(EndpointGroupV4$zodSchema),
   failover: FailoverV4$zodSchema.optional(),
   flowExecution: FlowExecution$zodSchema.optional(),
   flows: z.array(FlowV4$zodSchema).optional(),
-  groups: z.array(z.string()).optional(),
-  labels: z.array(z.string()).optional(),
-  lifecycleState: ApiLifecycleState$zodSchema.optional(),
-  listeners: z.array(Listener$zodSchema),
-  name: z.string(),
+  groups: z.array(z.string()).optional().describe(
+    "List of group IDs associated with this API. Used to manage team access.",
+  ),
+  labels: z.array(z.string()).optional().describe(
+    "The free list of labels associated with this API.",
+  ),
+  lifecycleState: ApiLifecycleState$zodSchema.optional().describe(
+    "The status of the API regarding the console.",
+  ),
+  listeners: z.array(Listener$zodSchema).describe(
+    "The list of listeners associated with this API.",
+  ),
+  name: z.string().describe("API's name. Duplicate names can exists."),
   properties: z.array(Property$zodSchema).optional(),
   resources: z.array(Resource$zodSchema).optional(),
-  responseTemplates: z.record(z.record(ResponseTemplate$zodSchema)).optional(),
+  responseTemplates: z.record(
+    z.string(),
+    z.record(z.string(), ResponseTemplate$zodSchema),
+  ).optional(),
   services: ApiServices$zodSchema.optional(),
-  tags: z.array(z.string()).optional(),
-  type: ApiType$zodSchema,
-  visibility: Visibility$zodSchema.optional(),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this API.",
+  ),
+  type: ApiType$zodSchema.describe("API's type."),
+  visibility: Visibility$zodSchema.default("PRIVATE").describe(
+    "The visibility of the resource regarding the portal.",
+  ),
 });

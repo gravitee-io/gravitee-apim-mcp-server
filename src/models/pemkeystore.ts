@@ -13,14 +13,10 @@ export type PEMKeyStore = {
   certContent?: string | undefined;
 };
 
-export const PEMKeyStore$zodSchema: z.ZodType<
-  PEMKeyStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  certContent: z.string().optional(),
-  certPath: z.string().optional(),
-  keyContent: z.string().optional(),
-  keyPath: z.string().optional(),
-  type: KeyStoreType$zodSchema,
+export const PEMKeyStore$zodSchema: z.ZodType<PEMKeyStore> = z.object({
+  certContent: z.string().optional().describe("The content of the key store"),
+  certPath: z.string().optional().describe("The path of the key store"),
+  keyContent: z.string().optional().describe("The content of the key store"),
+  keyPath: z.string().optional().describe("The path of the key store"),
+  type: KeyStoreType$zodSchema.describe("The type of the key store."),
 });

@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The status of the API regarding the review feature.
  */
+export const ApiWorkflowState = {
+  Draft: "DRAFT",
+  InReview: "IN_REVIEW",
+  RequestForChanges: "REQUEST_FOR_CHANGES",
+  ReviewOk: "REVIEW_OK",
+} as const;
+/**
+ * The status of the API regarding the review feature.
+ */
+export type ApiWorkflowState = ClosedEnum<typeof ApiWorkflowState>;
+
 export const ApiWorkflowState$zodSchema = z.enum([
   "DRAFT",
   "IN_REVIEW",
   "REQUEST_FOR_CHANGES",
   "REVIEW_OK",
 ]).describe("The status of the API regarding the review feature.");
-
-export type ApiWorkflowState = z.infer<typeof ApiWorkflowState$zodSchema>;

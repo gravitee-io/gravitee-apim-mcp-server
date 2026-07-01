@@ -22,45 +22,31 @@ export type SearchApisRequest = {
   ApiSearchQuery: ApiSearchQuery;
 };
 
-export const SearchApisRequest$zodSchema: z.ZodType<
-  SearchApisRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiSearchQuery: ApiSearchQuery$zodSchema,
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  expands: z.array(ApisGetExpandsParam$zodSchema).describe(
-    "Expansion of data to return in APIs.",
-  ).optional(),
-  manageOnly: z.boolean().default(true).describe(
-    "By default only APIs that the user can manage are returned. If set to false, all APIs that the user can view are returned.",
-  ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  sortBy: ApiSortByParam$zodSchema.optional(),
-});
+export const SearchApisRequest$zodSchema: z.ZodType<SearchApisRequest> = z
+  .object({
+    ApiSearchQuery: ApiSearchQuery$zodSchema,
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    expands: z.array(ApisGetExpandsParam$zodSchema).describe(
+      "Expansion of data to return in APIs.",
+    ).optional(),
+    manageOnly: z.boolean().default(true).describe(
+      "By default only APIs that the user can manage are returned. If set to false, all APIs that the user can view are returned.",
+    ),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    sortBy: ApiSortByParam$zodSchema.optional().describe(
+      "Possibility to sort APIs results by field.\nCan be ascending or descending with minus '-' prefix.\nBy default, no sort is applied.",
+    ),
+  });
 
-export type SearchApisResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApisResponse?: ApisResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type SearchApisResponse = ApisResponse | ErrorT;
 
-export const SearchApisResponse$zodSchema: z.ZodType<
-  SearchApisResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApisResponse: ApisResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const SearchApisResponse$zodSchema: z.ZodType<SearchApisResponse> = z
+  .union([
+    ApisResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

@@ -1,21 +1,41 @@
 /// <reference types="bun-types" />
 
 import { build } from "bun";
-import { chmod, copyFile, mkdir } from "node:fs/promises";
-import { packExtension } from "@anthropic-ai/dxt";
+import { chmod, cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { packExtension } from "@anthropic-ai/mcpb";
 import { join } from "node:path";
+import { createMCPServer } from "./server.ts";
+import { createConsoleLogger } from "./console-logger.ts";
+
+const shouldPack = process.argv.includes("--pack");
 
 async function buildMcpServer() {
+  // Explicitly create server to register tools
+  const logger = createConsoleLogger("info");
+  const { tools } = createMCPServer({ logger });
+
+  // Iterate through all registered tools and add them to the manifest
+  const manifest = await readFile("manifest.json", "utf8");
+  const manifestJson = JSON.parse(manifest);
+
+  // Remove previous manifest tools before writing the current generated catalog.
+  manifestJson.tools = [];
+  manifestJson.tools.push(...tools.map((tool: any) => ({
+    name: tool.name,
+    description: tool.description,
+  })));
+
+  await writeFile("manifest.json", JSON.stringify(manifestJson, null, 2));
   const entrypoint = "./src/mcp-server/mcp-server.ts";
   const destinationDir = "./bin";
 
   await build({
     entrypoints: [entrypoint],
     outdir: destinationDir,
-    sourcemap: "linked",
+    sourcemap: shouldPack ? "none" : "linked",
     target: "node",
     format: "esm",
-    minify: false,
+    minify: shouldPack,
     throw: true,
     banner: "#!/usr/bin/env node",
   });
@@ -24,17 +44,35 @@ async function buildMcpServer() {
   const outputFile = join(destinationDir, "mcp-server.js");
   await chmod(outputFile, 0o755);
 
-    // Build the DXT file
-  await packExtension({
-    extensionPath: ".",
-    outputPath: "mcp-server.dxt",
-    silent: false,
-  });
+  // Build the MCP bundle file
+  if (shouldPack) {
+    // Stage only the files needed for distribution to avoid bloated bundles.
+    // Without this, packExtension would include node_modules and source files.
+    const stageDir = ".mcpb-stage";
+    await mkdir(join(stageDir, "bin"), { recursive: true });
+    await cp(
+      join(destinationDir, "mcp-server.js"),
+      join(stageDir, "bin", "mcp-server.js"),
+    );
+    await cp("manifest.json", join(stageDir, "manifest.json"));
 
-  // Copy the DXT file to `./static` to have the CloudFlare Worker serve it
-  const staticDir = "./static";
-  await mkdir(staticDir, { recursive: true });
-  await copyFile("mcp-server.dxt", join(staticDir, "mcp-server.dxt"));
+    // Copy icon and screenshot assets if they exist
+    const assetExts = [".png", ".jpg", ".jpeg", ".gif", ".webp"];
+    for (const file of await readdir(".")) {
+      if (assetExts.some((ext) => file.toLowerCase().endsWith(ext))) {
+        await cp(file, join(stageDir, file));
+      }
+    }
+
+    await packExtension({
+      extensionPath: stageDir,
+      outputPath: "./gravitee-apim-mcp-server.mcpb",
+      silent: false,
+    });
+
+    // Clean up staging directory
+    await rm(stageDir, { recursive: true, force: true });
+  }
 }
 
 await buildMcpServer().catch((error) => {

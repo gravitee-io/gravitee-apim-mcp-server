@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get the API's members
  *
  * @remarks
- * List the members for a given API.
+ * Get the API's members
  *
- * User must have the API_MEMBER[READ] permission.
+ * List the members for a given API.
  */
 export function apiMembersListAPIMembers(
   client$: GraviteeApimCore,
@@ -117,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "listApiMembers",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +174,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, ListApiMembersResponse$zodSchema, { key: "MembersResponse" }),
-    M.json("default", ListApiMembersResponse$zodSchema, { key: "Error" }),
+    M.json("default", ListApiMembersResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

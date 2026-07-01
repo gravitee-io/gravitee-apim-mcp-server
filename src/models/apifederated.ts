@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import {
   ApiLifecycleState,
   ApiLifecycleState$zodSchema,
@@ -36,6 +37,18 @@ import { Visibility, Visibility$zodSchema } from "./visibility.js";
 /**
  * The state of the API regarding the gateway(s).
  */
+export const ApiFederatedState = {
+  Closed: "CLOSED",
+  Initialized: "INITIALIZED",
+  Started: "STARTED",
+  Stopped: "STOPPED",
+  Stopping: "STOPPING",
+} as const;
+/**
+ * The state of the API regarding the gateway(s).
+ */
+export type ApiFederatedState = ClosedEnum<typeof ApiFederatedState>;
+
 export const ApiFederatedState$zodSchema = z.enum([
   "CLOSED",
   "INITIALIZED",
@@ -44,19 +57,24 @@ export const ApiFederatedState$zodSchema = z.enum([
   "STOPPING",
 ]).describe("The state of the API regarding the gateway(s).");
 
-export type ApiFederatedState = z.infer<typeof ApiFederatedState$zodSchema>;
-
 /**
  * The deployment state of the API regarding the gateway(s).
  */
+export const ApiFederatedDeploymentState = {
+  NeedRedeploy: "NEED_REDEPLOY",
+  Deployed: "DEPLOYED",
+} as const;
+/**
+ * The deployment state of the API regarding the gateway(s).
+ */
+export type ApiFederatedDeploymentState = ClosedEnum<
+  typeof ApiFederatedDeploymentState
+>;
+
 export const ApiFederatedDeploymentState$zodSchema = z.enum([
   "NEED_REDEPLOY",
   "DEPLOYED",
 ]).describe("The deployment state of the API regarding the gateway(s).");
-
-export type ApiFederatedDeploymentState = z.infer<
-  typeof ApiFederatedDeploymentState$zodSchema
->;
 
 export type ApiFederated = {
   id?: string | undefined;
@@ -69,6 +87,7 @@ export type ApiFederated = {
   createdAt?: string | undefined;
   updatedAt?: string | undefined;
   disableMembershipNotifications?: boolean | undefined;
+  metadata?: { [k: string]: any } | undefined;
   groups?: Array<string> | undefined;
   state?: ApiFederatedState | undefined;
   deploymentState?: ApiFederatedDeploymentState | undefined;
@@ -89,35 +108,75 @@ export type ApiFederated = {
   _links?: ApiLinks | undefined;
 };
 
-export const ApiFederated$zodSchema: z.ZodType<
-  ApiFederated,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const ApiFederated$zodSchema: z.ZodType<ApiFederated> = z.object({
   _links: ApiLinks$zodSchema.optional(),
-  apiVersion: z.string().optional(),
-  categories: z.array(z.string()).optional(),
-  createdAt: z.string().datetime({ offset: true }).optional(),
-  crossId: z.string().optional(),
-  definitionContext: DefinitionContext$zodSchema.optional(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  deployedAt: z.string().datetime({ offset: true }).optional(),
-  deploymentState: ApiFederatedDeploymentState$zodSchema.optional(),
-  description: z.string().optional(),
-  disableMembershipNotifications: z.boolean().default(false),
-  groups: z.array(z.string()).optional(),
-  id: z.string().optional(),
-  labels: z.array(z.string()).optional(),
-  lifecycleState: ApiLifecycleState$zodSchema.optional(),
-  name: z.string().optional(),
+  apiVersion: z.string().optional().describe(
+    "API's version. It's a simple string only used in the portal.",
+  ),
+  categories: z.array(z.string()).optional().describe(
+    "The list of category keys associated with this API.",
+  ),
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The date (as timestamp) when the API was created.",
+  ),
+  crossId: z.string().optional().describe(
+    "API's crossId. Identifies API across environments.",
+  ),
+  definitionContext: DefinitionContext$zodSchema.optional().describe(
+    "the context where the api definition was created. Deprecated in favor of OriginContext.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  deployedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last date (as timestamp) when the API was deployed.",
+  ),
+  deploymentState: ApiFederatedDeploymentState$zodSchema.optional().describe(
+    "The deployment state of the API regarding the gateway(s).",
+  ),
+  description: z.string().optional().describe(
+    "API's description. A short description of your API.",
+  ),
+  disableMembershipNotifications: z.boolean().default(false).describe(
+    "Disable membership notifications.",
+  ),
+  groups: z.array(z.string()).optional().describe(
+    "List of group IDs associated with this API. Used to manage team access.",
+  ),
+  id: z.string().optional().describe("API's uuid."),
+  labels: z.array(z.string()).optional().describe(
+    "The free list of labels associated with this API.",
+  ),
+  lifecycleState: ApiLifecycleState$zodSchema.optional().describe(
+    "The status of the API regarding the console.",
+  ),
+  metadata: z.record(z.string(), z.any()).optional().describe(
+    "API metadata as key-value pairs, populated only when `expands=metadata` is requested.",
+  ),
+  name: z.string().optional().describe(
+    "API's name. Duplicate names can exists.",
+  ),
   originContext: BaseOriginContext$zodSchema.optional(),
   primaryOwner: PrimaryOwner$zodSchema.optional(),
   properties: z.array(PropertyOutput$zodSchema).optional(),
   resources: z.array(Resource$zodSchema).optional(),
-  responseTemplates: z.record(z.record(ResponseTemplate$zodSchema)).optional(),
-  state: ApiFederatedState$zodSchema.optional(),
-  tags: z.array(z.string()).optional(),
-  updatedAt: z.string().datetime({ offset: true }).optional(),
-  visibility: Visibility$zodSchema.optional(),
-  workflowState: ApiWorkflowState$zodSchema.optional(),
+  responseTemplates: z.record(
+    z.string(),
+    z.record(z.string(), ResponseTemplate$zodSchema),
+  ).optional(),
+  state: ApiFederatedState$zodSchema.optional().describe(
+    "The state of the API regarding the gateway(s).",
+  ),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this API.",
+  ),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The last date (as timestamp) when the API was updated.",
+  ),
+  visibility: Visibility$zodSchema.default("PRIVATE").describe(
+    "The visibility of the resource regarding the portal.",
+  ),
+  workflowState: ApiWorkflowState$zodSchema.optional().describe(
+    "The status of the API regarding the review feature.",
+  ),
 });

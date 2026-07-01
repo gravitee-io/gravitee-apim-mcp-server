@@ -16,38 +16,23 @@ export type ListApiMembersRequest = {
   perPage?: number | undefined;
 };
 
-export const ListApiMembersRequest$zodSchema: z.ZodType<
-  ListApiMembersRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-});
+export const ListApiMembersRequest$zodSchema: z.ZodType<ListApiMembersRequest> =
+  z.object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+  });
 
-export type ListApiMembersResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  MembersResponse?: MembersResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListApiMembersResponse = MembersResponse | ErrorT;
 
 export const ListApiMembersResponse$zodSchema: z.ZodType<
-  ListApiMembersResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  MembersResponse: MembersResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  ListApiMembersResponse
+> = z.union([
+  MembersResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

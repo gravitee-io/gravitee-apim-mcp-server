@@ -13,13 +13,20 @@ const args = {
 export const tool$apiSubscriptionsTransferAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-transfer-api-subscription",
+  name: "transfer_api_subscription",
   description: `Transfer an API subscription
 
-Transfer an API subscription to another plan.<br>
-The targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.
+Transfer an API subscription to another plan.<br> The targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.
 
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Transfer Api Subscription",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsTransferAPISubscription(

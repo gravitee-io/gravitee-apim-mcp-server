@@ -13,12 +13,16 @@ const args = {
 export const tool$apiAnalyticsGetResponseTimeOverTime: ToolDefinition<
   typeof args
 > = {
-  name: "API-analytics-get-response-time-over-time",
-  description: `Get API Analytics average response time
-
-Get API Analytics average response time
-
-User must have the API_ANALYTICS[READ] permission.`,
+  name: "get_response_time_over_time",
+  description: `Get API Analytics average response time`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Response Time Over Time",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetResponseTimeOverTime(

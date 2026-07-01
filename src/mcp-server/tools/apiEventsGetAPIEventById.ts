@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiEventsGetAPIEventById: ToolDefinition<typeof args> = {
-  name: "API-events-get-api-event-by-id",
+  name: "get_api_event_by_id",
   description: `Get single API Event by it's ID
 
-Get specific single API Event.
-
-User must have the API_EVENT[READ] permission.`,
+Get specific single API Event.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Event By Id",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiEventsGetAPIEventById(

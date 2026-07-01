@@ -23,14 +23,17 @@ export type HealthCheckLogStep = {
   response?: HealthCheckLogResponse | undefined;
 };
 
-export const HealthCheckLogStep$zodSchema: z.ZodType<
-  HealthCheckLogStep,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  message: z.string().optional(),
-  name: z.string().optional(),
-  request: HealthCheckLogRequest$zodSchema.optional(),
-  response: HealthCheckLogResponse$zodSchema.optional(),
-  success: z.boolean().optional(),
-}).describe("A healh check log step");
+export const HealthCheckLogStep$zodSchema: z.ZodType<HealthCheckLogStep> = z
+  .object({
+    message: z.string().optional().describe(
+      "The failure message when step failed",
+    ),
+    name: z.string().optional().describe("The step name"),
+    request: HealthCheckLogRequest$zodSchema.optional().describe(
+      "A health check request",
+    ),
+    response: HealthCheckLogResponse$zodSchema.optional().describe(
+      "A health check response",
+    ),
+    success: z.boolean().optional().describe("The status of the step"),
+  }).describe("A healh check log step");

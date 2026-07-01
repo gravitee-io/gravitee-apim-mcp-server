@@ -11,9 +11,7 @@ import { HttpMethod, HttpMethod$zodSchema } from "./httpmethod.js";
 export type ApiLogRequestContentHeaders = {};
 
 export const ApiLogRequestContentHeaders$zodSchema: z.ZodType<
-  ApiLogRequestContentHeaders,
-  z.ZodTypeDef,
-  unknown
+  ApiLogRequestContentHeaders
 > = z.object({}).describe("The list of headers associated with this message.");
 
 /**
@@ -26,13 +24,13 @@ export type ApiLogRequestContent = {
   body?: string | undefined;
 };
 
-export const ApiLogRequestContent$zodSchema: z.ZodType<
-  ApiLogRequestContent,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  body: z.string().optional(),
-  headers: z.lazy(() => ApiLogRequestContentHeaders$zodSchema).optional(),
-  method: HttpMethod$zodSchema.optional(),
-  uri: z.string().optional(),
-}).describe("The log request content.");
+export const ApiLogRequestContent$zodSchema: z.ZodType<ApiLogRequestContent> = z
+  .object({
+    body: z.string().optional().describe("The request's body."),
+    headers: z.lazy(() => ApiLogRequestContentHeaders$zodSchema).optional()
+      .describe("The list of headers associated with this message."),
+    method: HttpMethod$zodSchema.optional().describe(
+      "The method of the selector",
+    ),
+    uri: z.string().optional().describe("URI of the request."),
+  }).describe("The log request content.");

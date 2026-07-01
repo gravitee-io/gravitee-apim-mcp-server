@@ -15,9 +15,7 @@ export type VerifyApiDeploymentRequest = {
 };
 
 export const VerifyApiDeploymentRequest$zodSchema: z.ZodType<
-  VerifyApiDeploymentRequest,
-  z.ZodTypeDef,
-  unknown
+  VerifyApiDeploymentRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -25,22 +23,13 @@ export const VerifyApiDeploymentRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type VerifyApiDeploymentResponseResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  VerifyApiDeploymentResponse?: VerifyApiDeploymentResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type VerifyApiDeploymentResponseResponse =
+  | VerifyApiDeploymentResponse
+  | ErrorT;
 
 export const VerifyApiDeploymentResponseResponse$zodSchema: z.ZodType<
-  VerifyApiDeploymentResponseResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  VerifyApiDeploymentResponse: VerifyApiDeploymentResponse$zodSchema.optional(),
-});
+  VerifyApiDeploymentResponseResponse
+> = z.union([
+  VerifyApiDeploymentResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$integrationsIngestedApis: ToolDefinition<typeof args> = {
-  name: "integrations-ingested-apis",
+  name: "ingested_apis",
   description: `Get list of ingested APIs associated to integration
 
-Get a list of all APIs that were ingested from 3rd party provider using this integration. 
-
-User must have the ENVIRONMENT_INTEGRATION[READ] permission.
-`,
+Get a list of all APIs that were ingested from 3rd party provider using this integration.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Ingested Apis",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsIngestedApis(

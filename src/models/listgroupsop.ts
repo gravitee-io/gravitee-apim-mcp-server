@@ -12,37 +12,21 @@ export type ListGroupsRequest = {
   perPage?: number | undefined;
 };
 
-export const ListGroupsRequest$zodSchema: z.ZodType<
-  ListGroupsRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-});
+export const ListGroupsRequest$zodSchema: z.ZodType<ListGroupsRequest> = z
+  .object({
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+  });
 
-export type ListGroupsResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  GroupsResponse?: GroupsResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListGroupsResponse = GroupsResponse | ErrorT;
 
-export const ListGroupsResponse$zodSchema: z.ZodType<
-  ListGroupsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  GroupsResponse: GroupsResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const ListGroupsResponse$zodSchema: z.ZodType<ListGroupsResponse> = z
+  .union([
+    GroupsResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

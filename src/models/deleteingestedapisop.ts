@@ -15,9 +15,7 @@ export type DeleteIngestedApisRequest = {
 };
 
 export const DeleteIngestedApisRequest$zodSchema: z.ZodType<
-  DeleteIngestedApisRequest,
-  z.ZodTypeDef,
-  unknown
+  DeleteIngestedApisRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
@@ -25,22 +23,11 @@ export const DeleteIngestedApisRequest$zodSchema: z.ZodType<
   integrationId: z.string().describe("Id of an integration."),
 });
 
-export type DeleteIngestedApisResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  DeletedIngestedApisResponse?: DeletedIngestedApisResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type DeleteIngestedApisResponse = DeletedIngestedApisResponse | ErrorT;
 
 export const DeleteIngestedApisResponse$zodSchema: z.ZodType<
-  DeleteIngestedApisResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  DeletedIngestedApisResponse: DeletedIngestedApisResponse$zodSchema.optional(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  DeleteIngestedApisResponse
+> = z.union([
+  DeletedIngestedApisResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

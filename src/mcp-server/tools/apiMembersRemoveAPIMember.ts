@@ -11,16 +11,20 @@ const args = {
 };
 
 export const tool$apiMembersRemoveAPIMember: ToolDefinition<typeof args> = {
-  name: "API-members-remove-api-member",
+  name: "remove_api_member",
   description: `Remove one API member
 
-Remove an API member.
+Remove an API member. Returns a 400 HTTP Error:
 
-Returns a 400 HTTP Error:
- - when the user tries to remove a PrimaryOwner.
-
-User must have the API_MEMBER[DELETE] permission.
-`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Remove Api Member",
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiMembersRemoveAPIMember(

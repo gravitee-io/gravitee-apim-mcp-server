@@ -9,27 +9,21 @@ import {
 } from "./definitionversion.js";
 import { FlowV2, FlowV2$zodSchema } from "./flowv2.js";
 import { PlanValidation, PlanValidation$zodSchema } from "./planvalidation.js";
-import { Rule2, Rule2$zodSchema } from "./rule2.js";
 
 export type UpdatePlanV2Configuration = {};
 
 export const UpdatePlanV2Configuration$zodSchema: z.ZodType<
-  UpdatePlanV2Configuration,
-  z.ZodTypeDef,
-  unknown
+  UpdatePlanV2Configuration
 > = z.object({});
 
 export type UpdatePlanV2Security = {
   configuration?: UpdatePlanV2Configuration | undefined;
 };
 
-export const UpdatePlanV2Security$zodSchema: z.ZodType<
-  UpdatePlanV2Security,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  configuration: z.lazy(() => UpdatePlanV2Configuration$zodSchema).optional(),
-});
+export const UpdatePlanV2Security$zodSchema: z.ZodType<UpdatePlanV2Security> = z
+  .object({
+    configuration: z.lazy(() => UpdatePlanV2Configuration$zodSchema).optional(),
+  });
 
 export type UpdatePlanV2 = {
   crossId?: string | undefined;
@@ -47,28 +41,46 @@ export type UpdatePlanV2 = {
   selectionRule?: string | undefined;
   tags?: Array<string> | undefined;
   flows?: Array<FlowV2> | undefined;
-  paths?: { [k: string]: Array<Rule2> } | undefined;
 };
 
-export const UpdatePlanV2$zodSchema: z.ZodType<
-  UpdatePlanV2,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const UpdatePlanV2$zodSchema: z.ZodType<UpdatePlanV2> = z.object({
   characteristics: z.array(z.string()).optional(),
-  commentMessage: z.string().optional(),
-  commentRequired: z.boolean().optional(),
-  crossId: z.string().optional(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
-  excludedGroups: z.array(z.string()).optional(),
+  commentMessage: z.string().optional().describe(
+    "A message from the API Publisher that is displayed to the consumer at subscription time.",
+  ),
+  commentRequired: z.boolean().optional().describe(
+    "A flag indicating if the consumer has to write a \"consumer message\" or if he/she can leave the field blank.",
+  ),
+  crossId: z.string().optional().describe(
+    "Plan's crossId. Identifies plan across environments.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "Plan's description. A short description of your Plan.",
+  ),
+  excludedGroups: z.array(z.string()).optional().describe(
+    "Groups of users which are not allowed to subscribe to this plan.",
+  ),
   flows: z.array(FlowV2$zodSchema).optional(),
-  generalConditions: z.string().optional(),
-  name: z.string().optional(),
-  order: z.number().int().optional(),
-  paths: z.record(z.array(Rule2$zodSchema)).optional(),
+  generalConditions: z.string().optional().describe(
+    "This field contains the UUID of the documentation page that is used as General Conditions.",
+  ),
+  name: z.string().optional().describe(
+    "Plan's name. Duplicate names can exists.",
+  ),
+  order: z.int().optional().describe(
+    "Simple order that could be used by a front end to display plans in a certain order. To highlight a plan on the portal for instance.",
+  ),
   security: z.lazy(() => UpdatePlanV2Security$zodSchema).optional(),
-  selectionRule: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  validation: PlanValidation$zodSchema.optional(),
+  selectionRule: z.string().optional().describe(
+    "An optional EL expression that will be evaluated at request time to select this plan.",
+  ),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this plan.",
+  ),
+  validation: PlanValidation$zodSchema.optional().describe(
+    "Plan validation type.",
+  ),
 });

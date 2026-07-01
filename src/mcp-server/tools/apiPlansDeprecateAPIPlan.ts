@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiPlansDeprecateAPIPlan: ToolDefinition<typeof args> = {
-  name: "API-plans-deprecate-api-plan",
+  name: "deprecate_api_plan",
   description: `Deprecate an API's plan
 
-Deprecate the API's plan.
-
-User must have the API_PLAN[UPDATE] permission.`,
+Deprecate the API's plan.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Deprecate Api Plan",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansDeprecateAPIPlan(

@@ -13,10 +13,10 @@ export type ApiAnalyticsAverageConnectionDurationResponse = {
 };
 
 export const ApiAnalyticsAverageConnectionDurationResponse$zodSchema: z.ZodType<
-  ApiAnalyticsAverageConnectionDurationResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiAnalyticsAverageConnectionDurationResponse
 > = z.object({
-  average: z.number().optional(),
-  averagesByEntrypoint: z.record(z.number()).optional(),
+  average: z.number().optional().describe(
+    "The rounded global average of connection duration",
+  ),
+  averagesByEntrypoint: z.record(z.string(), z.number()).optional(),
 }).describe("API Analytics for average connection duration by entrypoint.");

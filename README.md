@@ -1,97 +1,153 @@
-# Gravitee API Management (APIM) MCP Server
+# Gravitee APIM MCP Server
 
-This repository contains a Model Context Protocol (MCP) server for the Gravitee.io API Management (APIM) platform. It allows you to interact with your Gravitee instance using natural language in AI assistants like Claude, Cursor, and other MCP-compatible clients.
+This repository contains a Model Context Protocol (MCP) server for Gravitee API Management (APIM). It lets MCP-compatible clients call the APIM Management API through tools.
 
-The server is generated from the official Gravitee Management API v2 OpenAPI specification and exposes its functionality as a set of tools for an LLM to use.
+This version targets the APIM 4.12 Management API v2 APIs surface.
 
-<div align="left">
-    <a href="https://www.speakeasy.com/?utm_source=gravitee-apim&utm_campaign=mcp-typescript"><img src="https://www.speakeasy.com/assets/badges/built-by-speakeasy.svg" /></a>
-    <a href="https://opensource.org/licenses/MIT">
-        <img src="https://img.shields.io/badge/License-MIT-blue.svg" style="width: 100px; height: 28px;" />
-    </a>
-</div>
+## Scope
 
-## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [1. Create a Service User and Generate a Token](#1-create-a-service-user-and-generate-a-token)
-  - [2. Clone and Build the Server](#2-clone-and-build-the-server)
-- [Installation](#installation)
-- [Usage Examples](#usage-examples)
-- [Contributions](#contributions)
+The MCP server covers the APIM Management API v2 APIs surface only. It does not expose the full Management API family.
 
-## Prerequisites
-- **Node.js v18+**
-- **npm** (included with Node.js)
-- Access to a **Gravitee APIM instance** (Self-hosted or Cloud)
+The tool surface includes API creation, import, update, deployment, plans, subscriptions, members, analytics, logs, health, scoring, integrations, and related read operations. Some high-impact operations such as delete, stop, migrate, promote, rollback, transfer ownership, debug, and subscription key actions are available when the configured APIM token has permission to perform them.
 
-## Getting Started
+Use a dedicated APIM service user and grant only the roles required for the intended workflow.
 
-Follow these steps to get the MCP server running and configured with your AI client.
+## Requirements
 
-### 1. Create a Service User and Generate a Token
+- Access to an APIM Management API endpoint
+- An APIM bearer token
+- Node.js 18 or later, npm, and Bun when installing from source
 
-The MCP server authenticates with the Gravitee Management API using a Bearer Token. For security, it is highly recommended to create a dedicated **Service User** for this purpose.
+## Create an APIM Token
 
-1.  **Log into your Gravitee APIM Management Console.**
-    *   **Self-Hosted:** e.g., `http://localhost:8084`
-    *   **Cloud:** e.g., `https://<your-org>.<region>.console.gravitee.io`
-2.  From the main navigation, select **Organization Settings**, then click on **Users**.
-3.  Click the **Add User** button.
-4.  In the form, select **Service User** as the user type, provide a meaningful name (e.g., `mcp-server-user`), and click **Create**.
-5.  You will be returned to the user list. Find and click on the service user you just created to open its configuration page.
-6.  **Assign Permissions.** The capabilities of the AI assistant are directly determined by the permissions granted to this service user. You should assign roles based on the **principle of least privilege** for your intended operations.
-    *   **Organization Role:** Sets permissions that apply across the entire organization.
-    *   **Environment Roles:** Sets specific permissions for each environment (e.g., Development, Production).
-    > **Important**: The Management API is powerful. To understand which permission is required for a specific action, please refer to the official Gravitee Management API documentation.
-7.  Click **Save** to apply the roles.
-8.  On the user's configuration page, navigate to the **Tokens** section and click **Generate a personal token**.
-9.  Enter a descriptive name for the token (e.g., `mcp-server-token`) and click **Generate**.
-10. **Copy the generated token immediately and store it in a safe place.** You will not be able to view it again. This token is the value you will use for the `--bearer-auth` argument.
+Create a dedicated APIM service user and generate a personal token for it.
 
-### 2. Clone and Build the Server
+Recommended flow:
+
+1. Open the APIM Console.
+2. Go to Organization Settings, then Users.
+3. Create a service user for MCP usage.
+4. Assign only the organization and environment roles required for the workflows you want to allow.
+5. Generate a personal token for that service user.
+6. Use that token as `APIM_BEARER_TOKEN` or as the value for `--bearer-auth`.
+
+## Install
+
+### Claude Desktop Bundle
+
+Official GitHub releases include a Claude Desktop bundle named `gravitee-apim-mcp-server.mcpb`. Install that file in Claude Desktop to use the packaged server. The bundle prompts for the APIM connection settings and bearer token.
+
+### From GitHub Source
+
+Clone and build locally:
 
 ```bash
-# Clone the repository
 git clone https://github.com/gravitee-io/gravitee-apim-mcp-server.git
 cd gravitee-apim-mcp-server
-
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# The server executable is now available at ./bin/mcp-server.js
 ```
 
-## Installation
+The build creates the server executable at:
 
-The server can be installed in any MCP-compatible client. The required arguments are `--bearer-auth` (the token you generated) and `--server-url`.
+```bash
+./bin/mcp-server.js
+```
 
-#### Server URL Guide
--   **Self-Hosted:** Use the base URL of your Management API. Example: `http://localhost:8083/management/v2`
--   **Gravitee Cloud:** Use your organization-specific API URL. Example: `https://<your-org>.<region>.api.gravitee.io/management/v2`
+Use the absolute path to `./bin/mcp-server.js` in MCP client configuration.
 
-#### Installations in MCP Clients
+## Basic Usage
 
-<details>
-<summary>DXT (Desktop Extension for Claude)</summary>
+Use the Management API v2 base URL as `--server-url`.
 
-Install the MCP server as a Desktop Extension using the pre-built [`mcp-server.dxt`](./mcp-server.dxt) file.
+Self-hosted example:
 
-Simply drag and drop the [`mcp-server.dxt`](./mcp-server.dxt) file onto Claude Desktop to install the extension. The DXT package includes the MCP server and will prompt you for the required configuration values upon installation.
+```bash
+node ./bin/mcp-server.js start \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "http://localhost:8083/management/v2"
+```
 
-> [!NOTE]
-> DXT (Desktop Extensions) provide a streamlined way to package and distribute MCP servers. Learn more about [Desktop Extensions](https://www.anthropic.com/engineering/desktop-extensions).
+Cloud example:
 
-</details>
+```bash
+node ./bin/mcp-server.js start \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "https://<your-org>.<region>.api.gravitee.io/management/v2"
+```
 
-<details>
-<summary>Claude Desktop (Manual Config)</summary>
+You can also use templated server arguments:
 
-1. Open Claude Desktop Settings -> Developer -> Edit Config.
-2. Add the following JSON, replacing the placeholder values.
+```bash
+node ./bin/mcp-server.js start \
+  --protocol https \
+  --management-api-host "<management-api-host>" \
+  --org-id DEFAULT \
+  --bearer-auth "$APIM_BEARER_TOKEN"
+```
+
+## Dynamic Mode
+
+Dynamic mode exposes a compact set of discovery and execution tools instead of registering every APIM operation as a separate MCP tool:
+
+- `list_scopes`
+- `list_tools`
+- `describe_tool_input`
+- `execute_tool`
+
+```bash
+node ./bin/mcp-server.js start \
+  --mode dynamic \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "$APIM_SERVER_URL"
+```
+
+In dynamic mode, an MCP client first discovers a tool, inspects its input schema, then calls it through `execute_tool`.
+
+## Read-Only Profile
+
+For safer exploration, mount only tools marked with the `read` scope:
+
+```bash
+node ./bin/mcp-server.js start \
+  --mode dynamic \
+  --scope read \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "$APIM_SERVER_URL"
+```
+
+This keeps read-oriented operations available and excludes write/high-impact operations such as member changes, migration, promotion, and debug tools.
+
+## Write Profile
+
+MCP scopes and APIM permissions both control write tools. For operational use, configure a service user with the smallest APIM role set that can perform the target workflow.
+
+Example:
+
+```bash
+node ./bin/mcp-server.js start \
+  --mode dynamic \
+  --scope read \
+  --scope write \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "$APIM_SERVER_URL"
+```
+
+The `dangerous` scope marks high-impact tools. Only enable that scope for controlled workflows:
+
+```bash
+node ./bin/mcp-server.js start \
+  --mode dynamic \
+  --scope read \
+  --scope write \
+  --scope dangerous \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "$APIM_SERVER_URL"
+```
+
+## MCP Client Configuration
+
+Claude Desktop or compatible stdio clients can use:
 
 ```json
 {
@@ -101,6 +157,10 @@ Simply drag and drop the [`mcp-server.dxt`](./mcp-server.dxt) file onto Claude D
       "args": [
         "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
         "start",
+        "--mode",
+        "dynamic",
+        "--scope",
+        "read",
         "--bearer-auth",
         "YOUR_BEARER_TOKEN",
         "--server-url",
@@ -110,78 +170,7 @@ Simply drag and drop the [`mcp-server.dxt`](./mcp-server.dxt) file onto Claude D
   }
 }
 ```
-
-</details>
-
-<details>
-<summary>Cursor</summary>
-
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=GraviteeApim&config=eyJtY3BTZXJ2ZXJzIjp7IkdyYXZpdGVlQXBpbSI6eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJncmF2aXRlZS1hcGltIiwic3RhcnQiLCItLWJlYXJlci1hdXRoIiwiLi4uIiwiLS1zZXJ2ZXItdXJsIiwiLi4uIl19fX0=)
-
-Or manually:
-1. Open Cursor Settings -> Tools and Integrations -> New MCP Server.
-2. Paste the following JSON, replacing the placeholder values.
-
-```json
-{
-  "mcpServers": {
-    "GraviteeApim": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
-        "start",
-        "--bearer-auth",
-        "YOUR_BEARER_TOKEN",
-        "--server-url",
-        "https://your-management-api-url/management/v2"
-      ]
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary>VS Code</summary>
-
-Refer to the [Official VS Code documentation](https://code.visualstudio.com/api/extension-guides/ai/mcp) for the latest information.
-
-1. Open the Command Palette and search for `MCP: Open User Configuration`.
-2. This will open the `mcp.json` file. Paste the following configuration:
-
-```json
-{
-  "mcpServers": {
-    "GraviteeApim": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
-        "start",
-        "--bearer-auth",
-        "YOUR_BEARER_TOKEN",
-        "--server-url",
-        "https://your-management-api-url/management/v2"
-      ]
-    }
-  }
-}
-```
-</details>
-
-## Usage Examples
-
-Once configured, you can interact with your Gravitee instance using natural language. For Cloud instances, remember to specify the target environment ID or HRID.
-
--   `List all of my APIs in the 'dev' environment.`
--   `Get the health status for the API with ID '123-abc-456'.`
--   `Create a new API named "Weather API" that points to http://example.com/weather.`
--   `For the "Weather API", create a keyless plan, publish it, and start the API.`
 
 ## Contributions
 
-While we value contributions to this MCP Server, the code is generated programmatically. Any manual changes added to the `src` directory will be overwritten on the next generation.
-
-We look forward to hearing your feedback. Feel free to open a PR with changes to the generation process or open an issue with a proof of concept, and we'll do our best to include it in a future release.
-
-### MCP Server Created by [Speakeasy](https://www.speakeasy.com/?utm_source=gravitee-apim&utm_campaign=mcp-typescript)
+Open issues or pull requests for documentation, installation problems, or reproducible runtime issues.

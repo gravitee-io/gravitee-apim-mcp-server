@@ -16,34 +16,19 @@ export type DuplicateApiRequest = {
   DuplicateApiOptions: DuplicateApiOptions;
 };
 
-export const DuplicateApiRequest$zodSchema: z.ZodType<
-  DuplicateApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  DuplicateApiOptions: DuplicateApiOptions$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const DuplicateApiRequest$zodSchema: z.ZodType<DuplicateApiRequest> = z
+  .object({
+    DuplicateApiOptions: DuplicateApiOptions$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type DuplicateApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Api?: Api | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type DuplicateApiResponse = Api | ErrorT;
 
-export const DuplicateApiResponse$zodSchema: z.ZodType<
-  DuplicateApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  Api: Api$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const DuplicateApiResponse$zodSchema: z.ZodType<DuplicateApiResponse> = z
+  .union([
+    Api$zodSchema,
+    ErrorT$zodSchema,
+  ]);

@@ -13,13 +13,20 @@ const args = {
 export const tool$apiSubscriptionsRevokeAPISubscriptionAPIKey: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-revoke-api-subscription-api-key",
+  name: "revoke_api_subscription_api_key",
   description: `Revoke a subscription API Key
 
-Revoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br>
-A notification will be sent to the subscriber according to his portal notification options.
+Revoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br> A notification will be sent to the subscriber according to his portal notification options.
 
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Revoke Api Subscription Api Key",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsRevokeAPISubscriptionAPIKey(

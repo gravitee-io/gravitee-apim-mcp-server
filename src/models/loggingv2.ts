@@ -17,10 +17,13 @@ export type LoggingV2 = {
   condition?: string | undefined;
 };
 
-export const LoggingV2$zodSchema: z.ZodType<LoggingV2, z.ZodTypeDef, unknown> =
-  z.object({
-    condition: z.string().optional(),
-    content: LoggingContentV2$zodSchema.optional(),
-    mode: LoggingModeV2$zodSchema.optional(),
-    scope: LoggingScope$zodSchema.optional(),
-  });
+export const LoggingV2$zodSchema: z.ZodType<LoggingV2> = z.object({
+  condition: z.string().optional().describe("The condition of the logging"),
+  content: LoggingContentV2$zodSchema.optional().describe(
+    "The content of the logging.",
+  ),
+  mode: LoggingModeV2$zodSchema.optional().describe("The mode of the logging."),
+  scope: LoggingScope$zodSchema.optional().describe(
+    "The scope of the logging.",
+  ),
+});

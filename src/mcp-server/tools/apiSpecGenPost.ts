@@ -11,12 +11,16 @@ const args = {
 };
 
 export const tool$apiSpecGenPost: ToolDefinition<typeof args> = {
-  name: "API-spec-gen-post",
-  description: `Starts the API SpecGen
-
-Starts the API SpecGen
-
-User must have the API_DOCUMENTATION[CREATE] permission.`,
+  name: "post",
+  description: `Starts the API SpecGen`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Post",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSpecGenPost(

@@ -14,11 +14,8 @@ import {
 
 export type Configuration = HttpDynamicPropertyProviderConfiguration;
 
-export const Configuration$zodSchema: z.ZodType<
-  Configuration,
-  z.ZodTypeDef,
-  unknown
-> = HttpDynamicPropertyProviderConfiguration$zodSchema;
+export const Configuration$zodSchema: z.ZodType<Configuration> =
+  HttpDynamicPropertyProviderConfiguration$zodSchema;
 
 export type DynamicPropertyService = {
   schedule?: string | undefined;
@@ -28,12 +25,12 @@ export type DynamicPropertyService = {
 };
 
 export const DynamicPropertyService$zodSchema: z.ZodType<
-  DynamicPropertyService,
-  z.ZodTypeDef,
-  unknown
+  DynamicPropertyService
 > = z.object({
   configuration: HttpDynamicPropertyProviderConfiguration$zodSchema.optional(),
-  enabled: z.boolean().default(true),
-  provider: DynamicPropertyProvider$zodSchema.optional(),
-  schedule: z.string().optional(),
+  enabled: z.boolean().default(true).describe("Is the service enabled or not."),
+  provider: DynamicPropertyProvider$zodSchema.optional().describe(
+    "The type of the dynamic property provider.",
+  ),
+  schedule: z.string().optional().describe("The schedule of the service"),
 });

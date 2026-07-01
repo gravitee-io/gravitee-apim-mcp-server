@@ -13,9 +13,7 @@ export type FetchDocumentationPageRequest = {
 };
 
 export const FetchDocumentationPageRequest$zodSchema: z.ZodType<
-  FetchDocumentationPageRequest,
-  z.ZodTypeDef,
-  unknown
+  FetchDocumentationPageRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -24,22 +22,11 @@ export const FetchDocumentationPageRequest$zodSchema: z.ZodType<
   pageId: z.string().describe("Id of a documentation page."),
 });
 
-export type FetchDocumentationPageResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Page?: Page | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type FetchDocumentationPageResponse = Page | ErrorT;
 
 export const FetchDocumentationPageResponse$zodSchema: z.ZodType<
-  FetchDocumentationPageResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Page: Page$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  FetchDocumentationPageResponse
+> = z.union([
+  Page$zodSchema,
+  ErrorT$zodSchema,
+]);

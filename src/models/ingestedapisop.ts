@@ -5,9 +5,9 @@
 import * as z from "zod";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 import {
-  IngestedApisResponseIngestedApisResponse,
-  IngestedApisResponseIngestedApisResponse$zodSchema,
-} from "./ingestedapisresponseingestedapisresponse.js";
+  IngestedApisResponse,
+  IngestedApisResponse$zodSchema,
+} from "./ingestedapisresponse.js";
 
 export type IngestedApisRequest = {
   envId?: string | undefined;
@@ -16,39 +16,22 @@ export type IngestedApisRequest = {
   perPage?: number | undefined;
 };
 
-export const IngestedApisRequest$zodSchema: z.ZodType<
-  IngestedApisRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  integrationId: z.string().describe("Id of an integration."),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-});
+export const IngestedApisRequest$zodSchema: z.ZodType<IngestedApisRequest> = z
+  .object({
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    integrationId: z.string().describe("Id of an integration."),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+  });
 
-export type IngestedApisResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  IngestedApisResponse?: IngestedApisResponseIngestedApisResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type IngestedApisResponse1 = IngestedApisResponse | ErrorT;
 
-export const IngestedApisResponse$zodSchema: z.ZodType<
-  IngestedApisResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  IngestedApisResponse: IngestedApisResponseIngestedApisResponse$zodSchema
-    .optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const IngestedApisResponse1$zodSchema: z.ZodType<IngestedApisResponse1> =
+  z.union([
+    IngestedApisResponse$zodSchema,
+    ErrorT$zodSchema,
+  ]);

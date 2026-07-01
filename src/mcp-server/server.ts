@@ -12,26 +12,29 @@ import {
   createRegisterResourceTemplate,
 } from "./resources.js";
 import { MCPScope } from "./scopes.js";
-import { createRegisterTool } from "./tools.js";
+import {
+  createRegisterTool,
+  MCPToolAnnotationFilter,
+  registerDynamicTools,
+} from "./tools.js";
+import { tool$apiAnalyticsGetAPIAggregatedMessageLogs } from "./tools/apiAnalyticsGetAPIAggregatedMessageLogs.js";
 import { tool$apiAnalyticsGetAPIAnalyticsRequestCount } from "./tools/apiAnalyticsGetAPIAnalyticsRequestCount.js";
 import { tool$apiAnalyticsGetAPILog } from "./tools/apiAnalyticsGetAPILog.js";
+import { tool$apiAnalyticsGetAPILogErrorKeys } from "./tools/apiAnalyticsGetAPILogErrorKeys.js";
 import { tool$apiAnalyticsGetAPILogs } from "./tools/apiAnalyticsGetAPILogs.js";
 import { tool$apiAnalyticsGetAPIMessageLogs } from "./tools/apiAnalyticsGetAPIMessageLogs.js";
+import { tool$apiAnalyticsGetAPIMetricsDetail } from "./tools/apiAnalyticsGetAPIMetricsDetail.js";
 import { tool$apiAnalyticsGetAverageConnectionDuration } from "./tools/apiAnalyticsGetAverageConnectionDuration.js";
 import { tool$apiAnalyticsGetAverageMessagesPerRequest } from "./tools/apiAnalyticsGetAverageMessagesPerRequest.js";
+import { tool$apiAnalyticsGetNativeAPILog } from "./tools/apiAnalyticsGetNativeAPILog.js";
+import { tool$apiAnalyticsGetNativeAPILogs } from "./tools/apiAnalyticsGetNativeAPILogs.js";
+import { tool$apiAnalyticsGetNativeAPILogsSummary } from "./tools/apiAnalyticsGetNativeAPILogsSummary.js";
 import { tool$apiAnalyticsGetResponseStatusCodes } from "./tools/apiAnalyticsGetResponseStatusCodes.js";
 import { tool$apiAnalyticsGetResponseStatusOvertime } from "./tools/apiAnalyticsGetResponseStatusOvertime.js";
 import { tool$apiAnalyticsGetResponseTimeOverTime } from "./tools/apiAnalyticsGetResponseTimeOverTime.js";
+import { tool$apiAnalyticsPerformAPIAnalytics } from "./tools/apiAnalyticsPerformAPIAnalytics.js";
 import { tool$apiAuditsGetAPIAudits } from "./tools/apiAuditsGetAPIAudits.js";
 import { tool$apiAuditsListAPIAuditEvents } from "./tools/apiAuditsListAPIAuditEvents.js";
-import { tool$apiDocumentationCreateDocumentationPage } from "./tools/apiDocumentationCreateDocumentationPage.js";
-import { tool$apiDocumentationDeleteDocumentationPage } from "./tools/apiDocumentationDeleteDocumentationPage.js";
-import { tool$apiDocumentationFetchDocumentationPage } from "./tools/apiDocumentationFetchDocumentationPage.js";
-import { tool$apiDocumentationGetAPIPage } from "./tools/apiDocumentationGetAPIPage.js";
-import { tool$apiDocumentationGetAPIPages } from "./tools/apiDocumentationGetAPIPages.js";
-import { tool$apiDocumentationPublishDocumentationPage } from "./tools/apiDocumentationPublishDocumentationPage.js";
-import { tool$apiDocumentationUnpublishDocumentationPage } from "./tools/apiDocumentationUnpublishDocumentationPage.js";
-import { tool$apiDocumentationUpdateDocumentationPage } from "./tools/apiDocumentationUpdateDocumentationPage.js";
 import { tool$apiEventsGetAPIEventById } from "./tools/apiEventsGetAPIEventById.js";
 import { tool$apiEventsGetAPIEvents } from "./tools/apiEventsGetAPIEvents.js";
 import { tool$apiHealthGetAPIAvailability } from "./tools/apiHealthGetAPIAvailability.js";
@@ -39,6 +42,7 @@ import { tool$apiHealthGetAPIHealthAverageResponseTime } from "./tools/apiHealth
 import { tool$apiHealthGetAPIHealthAverageResponseTimeOvertime } from "./tools/apiHealthGetAPIHealthAverageResponseTimeOvertime.js";
 import { tool$apiHealthGetAPIHealthLogs } from "./tools/apiHealthGetAPIHealthLogs.js";
 import { tool$apiMembersAddAPIMember } from "./tools/apiMembersAddAPIMember.js";
+import { tool$apiMembersGetAPIPrimaryOwner } from "./tools/apiMembersGetAPIPrimaryOwner.js";
 import { tool$apiMembersListAPIMembers } from "./tools/apiMembersListAPIMembers.js";
 import { tool$apiMembersRemoveAPIMember } from "./tools/apiMembersRemoveAPIMember.js";
 import { tool$apiMembersUpdateAPIMember } from "./tools/apiMembersUpdateAPIMember.js";
@@ -48,27 +52,32 @@ import { tool$apiPlansDeleteAPIPlan } from "./tools/apiPlansDeleteAPIPlan.js";
 import { tool$apiPlansDeprecateAPIPlan } from "./tools/apiPlansDeprecateAPIPlan.js";
 import { tool$apiPlansGetAPIPlan } from "./tools/apiPlansGetAPIPlan.js";
 import { tool$apiPlansListAPIPlans } from "./tools/apiPlansListAPIPlans.js";
+import { tool$apiPlansPatchAPIPlan } from "./tools/apiPlansPatchAPIPlan.js";
 import { tool$apiPlansPublishAPIPlan } from "./tools/apiPlansPublishAPIPlan.js";
 import { tool$apiPlansUpdateAPIPlan } from "./tools/apiPlansUpdateAPIPlan.js";
+import { tool$apiProductGetAPIProductsForAPI } from "./tools/apiProductGetAPIProductsForAPI.js";
 import { tool$apiScoringGetAPIScoring } from "./tools/apiScoringGetAPIScoring.js";
 import { tool$apiScoringTriggerAPIScoring } from "./tools/apiScoringTriggerAPIScoring.js";
 import { tool$apIsCreateApi } from "./tools/apIsCreateApi.js";
 import { tool$apIsCreateApiDeployment } from "./tools/apIsCreateApiDeployment.js";
 import { tool$apIsCreateApiFromSwagger } from "./tools/apIsCreateApiFromSwagger.js";
+import { tool$apIsCreateApiFromWsdl } from "./tools/apIsCreateApiFromWsdl.js";
 import { tool$apIsCreateApiWithImportDefinition } from "./tools/apIsCreateApiWithImportDefinition.js";
+import { tool$apIsCreateApiWithImportDefinitionFromUrl } from "./tools/apIsCreateApiWithImportDefinitionFromUrl.js";
+import { tool$apIsDebugApi } from "./tools/apIsDebugApi.js";
 import { tool$apIsDeleteApi } from "./tools/apIsDeleteApi.js";
-import { tool$apIsDeleteApiBackground } from "./tools/apIsDeleteApiBackground.js";
-import { tool$apIsDeleteApiPicture } from "./tools/apIsDeleteApiPicture.js";
 import { tool$apIsDuplicateApi } from "./tools/apIsDuplicateApi.js";
 import { tool$apIsExportApiDefinition } from "./tools/apIsExportApiDefinition.js";
+import { tool$apIsExposedEntrypoints } from "./tools/apIsExposedEntrypoints.js";
 import { tool$apIsGetApi } from "./tools/apIsGetApi.js";
-import { tool$apIsGetApiBackground } from "./tools/apIsGetApiBackground.js";
 import { tool$apIsGetApiMetadata } from "./tools/apIsGetApiMetadata.js";
-import { tool$apIsGetApiPicture } from "./tools/apIsGetApiPicture.js";
 import { tool$apIsGetCurrentApiDeployment } from "./tools/apIsGetCurrentApiDeployment.js";
 import { tool$apIsListApis } from "./tools/apIsListApis.js";
+import { tool$apIsMigrateApi } from "./tools/apIsMigrateApi.js";
+import { tool$apIsPatchApi } from "./tools/apIsPatchApi.js";
 import { tool$apiSpecGenGetSpecGenState } from "./tools/apiSpecGenGetSpecGenState.js";
 import { tool$apiSpecGenPost } from "./tools/apiSpecGenPost.js";
+import { tool$apIsPromoteApi } from "./tools/apIsPromoteApi.js";
 import { tool$apIsReviewsAccept } from "./tools/apIsReviewsAccept.js";
 import { tool$apIsReviewsAsk } from "./tools/apIsReviewsAsk.js";
 import { tool$apIsReviewsReject } from "./tools/apIsReviewsReject.js";
@@ -97,8 +106,10 @@ import { tool$apiSubscriptionsUpdateAPISubscriptionAPIKey } from "./tools/apiSub
 import { tool$apiSubscriptionsVerifyAPIDeployment } from "./tools/apiSubscriptionsVerifyAPIDeployment.js";
 import { tool$apiSubscriptionsVerifyCreateAPISubscription } from "./tools/apiSubscriptionsVerifyCreateAPISubscription.js";
 import { tool$apIsUpdateApi } from "./tools/apIsUpdateApi.js";
-import { tool$apIsUpdateApiBackground } from "./tools/apIsUpdateApiBackground.js";
-import { tool$apIsUpdateApiPicture } from "./tools/apIsUpdateApiPicture.js";
+import { tool$apIsUpdateApiFromSwagger } from "./tools/apIsUpdateApiFromSwagger.js";
+import { tool$apIsUpdateApiFromWsdl } from "./tools/apIsUpdateApiFromWsdl.js";
+import { tool$apIsUpdateApiWithDefinition } from "./tools/apIsUpdateApiWithDefinition.js";
+import { tool$apIsUpdateApiWithDefinitionFromUrl } from "./tools/apIsUpdateApiWithDefinitionFromUrl.js";
 import { tool$apIsVerifyHosts } from "./tools/apIsVerifyHosts.js";
 import { tool$apIsVerifyPaths } from "./tools/apIsVerifyPaths.js";
 import { tool$asyncJobsListAsyncJob } from "./tools/asyncJobsListAsyncJob.js";
@@ -106,6 +117,7 @@ import { tool$categoriesGetCategoryApisPage } from "./tools/categoriesGetCategor
 import { tool$categoriesUpdateCategoryApi } from "./tools/categoriesUpdateCategoryApi.js";
 import { tool$groupsListGroupMembers } from "./tools/groupsListGroupMembers.js";
 import { tool$groupsListGroups } from "./tools/groupsListGroups.js";
+import { tool$groupsSearchGroups } from "./tools/groupsSearchGroups.js";
 import { tool$integrationMembersAddIntegrationMember } from "./tools/integrationMembersAddIntegrationMember.js";
 import { tool$integrationMembersListIntegrationMembers } from "./tools/integrationMembersListIntegrationMembers.js";
 import { tool$integrationMembersRemoveIntegrationMember } from "./tools/integrationMembersRemoveIntegrationMember.js";
@@ -119,11 +131,15 @@ import { tool$integrationsIngestIntegration } from "./tools/integrationsIngestIn
 import { tool$integrationsListIntegrations } from "./tools/integrationsListIntegrations.js";
 import { tool$integrationsPreviewIntegration } from "./tools/integrationsPreviewIntegration.js";
 import { tool$integrationsUpdateIntegration } from "./tools/integrationsUpdateIntegration.js";
+import { tool$newtaiFeedbackEl } from "./tools/newtaiFeedbackEl.js";
+import { tool$newtaiGenerateEl } from "./tools/newtaiGenerateEl.js";
 
 export function createMCPServer(deps: {
   logger: ConsoleLogger;
   allowedTools?: string[] | undefined;
+  dynamic?: boolean | undefined;
   scopes?: MCPScope[] | undefined;
+  annotationFilter?: MCPToolAnnotationFilter | undefined;
   getSDK?: () => GraviteeApimCore;
   serverURL?: string | undefined;
   security?: SDKOptions["security"] | undefined;
@@ -134,7 +150,7 @@ export function createMCPServer(deps: {
 }) {
   const server = new McpServer({
     name: "GraviteeApim",
-    version: "0.0.1",
+    version: "0.1.0",
   });
 
   const getClient = deps.getSDK || (() =>
@@ -157,12 +173,14 @@ export function createMCPServer(deps: {
   const scopes = new Set(deps.scopes);
 
   const allowedTools = deps.allowedTools && new Set(deps.allowedTools);
-  const tool = createRegisterTool(
+  const [tool, tools, toolMap] = createRegisterTool(
     deps.logger,
     server,
     getClient,
     scopes,
     allowedTools,
+    deps.dynamic,
+    deps.annotationFilter,
   );
   const resource = createRegisterResource(
     deps.logger,
@@ -183,31 +201,36 @@ export function createMCPServer(deps: {
   tool(tool$apIsListApis);
   tool(tool$apIsCreateApi);
   tool(tool$apIsCreateApiFromSwagger);
+  tool(tool$apIsCreateApiFromWsdl);
   tool(tool$apIsCreateApiWithImportDefinition);
+  tool(tool$apIsCreateApiWithImportDefinitionFromUrl);
   tool(tool$apIsSearchApis);
   tool(tool$apIsVerifyPaths);
   tool(tool$apIsVerifyHosts);
   tool(tool$apIsGetApi);
   tool(tool$apIsUpdateApi);
+  tool(tool$apIsPatchApi);
   tool(tool$apIsDeleteApi);
-  tool(tool$apIsGetApiBackground);
-  tool(tool$apIsUpdateApiBackground);
-  tool(tool$apIsDeleteApiBackground);
   tool(tool$apIsCreateApiDeployment);
   tool(tool$apIsGetCurrentApiDeployment);
-  tool(tool$apIsGetApiPicture);
-  tool(tool$apIsUpdateApiPicture);
-  tool(tool$apIsDeleteApiPicture);
   tool(tool$apIsGetApiMetadata);
   tool(tool$apIsExportApiDefinition);
+  tool(tool$apIsUpdateApiWithDefinition);
+  tool(tool$apIsUpdateApiFromWsdl);
+  tool(tool$apIsUpdateApiWithDefinitionFromUrl);
+  tool(tool$apIsUpdateApiFromSwagger);
   tool(tool$apIsStartApi);
+  tool(tool$apIsMigrateApi);
+  tool(tool$apIsPromoteApi);
   tool(tool$apIsStopApi);
   tool(tool$apIsTransferOwnership);
   tool(tool$apIsDuplicateApi);
   tool(tool$apIsRollbackApi);
+  tool(tool$apIsExposedEntrypoints);
   tool(tool$apIsReviewsAsk);
   tool(tool$apIsReviewsAccept);
   tool(tool$apIsReviewsReject);
+  tool(tool$apIsDebugApi);
   tool(tool$apiSubscriptionsVerifyAPIDeployment);
   tool(tool$apiSubscriptionsGetAPISubscribers);
   tool(tool$apiSubscriptionsGetAPISubscriptions);
@@ -227,6 +250,7 @@ export function createMCPServer(deps: {
   tool(tool$apiSubscriptionsUpdateAPISubscriptionAPIKey);
   tool(tool$apiSubscriptionsRevokeAPISubscriptionAPIKey);
   tool(tool$apiSubscriptionsReactivateAPISubscriptionAPIKey);
+  tool(tool$apiMembersGetAPIPrimaryOwner);
   tool(tool$apiMembersListAPIMembers);
   tool(tool$apiMembersAddAPIMember);
   tool(tool$apiMembersUpdateAPIMember);
@@ -235,11 +259,13 @@ export function createMCPServer(deps: {
   tool(tool$apiPlansCreateAPIPlan);
   tool(tool$apiPlansGetAPIPlan);
   tool(tool$apiPlansUpdateAPIPlan);
+  tool(tool$apiPlansPatchAPIPlan);
   tool(tool$apiPlansDeleteAPIPlan);
   tool(tool$apiPlansCloseAPIPlan);
   tool(tool$apiPlansDeprecateAPIPlan);
   tool(tool$apiPlansPublishAPIPlan);
   tool(tool$groupsListGroups);
+  tool(tool$groupsSearchGroups);
   tool(tool$groupsListGroupMembers);
   tool(tool$integrationsListIntegrations);
   tool(tool$integrationsCreateIntegration);
@@ -254,15 +280,22 @@ export function createMCPServer(deps: {
   tool(tool$integrationMembersAddIntegrationMember);
   tool(tool$integrationMembersUpdateIntegrationMember);
   tool(tool$integrationMembersRemoveIntegrationMember);
+  tool(tool$apiAnalyticsPerformAPIAnalytics);
   tool(tool$apiAnalyticsGetAPIAnalyticsRequestCount);
   tool(tool$apiAnalyticsGetAverageMessagesPerRequest);
   tool(tool$apiAnalyticsGetAverageConnectionDuration);
   tool(tool$apiAnalyticsGetResponseStatusCodes);
   tool(tool$apiAnalyticsGetResponseTimeOverTime);
   tool(tool$apiAnalyticsGetResponseStatusOvertime);
+  tool(tool$apiAnalyticsGetAPIMetricsDetail);
   tool(tool$apiAnalyticsGetAPILogs);
+  tool(tool$apiAnalyticsGetAPILogErrorKeys);
   tool(tool$apiAnalyticsGetAPILog);
+  tool(tool$apiAnalyticsGetAPIAggregatedMessageLogs);
   tool(tool$apiAnalyticsGetAPIMessageLogs);
+  tool(tool$apiAnalyticsGetNativeAPILogs);
+  tool(tool$apiAnalyticsGetNativeAPILogsSummary);
+  tool(tool$apiAnalyticsGetNativeAPILog);
   tool(tool$apiHealthGetAPIHealthAverageResponseTime);
   tool(tool$apiHealthGetAPIHealthAverageResponseTimeOvertime);
   tool(tool$apiHealthGetAPIAvailability);
@@ -271,14 +304,6 @@ export function createMCPServer(deps: {
   tool(tool$apiAuditsListAPIAuditEvents);
   tool(tool$apiEventsGetAPIEvents);
   tool(tool$apiEventsGetAPIEventById);
-  tool(tool$apiDocumentationGetAPIPages);
-  tool(tool$apiDocumentationCreateDocumentationPage);
-  tool(tool$apiDocumentationGetAPIPage);
-  tool(tool$apiDocumentationUpdateDocumentationPage);
-  tool(tool$apiDocumentationDeleteDocumentationPage);
-  tool(tool$apiDocumentationPublishDocumentationPage);
-  tool(tool$apiDocumentationUnpublishDocumentationPage);
-  tool(tool$apiDocumentationFetchDocumentationPage);
   tool(tool$apiSpecGenGetSpecGenState);
   tool(tool$apiSpecGenPost);
   tool(tool$apiScoringTriggerAPIScoring);
@@ -286,6 +311,13 @@ export function createMCPServer(deps: {
   tool(tool$categoriesGetCategoryApisPage);
   tool(tool$categoriesUpdateCategoryApi);
   tool(tool$asyncJobsListAsyncJob);
+  tool(tool$newtaiGenerateEl);
+  tool(tool$newtaiFeedbackEl);
+  tool(tool$apiProductGetAPIProductsForAPI);
 
-  return server;
+  if (deps.dynamic) {
+    registerDynamicTools(deps.logger, server, getClient, toolMap, scopes);
+  }
+
+  return { server, tools };
 }

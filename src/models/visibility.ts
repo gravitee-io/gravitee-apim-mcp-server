@@ -3,13 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The visibility of the resource regarding the portal.
  */
+export const Visibility = {
+  Public: "PUBLIC",
+  Private: "PRIVATE",
+} as const;
+/**
+ * The visibility of the resource regarding the portal.
+ */
+export type Visibility = ClosedEnum<typeof Visibility>;
+
 export const Visibility$zodSchema = z.enum([
   "PUBLIC",
   "PRIVATE",
 ]).describe("The visibility of the resource regarding the portal.");
-
-export type Visibility = z.infer<typeof Visibility$zodSchema>;

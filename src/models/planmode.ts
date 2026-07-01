@@ -3,15 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
  */
+export const PlanMode = {
+  Standard: "STANDARD",
+  Push: "PUSH",
+} as const;
+/**
+ * The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
+ */
+export type PlanMode = ClosedEnum<typeof PlanMode>;
+
 export const PlanMode$zodSchema = z.enum([
   "STANDARD",
   "PUSH",
 ]).describe(
   "The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).",
 );
-
-export type PlanMode = z.infer<typeof PlanMode$zodSchema>;

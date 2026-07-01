@@ -13,9 +13,8 @@ import { pathToFunc } from "../lib/url.js";
 import {
   DeleteApiPictureRequest,
   DeleteApiPictureRequest$zodSchema,
-  DeleteApiPictureResponse,
-  DeleteApiPictureResponse$zodSchema,
 } from "../models/deleteapipictureop.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -32,9 +31,12 @@ import { Result } from "../types/fp.js";
  * Delete an API's picture
  *
  * @remarks
+ * Delete an API's picture
+ *
  * Delete the API's picture.
  *
- * User must have the API_DEFINITION[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apIsDeleteApiPicture(
   client$: GraviteeApimCore,
@@ -42,7 +44,7 @@ export function apIsDeleteApiPicture(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    DeleteApiPictureResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -66,7 +68,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      DeleteApiPictureResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -113,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "deleteApiPicture",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -159,7 +161,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    DeleteApiPictureResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -168,8 +170,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, DeleteApiPictureResponse$zodSchema),
-    M.json("default", DeleteApiPictureResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -13,15 +13,33 @@ export type ApiSearchQuery = {
   ids?: Array<string> | undefined;
   definitionVersion?: DefinitionVersion | undefined;
   definitionVersions?: Array<DefinitionVersion> | undefined;
+  apiTypes?: Array<string> | undefined;
+  statuses?: Array<string> | undefined;
+  tags?: Array<string> | undefined;
+  categories?: Array<string> | undefined;
+  published?: Array<string> | undefined;
+  visibilities?: Array<string> | undefined;
+  allowedInApiProducts?: boolean | undefined;
+  hasOpenApiDocumentation?: boolean | undefined;
 };
 
-export const ApiSearchQuery$zodSchema: z.ZodType<
-  ApiSearchQuery,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  definitionVersion: DefinitionVersion$zodSchema.optional(),
+export const ApiSearchQuery$zodSchema: z.ZodType<ApiSearchQuery> = z.object({
+  allowedInApiProducts: z.boolean().optional().describe(
+    "When set, filters results to only APIs with this allowedInApiProducts value. When true, only returns APIs allowed in API Products. When false, only returns APIs not allowed in API Products. Only applicable for V4 HTTP Proxy APIs.",
+  ),
+  apiTypes: z.array(z.string()).optional(),
+  categories: z.array(z.string()).optional(),
+  definitionVersion: DefinitionVersion$zodSchema.optional().describe(
+    "API's gravitee definition version.",
+  ),
   definitionVersions: z.array(DefinitionVersion$zodSchema).optional(),
-  ids: z.array(z.string()).optional(),
-  query: z.string().optional(),
+  hasOpenApiDocumentation: z.boolean().optional().describe(
+    "When set, filters results based on whether the API has at least one published OpenAPI/Swagger documentation page. When true, only returns APIs that publish an OpenAPI documentation page. When false, only returns APIs without one.",
+  ),
+  ids: z.array(z.string()).optional().describe("List of ids to find"),
+  published: z.array(z.string()).optional(),
+  query: z.string().optional().describe("The query to search for."),
+  statuses: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional(),
+  visibilities: z.array(z.string()).optional(),
 });

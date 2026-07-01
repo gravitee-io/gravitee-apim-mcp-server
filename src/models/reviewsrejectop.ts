@@ -4,7 +4,6 @@
 
 import * as z from "zod";
 import { ApiReview, ApiReview$zodSchema } from "./apireview.js";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type ReviewsRejectRequest = {
   envId?: string | undefined;
@@ -12,32 +11,11 @@ export type ReviewsRejectRequest = {
   ApiReview: ApiReview;
 };
 
-export const ReviewsRejectRequest$zodSchema: z.ZodType<
-  ReviewsRejectRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiReview: ApiReview$zodSchema,
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
-
-export type ReviewsRejectResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const ReviewsRejectResponse$zodSchema: z.ZodType<
-  ReviewsRejectResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const ReviewsRejectRequest$zodSchema: z.ZodType<ReviewsRejectRequest> = z
+  .object({
+    ApiReview: ApiReview$zodSchema,
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });

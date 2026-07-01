@@ -37,9 +37,11 @@ export enum GetApiPictureAcceptEnum {
  * Get an API's picture
  *
  * @remarks
+ * Get an API's picture
+ *
  * Get the API's picture.
  *
- * User must have the API_DEFINITION[READ] permission.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apIsGetApiPicture(
   client$: GraviteeApimCore,
@@ -119,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiPicture",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -178,7 +180,7 @@ async function $do(
       ctype: "image/*",
       key: "ImageResponse",
     }),
-    M.json("default", GetApiPictureResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiPictureResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

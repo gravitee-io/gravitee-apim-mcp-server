@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiScoringGetAPIScoring: ToolDefinition<typeof args> = {
-  name: "API-scoring-get-api-scoring",
+  name: "get_api_scoring",
   description: `Get API Scoring
 
-Get API Scoring.
-
-Return a 404 HTTP Response status if API was never evaluated.`,
+Get API Scoring. Return a 404 HTTP Response status if API was never evaluated.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Scoring",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiScoringGetAPIScoring(

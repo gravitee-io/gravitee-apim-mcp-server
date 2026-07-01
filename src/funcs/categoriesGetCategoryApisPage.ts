@@ -114,7 +114,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getCategoryApisPage",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -173,7 +173,7 @@ async function $do(
     M.json(200, GetCategoryApisPageResponse$zodSchema, {
       key: "CategoryApisResponse",
     }),
-    M.json("default", GetCategoryApisPageResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetCategoryApisPageResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

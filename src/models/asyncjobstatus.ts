@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Status of the job.
  */
+export const AsyncJobStatus = {
+  Success: "SUCCESS",
+  Pending: "PENDING",
+  Error: "ERROR",
+  Timeout: "TIMEOUT",
+} as const;
+/**
+ * Status of the job.
+ */
+export type AsyncJobStatus = ClosedEnum<typeof AsyncJobStatus>;
+
 export const AsyncJobStatus$zodSchema = z.enum([
   "SUCCESS",
   "PENDING",
   "ERROR",
   "TIMEOUT",
 ]).describe("Status of the job.");
-
-export type AsyncJobStatus = z.infer<typeof AsyncJobStatus$zodSchema>;

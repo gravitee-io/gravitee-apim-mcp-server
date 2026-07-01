@@ -15,9 +15,7 @@ export type GetSpecGenStateRequest = {
 };
 
 export const GetSpecGenStateRequest$zodSchema: z.ZodType<
-  GetSpecGenStateRequest,
-  z.ZodTypeDef,
-  unknown
+  GetSpecGenStateRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -25,22 +23,11 @@ export const GetSpecGenStateRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type GetSpecGenStateResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiSpecGenRequestState?: ApiSpecGenRequestState | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetSpecGenStateResponse = ApiSpecGenRequestState | ErrorT;
 
 export const GetSpecGenStateResponse$zodSchema: z.ZodType<
-  GetSpecGenStateResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiSpecGenRequestState: ApiSpecGenRequestState$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetSpecGenStateResponse
+> = z.union([
+  ApiSpecGenRequestState$zodSchema,
+  ErrorT$zodSchema,
+]);

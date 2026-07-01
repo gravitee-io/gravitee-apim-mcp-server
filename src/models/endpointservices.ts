@@ -7,10 +7,8 @@ import { ServiceV4, ServiceV4$zodSchema } from "./servicev4.js";
 
 export type EndpointServices = { healthCheck?: ServiceV4 | undefined };
 
-export const EndpointServices$zodSchema: z.ZodType<
-  EndpointServices,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  healthCheck: ServiceV4$zodSchema.optional(),
-});
+export const EndpointServices$zodSchema: z.ZodType<EndpointServices> = z.object(
+  {
+    healthCheck: ServiceV4$zodSchema.optional(),
+  },
+);

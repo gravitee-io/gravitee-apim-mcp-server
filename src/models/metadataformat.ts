@@ -3,10 +3,24 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The format of the metadata.
  */
+export const MetadataFormat = {
+  String: "STRING",
+  Numeric: "NUMERIC",
+  Boolean: "BOOLEAN",
+  Date: "DATE",
+  Mail: "MAIL",
+  Url: "URL",
+} as const;
+/**
+ * The format of the metadata.
+ */
+export type MetadataFormat = ClosedEnum<typeof MetadataFormat>;
+
 export const MetadataFormat$zodSchema = z.enum([
   "STRING",
   "NUMERIC",
@@ -15,5 +29,3 @@ export const MetadataFormat$zodSchema = z.enum([
   "MAIL",
   "URL",
 ]).describe("The format of the metadata.");
-
-export type MetadataFormat = z.infer<typeof MetadataFormat$zodSchema>;

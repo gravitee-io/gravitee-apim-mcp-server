@@ -10,6 +10,7 @@ import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,8 +23,6 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   StopApiRequest,
   StopApiRequest$zodSchema,
-  StopApiResponse,
-  StopApiResponse$zodSchema,
 } from "../models/stopapiop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -32,13 +31,12 @@ import { Result } from "../types/fp.js";
  * Stop an API
  *
  * @remarks
+ * Stop an API
+ *
  * Change the API's status to STOPPED.
  *
- * Return a 400 HTTP Error:
- *  - when user tries to stop an ARCHIVED API
- *  - when the API is already STOPPED.
- *
- * User must have the API_DEFINITION[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
+ * Stops gateway instances for the API; use only when traffic should stop.
  */
 export function apIsStopApi(
   client$: GraviteeApimCore,
@@ -46,7 +44,7 @@ export function apIsStopApi(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    StopApiResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -70,7 +68,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      StopApiResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -117,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "stopApi",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -163,7 +161,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    StopApiResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -172,8 +170,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, StopApiResponse$zodSchema),
-    M.json("default", StopApiResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

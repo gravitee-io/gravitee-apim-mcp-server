@@ -11,17 +11,13 @@ import {
 export type EndpointV4Configuration = {};
 
 export const EndpointV4Configuration$zodSchema: z.ZodType<
-  EndpointV4Configuration,
-  z.ZodTypeDef,
-  unknown
+  EndpointV4Configuration
 > = z.object({});
 
 export type SharedConfigurationOverride = {};
 
 export const SharedConfigurationOverride$zodSchema: z.ZodType<
-  SharedConfigurationOverride,
-  z.ZodTypeDef,
-  unknown
+  SharedConfigurationOverride
 > = z.object({});
 
 export type EndpointV4 = {
@@ -36,20 +32,22 @@ export type EndpointV4 = {
   tenants?: Array<string> | undefined;
 };
 
-export const EndpointV4$zodSchema: z.ZodType<
-  EndpointV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const EndpointV4$zodSchema: z.ZodType<EndpointV4> = z.object({
   configuration: z.lazy(() => EndpointV4Configuration$zodSchema).optional(),
-  inheritConfiguration: z.boolean().default(false),
-  name: z.string().optional(),
-  secondary: z.boolean().default(false),
+  inheritConfiguration: z.boolean().default(false).describe(
+    "Is the configuration of the endpoint inherited from the endpoint group it belongs to.",
+  ),
+  name: z.string().optional().describe("The name of the endpoint"),
+  secondary: z.boolean().default(false).describe(
+    "Is the endpoint a secondary endpoint.",
+  ),
   services: EndpointServices$zodSchema.optional(),
   sharedConfigurationOverride: z.lazy(() =>
     SharedConfigurationOverride$zodSchema
   ).optional(),
-  tenants: z.array(z.string()).optional(),
-  type: z.string(),
-  weight: z.number().int().default(1),
+  tenants: z.array(z.string()).optional().describe(
+    "The list of tenants associated to the endpoint.",
+  ),
+  type: z.string().describe("The type of the endpoint"),
+  weight: z.int().default(1).describe("The weight of the endpoint"),
 });

@@ -11,13 +11,20 @@ const args = {
 };
 
 export const tool$integrationsDeleteIntegration: ToolDefinition<typeof args> = {
-  name: "integrations-delete-integration",
+  name: "delete_integration",
   description: `Delete Integration
 
-Delete specific integration
+Delete specific integration To delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission. Deletion is not possible if there is any federated API associated.
 
-To delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission.
-Deletion is not possible if there is any federated API associated.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Delete Integration",
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationsDeleteIntegration(

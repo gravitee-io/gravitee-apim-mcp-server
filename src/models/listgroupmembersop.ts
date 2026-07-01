@@ -17,37 +17,23 @@ export type ListGroupMembersRequest = {
 };
 
 export const ListGroupMembersRequest$zodSchema: z.ZodType<
-  ListGroupMembersRequest,
-  z.ZodTypeDef,
-  unknown
+  ListGroupMembersRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   groupId: z.string().describe("Id of a group."),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
 });
 
-export type ListGroupMembersResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  MembersResponse?: MembersResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListGroupMembersResponse = MembersResponse | ErrorT;
 
 export const ListGroupMembersResponse$zodSchema: z.ZodType<
-  ListGroupMembersResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  MembersResponse: MembersResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  ListGroupMembersResponse
+> = z.union([
+  MembersResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

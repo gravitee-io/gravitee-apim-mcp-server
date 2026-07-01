@@ -13,14 +13,18 @@ const args = {
 export const tool$apiSubscriptionsGetAPISubscribers: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-get-api-subscribers",
+  name: "get_api_subscribers",
   description: `Get the API's subscribers
 
-List applications that have subscribed to a given API.<br>
-The results are paginated.
-
-User must have API_SUBSCRIPTION[READ] permissions to access endpoint.
-`,
+List applications that have subscribed to a given API.<br> The results are paginated.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Subscribers",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsGetAPISubscribers(

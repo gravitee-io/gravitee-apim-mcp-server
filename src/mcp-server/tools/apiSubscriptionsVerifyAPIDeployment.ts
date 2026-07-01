@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsVerifyAPIDeployment: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-verify-api-deployment",
+  name: "verify_api_deployment",
   description: `Check if a deployment is possible
 
-Check if an API deployment is possible given the API's definition and license used by the organization.
-
-User must have the API_DEFINITION[READ] permission.`,
+Check if an API deployment is possible given the API's definition and license used by the organization.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Verify Api Deployment",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsVerifyAPIDeployment(

@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Close one API's subscription
  *
  * @remarks
+ * Close one API's subscription
+ *
  * Close the API's subscription.
  *
- * User must have the API_SUBSCRIPTION[UPDATE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apiSubscriptionsCloseAPISubscription(
   client$: GraviteeApimCore,
@@ -119,7 +121,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "closeApiSubscription",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -177,7 +179,9 @@ async function $do(
     M.json(200, CloseApiSubscriptionResponse$zodSchema, {
       key: "Subscription",
     }),
-    M.json("default", CloseApiSubscriptionResponse$zodSchema, { key: "Error" }),
+    M.json("default", CloseApiSubscriptionResponse$zodSchema, {
+      key: "ErrorT",
+    }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

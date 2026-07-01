@@ -3,14 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the dynamic property provider.
  */
+export const DynamicPropertyProvider = {
+  Http: "HTTP",
+} as const;
+/**
+ * The type of the dynamic property provider.
+ */
+export type DynamicPropertyProvider = ClosedEnum<
+  typeof DynamicPropertyProvider
+>;
+
 export const DynamicPropertyProvider$zodSchema = z.enum([
   "HTTP",
 ]).describe("The type of the dynamic property provider.");
-
-export type DynamicPropertyProvider = z.infer<
-  typeof DynamicPropertyProvider$zodSchema
->;

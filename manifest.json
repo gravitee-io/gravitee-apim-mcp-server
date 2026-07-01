@@ -1,11 +1,11 @@
 {
-  "dxt_version": "0.1",
+  "manifest_version": "0.3",
   "name": "gravitee-apim",
-  "version": "0.0.1",
-  "description": "",
-  "long_description": "Gravitee.io APIM - Management API - APIs: This is the OpenAPI specification for our new version of APIM Management API.",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for the Gravitee APIM Management API.",
+  "long_description": "Gravitee APIM MCP server for the APIM 4.12 Management API v2 APIs surface. It exposes API management tools for MCP-compatible clients.",
   "author": {
-    "name": "Speakeasy"
+    "name": "Gravitee.io"
   },
   "server": {
     "type": "node",
@@ -15,462 +15,532 @@
       "args": [
         "${__dirname}/bin/mcp-server.js",
         "start",
+        "--mode",
+        "dynamic",
+        "--server-index",
+        "${user_config.server_index}",
+        "--protocol",
+        "${user_config.protocol}",
+        "--management-api-host",
+        "${user_config.management_api_host}",
+        "--org-id",
+        "${user_config.org_id}",
         "--bearer-auth",
-        "${user_config.bearer_auth}",
-        "--server-url",
-        "${user_config.server_url}"
+        "${user_config.bearer_auth}"
       ]
     }
   },
-  "display_name": "Gravitee Apim",
+  "display_name": "Gravitee APIM",
+  "prompts": [],
+  "keywords": [
+    "gravitee",
+    "apim",
+    "management",
+    "api",
+    "apis"
+  ],
+  "user_config": {
+    "server_index": {
+      "type": "number",
+      "title": "Server Index",
+      "description": "Available servers: [{protocol}://{managementAPIHost}/management/v2, {protocol}://{managementAPIHost}/management/v2/organizations/{orgId}]",
+      "required": false,
+      "default": "0",
+      "max": 1
+    },
+    "protocol": {
+      "type": "string",
+      "title": "Protocol",
+      "description": "Protocol used to connect to the Management API. Options: https, http.",
+      "required": false,
+      "default": "https"
+    },
+    "management_api_host": {
+      "type": "string",
+      "title": "Management API host",
+      "description": "Host name of the APIM Management API, without protocol or path.",
+      "required": false,
+      "default": "localhost:8083"
+    },
+    "org_id": {
+      "type": "string",
+      "title": "Organization ID",
+      "description": "APIM organization ID.",
+      "required": false,
+      "default": "DEFAULT"
+    },
+    "bearer_auth": {
+      "type": "string",
+      "title": "Bearer token",
+      "description": "APIM bearer token used to authenticate Management API requests.",
+      "required": true,
+      "sensitive": true
+    }
+  },
   "tools": [
     {
-      "name": "AP-is-list-apis",
-      "description": "List APIs\n\nGet the list of APIs for a specific environment.<br>\nThe results are paginated.\n\nUser must have the ENVIRONMENT_API[READ] permission."
+      "name": "list_apis",
+      "description": "List APIs\n\nGet the list of APIs for a specific environment.<br> The results are paginated."
     },
     {
-      "name": "AP-is-create-api",
-      "description": "Create an API\n\n⚠️ Support only v4 API for the moment. ⚠️<br>\nCreate a new API.\n\nUser must have the ENVIRONMENT_API[CREATE] permission."
+      "name": "create_api",
+      "description": "Create an API\n\n⚠️ Support only v4 API for the moment. ⚠️<br> Create a new API.\n\nFor V4 PROXY APIs, provide listeners with HTTP paths and an http-proxy entrypoint, plus endpointGroups with an http-proxy endpoint.\nExample request body: {\"name\":\"My API\",\"apiVersion\":\"1.0\",\"definitionVersion\":\"V4\",\"type\":\"PROXY\",\"listeners\":[{\"type\":\"HTTP\",\"paths\":[{\"path\":\"/my-api\"}],\"entrypoints\":[{\"type\":\"http-proxy\"}]}],\"endpointGroups\":[{\"name\":\"default\",\"type\":\"http-proxy\",\"endpoints\":[{\"name\":\"backend\",\"type\":\"http-proxy\",\"configuration\":{\"target\":\"https://backend.example.com\"}}]}]}"
     },
     {
-      "name": "AP-is-create-api-from-swagger",
-      "description": "Import API definition\n\n⚠️ Support only v4 API for the moment. ⚠️<br>\nCreate an API by importing from an Open API descriptor. <br>\nThis definition can be retrieved from \\`GET /environments/{envId}/apis/{apiId}/_export/definition\\`\n\nUser must have the ENVIRONMENT_API[CREATE] permission."
+      "name": "create_api_from_swagger",
+      "description": "Import API definition\n\n⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by importing from an Open API descriptor. <br> This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`"
     },
     {
-      "name": "AP-is-create-api-with-import-definition",
-      "description": "Import API definition\n\n⚠️ Support only v4 API for the moment. ⚠️<br>\nCreate an API by importing an API definition. <br>\nThis definition can be retrieved from \\`GET /environments/{envId}/apis/{apiId}/_export/definition\\`\n\nUser must have the ENVIRONMENT_API[CREATE] permission."
+      "name": "create_api_from_wsdl",
+      "description": "Create API from WSDL\n\nCreate a v4 HTTP Proxy API from a WSDL descriptor. The WSDL is converted to OpenAPI and processed through the v4 OAI import pipeline. Payload can be inline WSDL (type: INLINE) or a remote URL (type: URL)."
     },
     {
-      "name": "AP-is-search-apis",
-      "description": "Search APIs\n\nSearch APIs for a specific environment.<br>\nThe results are paginated and can be sorted.\n\nUser must have the ENVIRONMENT_API[READ] permission."
+      "name": "create_api_with_import_definition",
+      "description": "Import API definition\n\n⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by importing an API definition. <br> This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`"
     },
     {
-      "name": "AP-is-verify-paths",
-      "description": "Verify HTTP API paths\n\nVerify paths before creating or updating a HTTP API.<br>\nThis will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br>\nThe result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)"
+      "name": "create_api_with_import_definition_from_url",
+      "description": "Import API definition from a remote URL\n\n⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by fetching an API definition from a remote URL.<br> The URL must be permitted by the configured import whitelist."
     },
     {
-      "name": "AP-is-verify-hosts",
-      "description": "Verify TCP and Kafka API hosts\n\nVerify hosts before creating or updating a TCP or Kafka API.<br>\nThis will check it is not already used by other APIs in the environment.<br>\nThe result will indicate if the hosts are OK, and give the reason of the failure if they are not."
+      "name": "search_apis",
+      "description": "Search APIs\n\nSearch APIs for a specific environment.<br> The results are paginated and can be sorted."
     },
     {
-      "name": "AP-is-get-api",
-      "description": "Get a specific API\n\nGet a specific API.\n\nUser must have at least one management (create, update, or delete) permission on the API to access it."
+      "name": "verify_paths",
+      "description": "Verify HTTP API paths\n\nVerify paths before creating or updating a HTTP API.<br> This will check paths and hosts (depending on environment domain restrictions), and will check that path is not already used by other APIs in the environment.<br> The result will indicate if the paths are OK, and give the reason of the failure if they are not (path contains invalid chars, path is already covered by another API,...)"
     },
     {
-      "name": "AP-is-update-api",
-      "description": "Update an API\n\nUpdate a V2 or a V4 API.\n\nUser must have API_DEFINITION[UPDATE] or API_GATEWAY_DEFINITION[UPDATE] permissions."
+      "name": "verify_hosts",
+      "description": "Verify TCP and Kafka API hosts\n\nVerify hosts before creating or updating a TCP or Kafka API.<br> This will check it is not already used by other APIs in the environment.<br> The result will indicate if the hosts are OK, and give the reason of the failure if they are not."
     },
     {
-      "name": "AP-is-delete-api",
-      "description": "Delete an API\n\nDelete a V2 or a V4 API.\n\nUser must have API_DEFINITION[DELETE] permission."
+      "name": "get_api",
+      "description": "Get a specific API\n\nGet a specific API."
     },
     {
-      "name": "AP-is-get-api-background",
-      "description": "Get an API's background picture\n\nGet the API's background picture.\n\nUser must have the API_DEFINITION[READ] permission."
+      "name": "update_api",
+      "description": "Update an API\n\nUpdate a V2 or a V4 API.\n\nFetch the current API first, modify the complete API body, then submit the full update payload."
     },
     {
-      "name": "AP-is-update-api-background",
-      "description": "Update an API's background\n\nUpdate the API's background.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "patch_api",
+      "description": "Patch a V4 HTTP Proxy API\n\nPartially update a V4 HTTP Proxy API using JSON Patch (RFC 6902) or JSON Merge Patch (RFC 7396). Only the following fields are patchable: name, description, apiVersion, visibility, labels, tags, lifecycleState, categories, groups, analytics, failover, flowExecution, flows, services, resources, endpointGroups,"
     },
     {
-      "name": "AP-is-delete-api-background",
-      "description": "Delete an API's background\n\nDelete the API's background.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "delete_api",
+      "description": "Delete an API\n\nDelete a V2 or a V4 API.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "AP-is-create-api-deployment",
-      "description": "Request a deployment to gateway instances\n\nRequest a deployment for a given API. <br>\nAn optional deployment label can be given to the requested deployment.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "create_api_deployment",
+      "description": "Request a deployment to gateway instances\n\nRequest a deployment for a given API. <br> An optional deployment label can be given to the requested deployment.\n\nDeploy after configuration or plan changes and before starting the API.\nExample request body: {\"deploymentLabel\":\"release\"}"
     },
     {
-      "name": "AP-is-get-current-api-deployment",
-      "description": "Get the current deployment of an API\n\nGet the current deployment of an API.\n\nUser must have the API_DEFINITION[READ] permission."
+      "name": "get_current_api_deployment",
+      "description": "Get the current deployment of an API\n\nGet the current deployment of an API."
     },
     {
-      "name": "AP-is-get-api-picture",
-      "description": "Get an API's picture\n\nGet the API's picture.\n\nUser must have the API_DEFINITION[READ] permission."
+      "name": "get_api_metadata",
+      "description": "Get metadata pertaining to API\n\nGet the metadata that pertains to an API. Can be global and API metadata."
     },
     {
-      "name": "AP-is-update-api-picture",
-      "description": "Update an API's picture\n\nUpdate the API's picture.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "export_api_definition",
+      "description": "Export an API\n\n⚠️ Support only v4 API for the moment. ⚠️ Export an API to a JSON file. User should also have these permissions for specific data: - API_DEFINITION[READ] for the API - API_MEMBER[READ] for the API's members - API_PLAN[READ] for the API's plans"
     },
     {
-      "name": "AP-is-delete-api-picture",
-      "description": "Delete an API's picture\n\nDelete the API's picture.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "update_api_with_definition",
+      "description": "Update API from definition\n\nUpdate an existing API by importing a Gravitee API definition.<br> This definition can be retrieved from `GET /environments/{envId}/apis/{apiId}/_export/definition`"
     },
     {
-      "name": "AP-is-get-api-metadata",
-      "description": "Get metadata pertaining to API\n\nGet the metadata that pertains to an API. Can be global and API metadata.\n\nUser must have the API_METADATA[READ] permission."
+      "name": "update_api_from_wsdl",
+      "description": "Update API from WSDL descriptor\n\nUpdate an existing API by importing a WSDL descriptor.<br> The descriptor payload must be a valid WSDL 1.1 document, either as inline content or a remote URL."
     },
     {
-      "name": "AP-is-export-api-definition",
-      "description": "Export an API\n\n⚠️ Support only v4 API for the moment. ⚠️\n\nExport an API to a JSON file.\n\nUser must have at least the API_DEFINITION[READ] permission.<br>\nUser should also have these permissions for specific data:\n - API_DEFINITION[READ] for the API\n - API_MEMBER[READ] for the API's members\n - API_PLAN[READ] for the API's plans\n - API_METADATA[READ] for the API's metadata\n - API_DOCUMENTATION[READ] for the API's documentation pages"
+      "name": "update_api_with_definition_from_url",
+      "description": "Update API from a definition fetched from a remote URL\n\n⚠️ Support only v4 API for the moment. ⚠️<br> Update an existing API by fetching a Gravitee API definition from a remote URL.<br> The URL must be permitted by the configured import whitelist."
     },
     {
-      "name": "AP-is-start-api",
-      "description": "Start an API\n\nChange the API's status to STARTED.\n\nReturn a 400 HTTP Error:\n - when user tries to start an ARCHIVED API\n - when the API is already STARTED\n - when the API needs to be reviewed (only if Review feature is activated).\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "update_api_from_swagger",
+      "description": "Update API from OpenAPI descriptor\n\nUpdate an existing API by importing an OpenAPI (Swagger) descriptor.<br> The descriptor payload must be a valid OpenAPI 2.x or 3.x document in JSON or YAML format."
     },
     {
-      "name": "AP-is-stop-api",
-      "description": "Stop an API\n\nChange the API's status to STOPPED.\n\nReturn a 400 HTTP Error:\n - when user tries to stop an ARCHIVED API\n - when the API is already STOPPED.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "start_api",
+      "description": "Start an API\n\nChange the API's status to STARTED.\n\nStart only after the API has been deployed."
     },
     {
-      "name": "AP-is-transfer-ownership",
-      "description": "Transfer the ownership of the API\n\nTransfer the ownership of the API to a user, a group or an api member.\n\nReturn a 404 HTTP Error if API cannot be found.\n\nReturn a 400 HTTP Error:\n - when user tries to stop an ARCHIVED API\n - when the API is already STOPPED.\n\nUser must have the API_MEMBER[UPDATE] permission."
+      "name": "migrate_api",
+      "description": "Migrate an API\n\n⚠️ Experimental endpoints - subject to change Migrate an APIv2 to APIv4.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "AP-is-duplicate-api",
-      "description": "Duplicate an API\n\nCreate a new API from an existing one.\nContext-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request.\nUser must have at least the API_DEFINITION[READ] and ENVIRONMENT_API[CREATE] permissions."
+      "name": "promote_api",
+      "description": "Promote an API\n\nPromote the API to another environment.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "AP-is-rollback-api",
-      "description": "Rollback an API\n\nRollback an API to a previous version.\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "stop_api",
+      "description": "Stop an API\n\nChange the API's status to STOPPED.\n\nHigh risk operation: require explicit user confirmation before execution.\nStops gateway instances for the API; use only when traffic should stop."
     },
     {
-      "name": "AP-is-reviews-ask",
-      "description": "Ask for a review\n\nAsk for a review\n\nReturn a 400 HTTP Error:\n - when user tries to change reviews state of an ARCHIVED API\n - when user tries to change reviews state of an API already in review\n\nUser must have the API_DEFINITION[UPDATE] permission."
+      "name": "transfer_ownership",
+      "description": "Transfer the ownership of the API\n\nTransfer the ownership of the API to a user, a group or an api member. Return a 404 HTTP Error if API cannot be found.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "AP-is-reviews-accept",
-      "description": "Accept a review\n\nAccept a review\n\nReturn a 400 HTTP Error:\n - when user tries to change reviews state of an ARCHIVED API\n - when user tries to change reviews state of an API that is not in review\n\nUser must have the API_REVIEWS[UPDATE] permission."
+      "name": "duplicate_api",
+      "description": "Duplicate an API\n\nCreate a new API from an existing one. Context-path is required for HTTP APIs and host is required for TCP APIs. If one of these fields is missing, then it returns a 400 Bad Request."
     },
     {
-      "name": "AP-is-reviews-reject",
-      "description": "Reject a review\n\nReject a review\n\nReturn a 400 HTTP Error:\n - when user tries to change reviews state of an ARCHIVED API\n - when user tries to change reviews state of an API that is not in review\n\nUser must have the API_REVIEWS[UPDATE] permission."
+      "name": "rollback_api",
+      "description": "Rollback an API\n\nRollback an API to a previous version.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-subscriptions-verify-api-deployment",
-      "description": "Check if a deployment is possible\n\nCheck if an API deployment is possible given the API's definition and license used by the organization.\n\nUser must have the API_DEFINITION[READ] permission."
+      "name": "exposed_entrypoints",
+      "description": "Get Exposed API Entrypoints\n\nGet the list of exposed API entry points. This list represents the API's usable entrypoints that can be used by a client. It takes into account tags associated with the API or configured AccessPoint."
     },
     {
-      "name": "API-subscriptions-get-api-subscribers",
-      "description": "Get the API's subscribers\n\nList applications that have subscribed to a given API.<br>\nThe results are paginated.\n\nUser must have API_SUBSCRIPTION[READ] permissions to access endpoint.\n"
+      "name": "reviews_ask",
+      "description": "Ask for a review"
     },
     {
-      "name": "API-subscriptions-get-api-subscriptions",
-      "description": "Get the API's subscriptions\n\nList subscriptions for a given API, always filtered by a \\`status\\` and the possibility to filter by \\`security\\`.\n\nUser must have API_SUBSCRIPTION[READ] permissions to access endpoint.\n"
+      "name": "reviews_accept",
+      "description": "Accept a review"
     },
     {
-      "name": "API-subscriptions-create-api-subscription",
-      "description": "Subscribe to an API's plan\n\nCreate a new subscription on a given API.\n\nUser must have the API_SUBSCRIPTION[CREATE] permission."
+      "name": "reviews_reject",
+      "description": "Reject a review\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-subscriptions-export-api-subscriptions",
-      "description": "Export API subscriptions as CSV\n\nExport API subscriptions to a CSV file.\n\nUser must have the API_SUBSCRIPTION[READ] permission."
+      "name": "debug_api",
+      "description": "Debug an API on gateway instances\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-subscriptions-verify-create-api-subscription",
-      "description": "Check a subscription can be created\n\nCheck a subscription can be created with given API Key, and application.\n\nUser must have the API_SUBSCRIPTION[CREATE] permission."
+      "name": "verify_api_deployment",
+      "description": "Check if a deployment is possible\n\nCheck if an API deployment is possible given the API's definition and license used by the organization."
     },
     {
-      "name": "API-subscriptions-get-api-subscription",
-      "description": "Get one API's subscription\n\nGet the API's subscription by its identifier.\n\nUser must have the API_SUBSCRIPTION[READ] permission."
+      "name": "get_api_subscribers",
+      "description": "Get the API's subscribers\n\nList applications that have subscribed to a given API.<br> The results are paginated."
     },
     {
-      "name": "API-subscriptions-update-api-subscription",
-      "description": "Update one API's subscription\n\nUpdate the API's subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "get_api_subscriptions",
+      "description": "Get the API's subscriptions\n\nList subscriptions for a given API, always filtered by a `status` and the possibility to filter by `security`."
     },
     {
-      "name": "API-subscriptions-close-api-subscription",
-      "description": "Close one API's subscription\n\nClose the API's subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "create_api_subscription",
+      "description": "Subscribe to an API's plan\n\nCreate a new subscription on a given API."
     },
     {
-      "name": "API-subscriptions-pause-api-subscription",
-      "description": "Pause one API's subscription\n\nPause the API's subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "export_api_subscriptions",
+      "description": "Export API subscriptions as CSV\n\nExport API subscriptions to a CSV file."
     },
     {
-      "name": "API-subscriptions-resume-api-subscription",
-      "description": "Resume a paused API's subscription\n\nResume a previously paused subscription.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "verify_create_api_subscription",
+      "description": "Check a subscription can be created\n\nCheck a subscription can be created with given API Key, and application."
     },
     {
-      "name": "API-subscriptions-accept-api-subscription",
-      "description": "Accept an API subscription\n\nAccept an API subscription with an optional starting / ending dates and reason.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "get_api_subscription",
+      "description": "Get one API's subscription\n\nGet the API's subscription by its identifier."
     },
     {
-      "name": "API-subscriptions-reject-api-subscription",
-      "description": "Reject an API subscription\n\nReject an API subscription with an optional reason.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "update_api_subscription",
+      "description": "Update one API's subscription\n\nUpdate the API's subscription."
     },
     {
-      "name": "API-subscriptions-transfer-api-subscription",
-      "description": "Transfer an API subscription\n\nTransfer an API subscription to another plan.<br>\nThe targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "close_api_subscription",
+      "description": "Close one API's subscription\n\nClose the API's subscription.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-subscriptions-get-api-subscription-api-keys",
-      "description": "Get subscription's API Keys\n\nGet the subscription API Keys.\n\nUser must have the API_SUBSCRIPTION[READ] permission."
+      "name": "pause_api_subscription",
+      "description": "Pause one API's subscription\n\nPause the API's subscription."
     },
     {
-      "name": "API-subscriptions-renew-api-subscription-api-keys",
-      "description": "Renew the subscription API Keys.\n\nRenew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br>\nThe newly created API Key is returned in response.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "resume_api_subscription",
+      "description": "Resume a paused API's subscription\n\nResume a previously paused subscription."
     },
     {
-      "name": "API-subscriptions-update-api-subscription-api-key",
-      "description": "Update a subscription API Key\n\nUpdate the subscription API Key.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "accept_api_subscription",
+      "description": "Accept an API subscription\n\nAccept an API subscription with an optional starting / ending dates and reason."
     },
     {
-      "name": "API-subscriptions-revoke-api-subscription-api-key",
-      "description": "Revoke a subscription API Key\n\nRevoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br>\nA notification will be sent to the subscriber according to his portal notification options.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "reject_api_subscription",
+      "description": "Reject an API subscription\n\nReject an API subscription with an optional reason.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-subscriptions-reactivate-api-subscription-api-key",
-      "description": "Reactivate subscription API Key\n\nReactivate the revoked or expired subscription API Key.\n\nUser must have the API_SUBSCRIPTION[UPDATE] permission."
+      "name": "transfer_api_subscription",
+      "description": "Transfer an API subscription\n\nTransfer an API subscription to another plan.<br> The targeted plan must be published and must have the same security type. Transfer cannot be performed if general conditions apply to the targeted plan.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-members-list-api-members",
-      "description": "Get the API's members\n\nList the members for a given API.\n\nUser must have the API_MEMBER[READ] permission.\n"
+      "name": "get_api_subscription_api_keys",
+      "description": "Get subscription's API Keys\n\nGet the subscription API Keys."
     },
     {
-      "name": "API-members-add-api-member",
-      "description": "Add a member to an API.\n\nAdd a new member to an API.\n\nReturns a 400 HTTP Error:\n - when the user tries to set a member as PrimaryOwner.\n\nUser must have the API_MEMBER[CREATE] permission.\n"
+      "name": "renew_api_subscription_api_keys",
+      "description": "Renew the subscription API Keys.\n\nRenew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br> The newly created API Key is returned in response."
     },
     {
-      "name": "API-members-update-api-member",
-      "description": "Updates a member for an API.\n\nEdit a member for an API.\n\nReturns a 400 HTTP Error:\n - when the user tries to set a member as PrimaryOwner.\n\nUser must have the API_MEMBER[UPDATE] permission.\n"
+      "name": "update_api_subscription_api_key",
+      "description": "Update a subscription API Key\n\nUpdate the subscription API Key."
     },
     {
-      "name": "API-members-remove-api-member",
-      "description": "Remove one API member\n\nRemove an API member.\n\nReturns a 400 HTTP Error:\n - when the user tries to remove a PrimaryOwner.\n\nUser must have the API_MEMBER[DELETE] permission.\n"
+      "name": "revoke_api_subscription_api_key",
+      "description": "Revoke a subscription API Key\n\nRevoke the subscription API Key by setting the revocation date to the current date and flagging it as revoked.<br> A notification will be sent to the subscriber according to his portal notification options.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-plans-list-api-plans",
-      "description": "List the API's plans\n\nList plans for a given API, always filtered by a \\`status\\` and the possibility to filter by \\`security\\`.<br>\nThe results are paginated.\n\nUser must have API_PLAN[READ] permissions to access endpoint.\n"
+      "name": "reactivate_api_subscription_api_key",
+      "description": "Reactivate subscription API Key\n\nReactivate the revoked or expired subscription API Key."
     },
     {
-      "name": "API-plans-create-api-plan",
-      "description": "Create an API's plan\n\nCreate a new plan on a given API.\n\nUser must have the API_PLAN[CREATE] permission."
+      "name": "get_api_primary_owner",
+      "description": "Get the API's primary owner userId\n\nGet the API Primary Owner userId. If the primary owner is a group, then the userId of the primary owner user within that group will be returned, not the groupId. The userId is wrapper into a Member object, but no other properties are returned."
     },
     {
-      "name": "API-plans-get-api-plan",
-      "description": "Get one API's plan\n\nGet the API's plan by its identifier.\n\nUser must have the API_PLAN[READ] permission."
+      "name": "list_api_members",
+      "description": "Get the API's members\n\nList the members for a given API."
     },
     {
-      "name": "API-plans-update-api-plan",
-      "description": "Update one API's plan\n\nUpdate the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+      "name": "add_api_member",
+      "description": "Add a member to an API.\n\nAdd a new member to an API. Returns a 400 HTTP Error:"
     },
     {
-      "name": "API-plans-delete-api-plan",
-      "description": "Delete one API's plan\n\nDelete the API's plan.\n\nUser must have the API_PLAN[DELETE] permission."
+      "name": "update_api_member",
+      "description": "Updates a member for an API.\n\nEdit a member for an API. Returns a 400 HTTP Error:"
     },
     {
-      "name": "API-plans-close-api-plan",
-      "description": "Close an API's plan\n\nClose the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+      "name": "remove_api_member",
+      "description": "Remove one API member\n\nRemove an API member. Returns a 400 HTTP Error:\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-plans-deprecate-api-plan",
-      "description": "Deprecate an API's plan\n\nDeprecate the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+      "name": "list_api_plans",
+      "description": "List the API's plans\n\nList plans for a given API, always filtered by a `status` and the possibility to filter by `security`.<br> The results are paginated."
     },
     {
-      "name": "API-plans-publish-api-plan",
-      "description": "Publish an API's plan\n\nPublish the API's plan.\n\nUser must have the API_PLAN[UPDATE] permission."
+      "name": "create_api_plan",
+      "description": "Create an API's plan\n\nCreate a new plan on a given API.\n\nPlans are created in STAGING status. Publish the plan before deployment when the API should receive traffic.\nExample request body: {\"definitionVersion\":\"V4\",\"name\":\"Keyless\",\"security\":{\"type\":\"KEY_LESS\"},\"mode\":\"STANDARD\",\"validation\":\"AUTO\"}"
     },
     {
-      "name": "groups-list-groups",
-      "description": "List of environment groups\n\nList the groups of a given environment.\n\nUser must have the ENVIRONMENT_GROUP[READ] permission.\n"
+      "name": "get_api_plan",
+      "description": "Get one API's plan\n\nGet the API's plan by its identifier."
     },
     {
-      "name": "groups-list-group-members",
-      "description": "List a group's members\n\nList the members of a given group.\n\nUser must have the GROUP_MEMBER[READ] permission.\n"
+      "name": "update_api_plan",
+      "description": "Update one API's plan\n\nUpdate the API's plan."
     },
     {
-      "name": "integrations-list-integrations",
-      "description": "List Integrations\n\nGet the list of Integration for a specific environment.<br>\nThe results are paginated.\n\nUser must have the ENVIRONMENT_INTEGRATION[READ] permission."
+      "name": "patch_api_plan",
+      "description": "Partially update one API's plan\n\nApply a partial update to an API's plan using JSON Merge Patch (RFC 7396) or JSON Patch (RFC 6902). Only v4 HTTP Proxy API plans support this operation. Only the following fields are patchable: name, description, security (configuration only),"
     },
     {
-      "name": "integrations-create-integration",
-      "description": "Create an Integration\n\nCreate a new Integration.\n\nThe response body will not contain Agent Status. To get it you should use getIntegration operation.\nUser must have the ENVIRONMENT_INTEGRATION[CREATE] permission."
+      "name": "delete_api_plan",
+      "description": "Delete one API's plan\n\nDelete the API's plan.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "integrations-get-integration",
-      "description": "Get a specific Integration\n\nGet a specific Integration.\n\nUser must have at least one management (create, update, or delete) permission on the Integration to access it."
+      "name": "close_api_plan",
+      "description": "Close an API's plan\n\nClose the API's plan.\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "integrations-update-integration",
-      "description": "Update Integration\n\nUpdate specific Integration.\n\nThe response body will not contain Agent Status. To get it you should use getIntegration operation.\nUser must have ENVIRONMENT_INTEGRATION[UPDATE] permission to access it."
+      "name": "deprecate_api_plan",
+      "description": "Deprecate an API's plan\n\nDeprecate the API's plan."
     },
     {
-      "name": "integrations-delete-integration",
-      "description": "Delete Integration\n\nDelete specific integration\n\nTo delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission.\nDeletion is not possible if there is any federated API associated."
+      "name": "publish_api_plan",
+      "description": "Publish an API's plan\n\nPublish the API's plan."
     },
     {
-      "name": "integrations-ingest-integration",
+      "name": "list_groups",
+      "description": "List of environment groups\n\nList the groups of a given environment."
+    },
+    {
+      "name": "search_groups",
+      "description": "Search for groups using filters\n\nSearch for groups using filters."
+    },
+    {
+      "name": "list_group_members",
+      "description": "List a group's members\n\nList the members of a given group."
+    },
+    {
+      "name": "list_integrations",
+      "description": "List Integrations\n\nGet the list of Integration for a specific environment.<br> The results are paginated."
+    },
+    {
+      "name": "create_integration",
+      "description": "Create an Integration\n\nCreate a new Integration. The response body will not contain Agent Status. To get it you should use getIntegration operation."
+    },
+    {
+      "name": "get_integration",
+      "description": "Get a specific Integration\n\nGet a specific Integration."
+    },
+    {
+      "name": "update_integration",
+      "description": "Update Integration\n\nUpdate specific Integration. The response body will not contain Agent Status. To get it you should use getIntegration operation."
+    },
+    {
+      "name": "delete_integration",
+      "description": "Delete Integration\n\nDelete specific integration To delete integration user must have ENVIRONMENT_INTEGRATION[DELETE] permission. Deletion is not possible if there is any federated API associated.\n\nHigh risk operation: require explicit user confirmation before execution."
+    },
+    {
+      "name": "ingest_integration",
       "description": "Ingest APIs for a specific Integration\n\nIngest all APIs for a specific Integration."
     },
     {
-      "name": "integrations-preview-integration",
-      "description": "Preview APIs to ingest for a specific Integration\n\nPreview APIs to ingest before actual ingestion.\n\nUser must have both the ENVIRONMENT_INTEGRATION[READ] and the ENVIRONMENT_API[CREATE] permission \nto perform ingestion preview."
+      "name": "preview_integration",
+      "description": "Preview APIs to ingest for a specific Integration\n\nPreview APIs to ingest before actual ingestion. to perform ingestion preview."
     },
     {
-      "name": "integrations-ingested-apis",
-      "description": "Get list of ingested APIs associated to integration\n\nGet a list of all APIs that were ingested from 3rd party provider using this integration. \n\nUser must have the ENVIRONMENT_INTEGRATION[READ] permission.\n"
+      "name": "ingested_apis",
+      "description": "Get list of ingested APIs associated to integration\n\nGet a list of all APIs that were ingested from 3rd party provider using this integration."
     },
     {
-      "name": "integrations-delete-ingested-apis",
-      "description": "Delete ingested APIs associated to integration\n\nDelete APIs that were ingested from 3rd party provider using this integration. \n\nTo delete APIs user must have ENVIRONMENT_API[DELETE] permission.\nOnly unpublished APIs will deleted. APIs that are published will be omitted!"
+      "name": "delete_ingested_apis",
+      "description": "Delete ingested APIs associated to integration\n\nDelete APIs that were ingested from 3rd party provider using this integration. To delete APIs user must have ENVIRONMENT_API[DELETE] permission. Only unpublished APIs will deleted. APIs that are published will be omitted!\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "integration-members-list-integration-members",
-      "description": "Get the Integration's members\n\nList the members for a given Integration.\n\nUser must have the INTEGRATION_MEMBER[READ] permission.\n"
+      "name": "list_integration_members",
+      "description": "Get the Integration's members\n\nList the members for a given Integration."
     },
     {
-      "name": "integration-members-add-integration-member",
-      "description": "Add a member to an Integration.\n\nAdd a new member to an Integration.\n\nReturns a 400 HTTP Error:\n- when the user tries to set a member as PrimaryOwner.\n\nUser must have the INTEGRATION_MEMBER[CREATE] permission.\n"
+      "name": "add_integration_member",
+      "description": "Add a member to an Integration.\n\nAdd a new member to an Integration. Returns a 400 HTTP Error:"
     },
     {
-      "name": "integration-members-update-integration-member",
-      "description": "Updates a member for an Integration.\n\nEdit a member for an Integration.\n\nReturns a 400 HTTP Error:\n - when the user tries to set a member as PrimaryOwner.\n\nUser must have the INTEGRATION_MEMBER[UPDATE] permission.\n"
+      "name": "update_integration_member",
+      "description": "Updates a member for an Integration.\n\nEdit a member for an Integration. Returns a 400 HTTP Error:"
     },
     {
-      "name": "integration-members-remove-integration-member",
-      "description": "Remove one Integration member\n\nRemove an Integration member.\n\nReturns a 400 HTTP Error:\n - when the user tries to remove a PrimaryOwner.\n\nUser must have the INTEGRATION_MEMBER[DELETE] permission.\n"
+      "name": "remove_integration_member",
+      "description": "Remove one Integration member\n\nRemove an Integration member. Returns a 400 HTTP Error:\n\nHigh risk operation: require explicit user confirmation before execution."
     },
     {
-      "name": "API-analytics-get-api-analytics-request-count",
-      "description": "Get API Analytics requests count\n\nGet API analytics request count.\nTCP Proxy APIs are not supported.\n\nUser must have the API_ANALYTICS[READ] permission."
+      "name": "perform_api_analytics",
+      "description": "Perform analytics on API data\n\nPerform analytics on API data based on the provided query parameters."
     },
     {
-      "name": "API-analytics-get-average-messages-per-request",
-      "description": "Get API Analytics average messages per request\n\nGet API analytics average messages per request.\n\nUser must have the API_ANALYTICS[READ] permission."
+      "name": "get_api_analytics_request_count",
+      "description": "Get API Analytics requests count\n\nGet API analytics request count. TCP Proxy APIs are not supported."
     },
     {
-      "name": "API-analytics-get-average-connection-duration",
-      "description": "Get API Analytics average connection duration\n\nGet API analytics average connection duration. Duration is only computed for ended requests.\nTCP Proxy APIs are not supported.\n\nUser must have the API_ANALYTICS[READ] permission."
+      "name": "get_average_messages_per_request",
+      "description": "Get API Analytics average messages per request\n\nGet API analytics average messages per request."
     },
     {
-      "name": "API-analytics-get-response-status-codes",
-      "description": "Get API Analytics response status counts\n\nGet API analytics response status counts. Response statuses are grouped by endpoint and status code hundreds.\n\nUser must have the API_ANALYTICS[READ] permission."
+      "name": "get_average_connection_duration",
+      "description": "Get API Analytics average connection duration\n\nGet API analytics average connection duration. Duration is only computed for ended requests. TCP Proxy APIs are not supported."
     },
     {
-      "name": "API-analytics-get-response-time-over-time",
-      "description": "Get API Analytics average response time\n\nGet API Analytics average response time\n\nUser must have the API_ANALYTICS[READ] permission."
+      "name": "get_response_status_codes",
+      "description": "Get API Analytics response status counts\n\nGet API analytics response status counts. Response statuses are grouped by endpoint and status code hundreds."
     },
     {
-      "name": "API-analytics-get-response-status-overtime",
-      "description": "Get API Analytics response status counts over time\n\nGet API analytics response status counts over time.\n\nUser must have the API_ANALYTICS[READ] permission."
+      "name": "get_response_time_over_time",
+      "description": "Get API Analytics average response time"
     },
     {
-      "name": "API-analytics-get-api-logs",
-      "description": "Get API logs\n\nGet API logs.\n\nUser must have the API_LOG[READ] permission."
+      "name": "get_response_status_overtime",
+      "description": "Get API Analytics response status counts over time\n\nGet API analytics response status counts over time."
     },
     {
-      "name": "API-analytics-get-api-log",
-      "description": "Get API log for a request\n\nGet API log for a request.\n\nUser must have the API_LOG[READ] permission."
+      "name": "get_api_metrics_detail",
+      "description": "Get API metric for a request\n\nGet API metric for a request."
     },
     {
-      "name": "API-analytics-get-api-message-logs",
-      "description": "Get API Messages logs\n\nGet API Messages logs.\n\nUser must have the API_LOG[READ] permission."
+      "name": "get_api_logs",
+      "description": "Get API logs\n\nGet API logs."
     },
     {
-      "name": "API-health-get-api-health-average-response-time",
-      "description": "Get API Health Check average response time\n\nGet API Health Check average response time. \n\nUser must have the API_HEALTH[READ] permission."
+      "name": "get_api_log_error_keys",
+      "description": "Get API log error keys\n\nReturns a list of distinct error keys found in connection logs for the specified API."
     },
     {
-      "name": "API-health-get-api-health-average-response-time-overtime",
-      "description": "Get API Health Check average response time overtime\n\nGet API Health Check average response time overtime. \n\nUser must have the API_HEALTH[READ] permission."
+      "name": "get_api_log",
+      "description": "Get API log for a request\n\nGet API log for a request."
     },
     {
-      "name": "API-health-get-api-availability",
-      "description": "Get API availability by endpoint or by gateway\n\nGet API Health availability. \n\nUser must have the API_HEALTH[READ] permission."
+      "name": "get_api_aggregated_message_logs",
+      "description": "Get API Aggregated Messages logs (with endpoint and entrypoint messages)\n\nGet API Aggregated Messages logs (with endpoint and entrypoint messages)."
     },
     {
-      "name": "API-health-get-api-health-logs",
-      "description": "Get API Health Check logs\n\nGet API Health Check average response time overtime. \n\nUser must have the API_HEALTH[READ] permission."
+      "name": "get_api_message_logs",
+      "description": "Get API Messages logs\n\nGet API Messages logs. Allow filtering."
     },
     {
-      "name": "API-audits-get-api-audits",
-      "description": "Get API Audit\n\nGet API Audit.\n\nUser must have the API_AUDIT[READ] permission."
+      "name": "get_native_api_logs",
+      "description": "Get native API connection logs\n\nReturns the paginated list of native API connection log entries for the API."
     },
     {
-      "name": "API-audits-list-api-audit-events",
-      "description": "List available audit event type for API\n\nList available audit event type for API.\n\nUser must have the API_AUDIT[READ] permission."
+      "name": "get_native_api_logs_summary",
+      "description": "Get analytics for native API connection logs\n\nReturns the count of native API connection lifecycle events grouped by connection status."
     },
     {
-      "name": "API-events-get-api-events",
-      "description": "Get API Events\n\nGet API Events.\n\nUser must have the API_EVENT[READ] permission."
+      "name": "get_native_api_log",
+      "description": "Get a native API connection log for a request\n\nReturns the native API connection log entry for the given request."
     },
     {
-      "name": "API-events-get-api-event-by-id",
-      "description": "Get single API Event by it's ID\n\nGet specific single API Event.\n\nUser must have the API_EVENT[READ] permission."
+      "name": "get_api_health_average_response_time",
+      "description": "Get API Health Check average response time\n\nGet API Health Check average response time."
     },
     {
-      "name": "API-documentation-get-api-pages",
-      "description": "Get API documentation pages\n\nGet API documentation pages.\nWhen no parentId is specified, returns all the pages of the API.\n\nWhen parentId is specified (either ID of a folder, or 'ROOT'), only the pages with the given parent are returned, \nand the breadcrumb of the specified folder is added to the response. \n\nUser must have the API_DOCUMENTATION[READ] permission."
+      "name": "get_api_health_average_response_time_overtime",
+      "description": "Get API Health Check average response time overtime\n\nGet API Health Check average response time overtime."
     },
     {
-      "name": "API-documentation-create-documentation-page",
-      "description": "Create API documentation page\n\nCreate API documentation. The result will be the created page or folder.\nOnly MARKDOWN and FOLDER types are supported.\n\nUser must have the API_DOCUMENTATION[CREATE] permission."
+      "name": "get_api_availability",
+      "description": "Get API availability by endpoint or by gateway\n\nGet API Health availability."
     },
     {
-      "name": "API-documentation-get-api-page",
-      "description": "Get API Documentation Page\n\nGet API Documentation Page by ID.\n\nUser must have the API_DOCUMENTATION[READ] permission."
+      "name": "get_api_health_logs",
+      "description": "Get API Health Check logs\n\nGet API Health Check average response time overtime."
     },
     {
-      "name": "API-documentation-update-documentation-page",
-      "description": "Update API documentation page\n\nUpdate API documentation. The result will be the updated documentation.\nOnly MARKDOWN and FOLDER types are supported.\n\nUser must have the API_DOCUMENTATION[CREATE] permission."
+      "name": "get_api_audits",
+      "description": "Get API Audit\n\nGet API Audit."
     },
     {
-      "name": "API-documentation-delete-documentation-page",
-      "description": "Delete API documentation page\n\nDelete API documentation page.\nA FOLDER will be deleted only if it is empty."
+      "name": "list_api_audit_events",
+      "description": "List available audit event type for API\n\nList available audit event type for API."
     },
     {
-      "name": "API-documentation-publish-documentation-page",
-      "description": "Publish API Documentation Page\n\nPublish API Documentation Page. Returns the published page.\n\nUser must have the API_DOCUMENTATION[UPDATE] permission."
+      "name": "get_api_events",
+      "description": "Get API Events\n\nGet API Events."
     },
     {
-      "name": "API-documentation-unpublish-documentation-page",
-      "description": "Unpublish API Documentation Page\n\nUnpublish API Documentation Page. Returns the unpublished page.\n\nUser must have the API_DOCUMENTATION[UPDATE] permission."
+      "name": "get_api_event_by_id",
+      "description": "Get single API Event by it's ID\n\nGet specific single API Event."
     },
     {
-      "name": "API-documentation-fetch-documentation-page",
-      "description": "Fetch Content of API Documentation Page\n\nFetch Content of API Documentation Page. Returns the page with newly fetched content.\nThe page must have a configured source, otherwise an error is returned.\n\nUser must have the API_DOCUMENTATION[UPDATE] permission."
+      "name": "get_spec_gen_state",
+      "description": "Evaluate the state of the API SpecGen"
     },
     {
-      "name": "API-spec-gen-get-spec-gen-state",
-      "description": "Evaluate the state of the API SpecGen\n\nEvaluate the state of the API SpecGen\n\nUser must have the API_DOCUMENTATION[READ] permission."
+      "name": "post",
+      "description": "Starts the API SpecGen"
     },
     {
-      "name": "API-spec-gen-post",
-      "description": "Starts the API SpecGen\n\nStarts the API SpecGen\n\nUser must have the API_DOCUMENTATION[CREATE] permission."
-    },
-    {
-      "name": "API-scoring-trigger-api-scoring",
+      "name": "trigger_api_scoring",
       "description": "Trigger API Scoring\n\nTrigger API Scoring."
     },
     {
-      "name": "API-scoring-get-api-scoring",
-      "description": "Get API Scoring\n\nGet API Scoring.\n\nReturn a 404 HTTP Response status if API was never evaluated."
+      "name": "get_api_scoring",
+      "description": "Get API Scoring\n\nGet API Scoring. Return a 404 HTTP Response status if API was never evaluated."
     },
     {
-      "name": "categories-get-category-apis-page",
+      "name": "get_category_apis_page",
       "description": "Page of APIs within a Category"
     },
     {
-      "name": "categories-update-category-api",
+      "name": "update_category_api",
       "description": "Update a specified API within a Category"
     },
     {
-      "name": "async-jobs-list-async-job",
+      "name": "list_async_job",
       "description": "List Async Jobs\n\nGet the list of AsyncJobs."
+    },
+    {
+      "name": "generate_el",
+      "description": "Generate Expression Language\n\nGenerate Expression Language."
+    },
+    {
+      "name": "feedback_el",
+      "description": "Submit Newt AI generated Expression Language feedback\n\nSubmit feedback for the Newt AI generated Expression Language."
+    },
+    {
+      "name": "get_api_products_for_api",
+      "description": "Get API Products for an API\n\nReturns the list of API Products that include the specified API."
     }
-  ],
-  "prompts": [],
-  "keywords": [
-      "gravitee",
-      "apim",
-      "management",
-      "api",
-      "apis"
-    ],
-  "user_config": {
-      "bearer_auth": {
-        "type": "string",
-        "title": "Bearer Auth Token",
-        "description": "The bearer authentication token to access the Gravitee API",
-        "required": true,
-        "sensitive": true
-      },
-      "server_url": {
-        "type": "string",
-        "title": "Server URL",
-        "description": "The base URL of your Gravitee APIM Management API (e.g., https://your-domain.gravitee.io/management/v2)",
-        "required": true,
-        "sensitive": false
-      }
-    }
+  ]
 }

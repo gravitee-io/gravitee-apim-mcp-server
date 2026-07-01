@@ -32,10 +32,11 @@ import { Result } from "../types/fp.js";
  * Delete ingested APIs associated to integration
  *
  * @remarks
- * Delete APIs that were ingested from 3rd party provider using this integration.
+ * Delete ingested APIs associated to integration
  *
- * To delete APIs user must have ENVIRONMENT_API[DELETE] permission.
- * Only unpublished APIs will deleted. APIs that are published will be omitted!
+ * Delete APIs that were ingested from 3rd party provider using this integration. To delete APIs user must have ENVIRONMENT_API[DELETE] permission. Only unpublished APIs will deleted. APIs that are published will be omitted!
+ *
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function integrationsDeleteIngestedApis(
   client$: GraviteeApimCore,
@@ -116,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "deleteIngestedApis",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +175,7 @@ async function $do(
     M.json(200, DeleteIngestedApisResponse$zodSchema, {
       key: "DeletedIngestedApisResponse",
     }),
-    M.json("default", DeleteIngestedApisResponse$zodSchema, { key: "Error" }),
+    M.json("default", DeleteIngestedApisResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

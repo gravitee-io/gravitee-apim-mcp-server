@@ -11,14 +11,18 @@ const args = {
 };
 
 export const tool$apIsCreateApiFromSwagger: ToolDefinition<typeof args> = {
-  name: "AP-is-create-api-from-swagger",
+  name: "create_api_from_swagger",
   description: `Import API definition
 
-⚠️ Support only v4 API for the moment. ⚠️<br>
-Create an API by importing from an Open API descriptor. <br>
-This definition can be retrieved from \`GET /environments/{envId}/apis/{apiId}/_export/definition\`
-
-User must have the ENVIRONMENT_API[CREATE] permission.`,
+⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by importing from an Open API descriptor. <br> This definition can be retrieved from \`GET /environments/{envId}/apis/{apiId}/_export/definition\``,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Api From Swagger",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsCreateApiFromSwagger(

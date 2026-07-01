@@ -32,10 +32,9 @@ import { Result } from "../types/fp.js";
  * Get the API's subscribers
  *
  * @remarks
- * List applications that have subscribed to a given API.<br>
- * The results are paginated.
+ * Get the API's subscribers
  *
- * User must have API_SUBSCRIPTION[READ] permissions to access endpoint.
+ * List applications that have subscribed to a given API.<br> The results are paginated.
  */
 export function apiSubscriptionsGetAPISubscribers(
   client$: GraviteeApimCore,
@@ -119,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiSubscribers",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -178,7 +177,7 @@ async function $do(
     M.json(200, GetApiSubscribersResponse$zodSchema, {
       key: "SubscribersResponse",
     }),
-    M.json("default", GetApiSubscribersResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiSubscribersResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -7,6 +7,7 @@ import { numberParser } from "@stricli/core";
 import * as z from "zod";
 import { ServerProtocol } from "../../../lib/config.js";
 import { consoleLoggerLevels } from "../../console-logger.js";
+import { mcpScopes } from "../../scopes.js";
 
 export const startCommand = buildCommand({
   loader: async () => {
@@ -36,6 +37,27 @@ export const startCommand = buildCommand({
         parse: (value) => {
           return z.string().parse(value);
         },
+      },
+      mode: {
+        kind: "enum",
+        brief:
+          "Server mode (dynamic: expose list_tools, describe_tool_input, and execute_tool instead of individual tools)",
+        values: ["dynamic"],
+        optional: true,
+      },
+      "tool-annotations": {
+        kind: "parsed",
+        brief:
+          "Filter tools by annotations (comma-separated: readOnly, destructive, idempotent, openWorld). Listed = required true, unlisted = required false.",
+        optional: true,
+        parse: (value) => value.split(",").map(s => s.trim()),
+      },
+      scope: {
+        kind: "enum",
+        brief: "Mount tools/resources that match given scope (repeatable flag)",
+        values: mcpScopes,
+        variadic: true,
+        optional: true,
       },
       "bearer-auth": {
         kind: "parsed",

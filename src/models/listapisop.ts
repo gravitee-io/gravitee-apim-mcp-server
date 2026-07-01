@@ -17,40 +17,22 @@ export type ListApisRequest = {
   expands?: Array<ApisSearchExpandsParam> | undefined;
 };
 
-export const ListApisRequest$zodSchema: z.ZodType<
-  ListApisRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const ListApisRequest$zodSchema: z.ZodType<ListApisRequest> = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   expands: z.array(ApisSearchExpandsParam$zodSchema).describe(
     "Expansion of data to return in APIs.",
   ).optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
 });
 
-export type ListApisResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApisResponse?: ApisResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type ListApisResponse = ApisResponse | ErrorT;
 
-export const ListApisResponse$zodSchema: z.ZodType<
-  ListApisResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApisResponse: ApisResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const ListApisResponse$zodSchema: z.ZodType<ListApisResponse> = z.union([
+  ApisResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

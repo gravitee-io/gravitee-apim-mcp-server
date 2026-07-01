@@ -13,13 +13,18 @@ const args = {
 export const tool$integrationMembersListIntegrationMembers: ToolDefinition<
   typeof args
 > = {
-  name: "integration-members-list-integration-members",
+  name: "list_integration_members",
   description: `Get the Integration's members
 
-List the members for a given Integration.
-
-User must have the INTEGRATION_MEMBER[READ] permission.
-`,
+List the members for a given Integration.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Integration Members",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationMembersListIntegrationMembers(

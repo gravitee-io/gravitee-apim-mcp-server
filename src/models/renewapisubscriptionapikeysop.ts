@@ -15,9 +15,7 @@ export type RenewApiSubscriptionApiKeysRequest = {
 };
 
 export const RenewApiSubscriptionApiKeysRequest$zodSchema: z.ZodType<
-  RenewApiSubscriptionApiKeysRequest,
-  z.ZodTypeDef,
-  unknown
+  RenewApiSubscriptionApiKeysRequest
 > = z.object({
   RenewApiKey: RenewApiKey$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -27,22 +25,11 @@ export const RenewApiSubscriptionApiKeysRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type RenewApiSubscriptionApiKeysResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiKey?: ApiKey | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type RenewApiSubscriptionApiKeysResponse = ApiKey | ErrorT;
 
 export const RenewApiSubscriptionApiKeysResponse$zodSchema: z.ZodType<
-  RenewApiSubscriptionApiKeysResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiKey: ApiKey$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  RenewApiSubscriptionApiKeysResponse
+> = z.union([
+  ApiKey$zodSchema,
+  ErrorT$zodSchema,
+]);

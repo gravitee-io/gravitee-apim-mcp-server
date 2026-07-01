@@ -32,9 +32,11 @@ import { Result } from "../types/fp.js";
  * Get API Documentation Page
  *
  * @remarks
+ * Get API Documentation Page
+ *
  * Get API Documentation Page by ID.
  *
- * User must have the API_DOCUMENTATION[READ] permission.
+ * Low-value for routine assistant workflows; prefer higher-level API inspection tools first.
  */
 export function apiDocumentationGetAPIPage(
   client$: GraviteeApimCore,
@@ -117,7 +119,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiPage",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -173,7 +175,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiPageResponse$zodSchema, { key: "Page" }),
-    M.json("default", GetApiPageResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiPageResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

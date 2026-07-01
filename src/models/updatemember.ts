@@ -6,10 +6,6 @@ import * as z from "zod";
 
 export type UpdateMember = { roleName: string };
 
-export const UpdateMember$zodSchema: z.ZodType<
-  UpdateMember,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  roleName: z.string(),
+export const UpdateMember$zodSchema: z.ZodType<UpdateMember> = z.object({
+  roleName: z.string().describe("The name of the role"),
 });

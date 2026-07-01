@@ -18,42 +18,26 @@ export type GetApiSubscribersRequest = {
 };
 
 export const GetApiSubscribersRequest$zodSchema: z.ZodType<
-  GetApiSubscribersRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiSubscribersRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   name: z.string().describe(
-    "Name to use to filter subscribers. <br>\n"
-      + "Can be a part of a name. <br>\n"
-      + "For example, `foo` will match `foo`, `foobar` and `barfoo`.",
+    "Name to use to filter subscribers. <br>\nCan be a part of a name. <br>\nFor example, `foo` will match `foo`, `foobar` and `barfoo`.",
   ).optional(),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
 });
 
-export type GetApiSubscribersResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  SubscribersResponse?: SubscribersResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiSubscribersResponse = SubscribersResponse | ErrorT;
 
 export const GetApiSubscribersResponse$zodSchema: z.ZodType<
-  GetApiSubscribersResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  SubscribersResponse: SubscribersResponse$zodSchema.optional(),
-});
+  GetApiSubscribersResponse
+> = z.union([
+  SubscribersResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

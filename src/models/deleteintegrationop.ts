@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type DeleteIntegrationRequest = {
   envId?: string | undefined;
@@ -11,30 +10,10 @@ export type DeleteIntegrationRequest = {
 };
 
 export const DeleteIntegrationRequest$zodSchema: z.ZodType<
-  DeleteIntegrationRequest,
-  z.ZodTypeDef,
-  unknown
+  DeleteIntegrationRequest
 > = z.object({
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
   integrationId: z.string().describe("Id of an integration."),
-});
-
-export type DeleteIntegrationResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ErrorT?: ErrorT | undefined;
-};
-
-export const DeleteIntegrationResponse$zodSchema: z.ZodType<
-  DeleteIntegrationResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
 });

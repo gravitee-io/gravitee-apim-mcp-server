@@ -11,8 +11,16 @@ const args = {
 };
 
 export const tool$categoriesUpdateCategoryApi: ToolDefinition<typeof args> = {
-  name: "categories-update-category-api",
+  name: "update_category_api",
   description: `Update a specified API within a Category`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Update Category Api",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await categoriesUpdateCategoryApi(

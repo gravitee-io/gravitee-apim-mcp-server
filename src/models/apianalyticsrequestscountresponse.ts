@@ -13,10 +13,8 @@ export type ApiAnalyticsRequestsCountResponse = {
 };
 
 export const ApiAnalyticsRequestsCountResponse$zodSchema: z.ZodType<
-  ApiAnalyticsRequestsCountResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiAnalyticsRequestsCountResponse
 > = z.object({
-  countsByEntrypoint: z.record(z.number()).optional(),
-  total: z.number().int().optional(),
+  countsByEntrypoint: z.record(z.string(), z.number()).optional(),
+  total: z.int().optional().describe("The total count of requests"),
 }).describe("API Analytics for requests count by entrypoint.");

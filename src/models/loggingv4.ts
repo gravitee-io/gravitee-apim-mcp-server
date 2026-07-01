@@ -18,11 +18,10 @@ export type LoggingV4 = {
   mode?: LoggingModeV4 | undefined;
 };
 
-export const LoggingV4$zodSchema: z.ZodType<LoggingV4, z.ZodTypeDef, unknown> =
-  z.object({
-    condition: z.string().optional(),
-    content: LoggingContentV4$zodSchema.optional(),
-    messageCondition: z.string().optional(),
-    mode: LoggingModeV4$zodSchema.optional(),
-    phase: LoggingPhase$zodSchema.optional(),
-  });
+export const LoggingV4$zodSchema: z.ZodType<LoggingV4> = z.object({
+  condition: z.string().optional(),
+  content: LoggingContentV4$zodSchema.optional(),
+  messageCondition: z.string().optional(),
+  mode: LoggingModeV4$zodSchema.optional(),
+  phase: LoggingPhase$zodSchema.optional(),
+});

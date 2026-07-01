@@ -32,6 +32,8 @@ import { Result } from "../types/fp.js";
  * Trigger API Scoring
  *
  * @remarks
+ * Trigger API Scoring
+ *
  * Trigger API Scoring.
  */
 export function apiScoringTriggerAPIScoring(
@@ -113,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "triggerApiScoring",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -171,7 +173,7 @@ async function $do(
     M.json(202, TriggerApiScoringResponse$zodSchema, {
       key: "ApiScoringTriggerResponse",
     }),
-    M.json("default", TriggerApiScoringResponse$zodSchema, { key: "Error" }),
+    M.json("default", TriggerApiScoringResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

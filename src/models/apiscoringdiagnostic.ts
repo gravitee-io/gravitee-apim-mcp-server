@@ -17,11 +17,10 @@ export type Range = {
   end?: ApiScoringPosition | undefined;
 };
 
-export const Range$zodSchema: z.ZodType<Range, z.ZodTypeDef, unknown> = z
-  .object({
-    end: ApiScoringPosition$zodSchema.optional(),
-    start: ApiScoringPosition$zodSchema.optional(),
-  });
+export const Range$zodSchema: z.ZodType<Range> = z.object({
+  end: ApiScoringPosition$zodSchema.optional(),
+  start: ApiScoringPosition$zodSchema.optional(),
+});
 
 export type ApiScoringDiagnostic = {
   severity?: ApiScoringSeverity | undefined;
@@ -31,14 +30,17 @@ export type ApiScoringDiagnostic = {
   path?: string | undefined;
 };
 
-export const ApiScoringDiagnostic$zodSchema: z.ZodType<
-  ApiScoringDiagnostic,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  message: z.string().optional(),
-  path: z.string().optional(),
-  range: z.lazy(() => Range$zodSchema).optional(),
-  rule: z.string().optional(),
-  severity: ApiScoringSeverity$zodSchema.optional(),
-});
+export const ApiScoringDiagnostic$zodSchema: z.ZodType<ApiScoringDiagnostic> = z
+  .object({
+    message: z.string().optional().describe(
+      "A string that contains a human-readable message describing the issue found.",
+    ),
+    path: z.string().optional().describe(
+      "A string that indicates the location within the analyzed document where the rule was triggered. It shows the \"path\" in the document structure to the issue.",
+    ),
+    range: z.lazy(() => Range$zodSchema).optional(),
+    rule: z.string().optional().describe("The rule that has been violated."),
+    severity: ApiScoringSeverity$zodSchema.optional().describe(
+      "An enum representing the severity level of the rule violation.",
+    ),
+  });

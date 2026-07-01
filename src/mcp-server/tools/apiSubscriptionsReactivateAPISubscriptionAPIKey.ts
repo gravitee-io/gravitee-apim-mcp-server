@@ -12,12 +12,18 @@ const args = {
 
 export const tool$apiSubscriptionsReactivateAPISubscriptionAPIKey:
   ToolDefinition<typeof args> = {
-    name: "API-subscriptions-reactivate-api-subscription-api-key",
+    name: "reactivate_api_subscription_api_key",
     description: `Reactivate subscription API Key
 
-Reactivate the revoked or expired subscription API Key.
-
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+Reactivate the revoked or expired subscription API Key.`,
+    scopes: ["write"],
+    annotations: {
+      "title": "Reactivate Api Subscription Api Key",
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
     args,
     tool: async (client, args, ctx) => {
       const [result, apiCall] =

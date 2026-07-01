@@ -18,9 +18,7 @@ export type UpdateApiSubscriptionRequest = {
 };
 
 export const UpdateApiSubscriptionRequest$zodSchema: z.ZodType<
-  UpdateApiSubscriptionRequest,
-  z.ZodTypeDef,
-  unknown
+  UpdateApiSubscriptionRequest
 > = z.object({
   UpdateSubscription: UpdateSubscription$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -30,22 +28,11 @@ export const UpdateApiSubscriptionRequest$zodSchema: z.ZodType<
   subscriptionId: z.string().describe("Id of a subscription."),
 });
 
-export type UpdateApiSubscriptionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Subscription?: Subscription | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type UpdateApiSubscriptionResponse = Subscription | ErrorT;
 
 export const UpdateApiSubscriptionResponse$zodSchema: z.ZodType<
-  UpdateApiSubscriptionResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-  Subscription: Subscription$zodSchema.optional(),
-});
+  UpdateApiSubscriptionResponse
+> = z.union([
+  Subscription$zodSchema,
+  ErrorT$zodSchema,
+]);

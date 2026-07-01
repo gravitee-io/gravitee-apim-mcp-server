@@ -32,12 +32,9 @@ import { Result } from "../types/fp.js";
  * Updates a member for an Integration.
  *
  * @remarks
- * Edit a member for an Integration.
+ * Updates a member for an Integration.
  *
- * Returns a 400 HTTP Error:
- *  - when the user tries to set a member as PrimaryOwner.
- *
- * User must have the INTEGRATION_MEMBER[UPDATE] permission.
+ * Edit a member for an Integration. Returns a 400 HTTP Error:
  */
 export function integrationMembersUpdateIntegrationMember(
   client$: GraviteeApimCore,
@@ -123,7 +120,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "updateIntegrationMember",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -180,7 +177,7 @@ async function $do(
   >(
     M.json(200, UpdateIntegrationMemberResponse$zodSchema, { key: "Member" }),
     M.json("default", UpdateIntegrationMemberResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get one API's plan
  *
  * @remarks
- * Get the API's plan by its identifier.
+ * Get one API's plan
  *
- * User must have the API_PLAN[READ] permission.
+ * Get the API's plan by its identifier.
  */
 export function apiPlansGetAPIPlan(
   client$: GraviteeApimCore,
@@ -117,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiPlan",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -172,8 +172,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.json(200, GetApiPlanResponse$zodSchema, { key: "Plan" }),
-    M.json("default", GetApiPlanResponse$zodSchema, { key: "Error" }),
+    M.json(200, GetApiPlanResponse$zodSchema, { hdrs: true, key: "Plan" }),
+    M.json("default", GetApiPlanResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

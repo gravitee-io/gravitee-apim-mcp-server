@@ -12,13 +12,11 @@ export type Pkcs12TrustStore = {
   password?: string | undefined;
 };
 
-export const Pkcs12TrustStore$zodSchema: z.ZodType<
-  Pkcs12TrustStore,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  content: z.string().optional(),
-  password: z.string().optional(),
-  path: z.string().optional(),
-  type: TrustStoreType$zodSchema,
-});
+export const Pkcs12TrustStore$zodSchema: z.ZodType<Pkcs12TrustStore> = z.object(
+  {
+    content: z.string().optional().describe("The content of the trust store"),
+    password: z.string().optional().describe("The password of the trust store"),
+    path: z.string().optional().describe("The path of the trust store"),
+    type: TrustStoreType$zodSchema.describe("The type of the trust store."),
+  },
+);

@@ -3,40 +3,105 @@
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import {
+  ShapeOutput,
+  ZodRawShapeCompat,
+} from "@modelcontextprotocol/sdk/server/zod-compat.js";
 import { RequestHandlerExtra } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import {
   CallToolResult,
   ServerNotification,
   ServerRequest,
 } from "@modelcontextprotocol/sdk/types.js";
-import { objectOutputType, ZodRawShape, ZodTypeAny } from "zod";
+import * as z from "zod";
 import { GraviteeApimCore } from "../core.js";
+import { ServerProtocol$zodSchema } from "../lib/config.js";
 import { ConsoleLogger } from "./console-logger.js";
-import { MCPScope } from "./scopes.js";
+import { MCPServerFlags } from "./flags.js";
+import { MCPScope, mcpScopes } from "./scopes.js";
 import { isAsyncIterable, isBinaryData, valueToBase64 } from "./shared.js";
 
-export type ToolDefinition<Args extends undefined | ZodRawShape = undefined> =
-  Args extends ZodRawShape ? {
-      name: string;
-      description: string;
-      scopes?: MCPScope[];
-      args: Args;
-      tool: (
-        client: GraviteeApimCore,
-        args: objectOutputType<Args, ZodTypeAny>,
-        extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
-      ) => CallToolResult | Promise<CallToolResult>;
+export type MCPToolAnnotationFilter = {
+  readOnlyHint?: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint?: boolean;
+};
+
+const VALID_ANNOTATIONS = [
+  "readOnly",
+  "destructive",
+  "idempotent",
+  "openWorld",
+] as const;
+type AnnotationName = typeof VALID_ANNOTATIONS[number];
+
+const annotationToKey: Record<AnnotationName, keyof MCPToolAnnotationFilter> = {
+  readOnly: "readOnlyHint",
+  destructive: "destructiveHint",
+  idempotent: "idempotentHint",
+  openWorld: "openWorldHint",
+};
+
+export function buildAnnotationFilter(
+  annotations: string[] | undefined,
+): MCPToolAnnotationFilter {
+  const filter: MCPToolAnnotationFilter = {};
+  if (!annotations || annotations.length === 0) {
+    return filter;
+  }
+  for (const a of annotations) {
+    if (!VALID_ANNOTATIONS.includes(a as AnnotationName)) {
+      throw new Error(
+        `Invalid annotation filter: "${a}". Valid values are: ${
+          VALID_ANNOTATIONS.join(", ")
+        }`,
+      );
     }
-    : {
-      name: string;
-      description: string;
-      scopes?: MCPScope[];
-      args?: undefined;
-      tool: (
-        client: GraviteeApimCore,
-        extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
-      ) => CallToolResult | Promise<CallToolResult>;
+  }
+  for (const name of VALID_ANNOTATIONS) {
+    filter[annotationToKey[name]] = annotations.includes(name);
+  }
+  return filter;
+}
+
+export type ToolDefinition<
+  Args extends undefined | ZodRawShapeCompat = undefined,
+> = Args extends ZodRawShapeCompat ? {
+    name: string;
+    description: string;
+    scopes?: MCPScope[];
+    args: Args;
+    annotations: {
+      title: string;
+      destructiveHint: boolean;
+      idempotentHint: boolean;
+      openWorldHint: boolean;
+      readOnlyHint: boolean;
     };
+    tool: (
+      client: GraviteeApimCore,
+      args: ShapeOutput<Args>,
+      extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
+    ) => CallToolResult | Promise<CallToolResult>;
+  }
+  : {
+    name: string;
+    description: string;
+    scopes?: MCPScope[];
+    args?: undefined;
+    annotations: {
+      title: string;
+      destructiveHint: boolean;
+      idempotentHint: boolean;
+      openWorldHint: boolean;
+      readOnlyHint: boolean;
+    };
+    tool: (
+      client: GraviteeApimCore,
+      extra: RequestHandlerExtra<ServerRequest, ServerNotification>,
+    ) => CallToolResult | Promise<CallToolResult>;
+  };
 
 // Optional function to assist with formatting tool results
 export async function formatResult(
@@ -75,7 +140,8 @@ export async function formatResult(
     };
   }
 
-  return { content };
+  const isError = response ? !response.ok : false;
+  return isError ? { content, isError } : { content };
 }
 
 async function consumeSSE(
@@ -100,8 +166,21 @@ export function createRegisterTool(
   getSDK: () => GraviteeApimCore,
   allowedScopes: Set<MCPScope>,
   allowedTools?: Set<string>,
-): <A extends ZodRawShape | undefined>(tool: ToolDefinition<A>) => void {
-  return <A extends ZodRawShape | undefined>(tool: ToolDefinition<A>): void => {
+  dynamic?: boolean,
+  annotationFilter?: MCPToolAnnotationFilter,
+): [
+  <A extends ZodRawShapeCompat | undefined>(tool: ToolDefinition<A>) => void,
+  Array<{ name: string; description: string }>,
+  Map<string, ToolDefinition<ZodRawShapeCompat | undefined>>,
+] {
+  const tools: Array<{ name: string; description: string }> = [];
+  const toolMap = new Map<
+    string,
+    ToolDefinition<ZodRawShapeCompat | undefined>
+  >();
+  const registerTool = <A extends ZodRawShapeCompat | undefined>(
+    tool: ToolDefinition<A>,
+  ): void => {
     if (allowedTools && !allowedTools.has(tool.name)) {
       return;
     }
@@ -118,16 +197,354 @@ export function createRegisterTool(
       return;
     }
 
+    if (annotationFilter) {
+      const a = tool.annotations;
+      if (
+        annotationFilter.readOnlyHint !== undefined
+        && a.readOnlyHint !== annotationFilter.readOnlyHint
+      ) {
+        return;
+      }
+      if (
+        annotationFilter.destructiveHint !== undefined
+        && a.destructiveHint !== annotationFilter.destructiveHint
+      ) {
+        return;
+      }
+      if (
+        annotationFilter.idempotentHint !== undefined
+        && a.idempotentHint !== annotationFilter.idempotentHint
+      ) {
+        return;
+      }
+      if (
+        annotationFilter.openWorldHint !== undefined
+        && a.openWorldHint !== annotationFilter.openWorldHint
+      ) {
+        return;
+      }
+    }
+
+    toolMap.set(
+      tool.name,
+      tool as ToolDefinition<ZodRawShapeCompat | undefined>,
+    );
+
+    if (dynamic) {
+      logger.debug("Collected tool for dynamic mode", { name: tool.name });
+      tools.push({ name: tool.name, description: tool.description });
+      return;
+    }
+
     if (tool.args) {
-      server.tool(tool.name, tool.description, tool.args, async (args, ctx) => {
-        return tool.tool(getSDK(), args, ctx);
-      });
+      server.registerTool(
+        tool.name,
+        {
+          description: tool.description,
+          inputSchema: tool.args,
+          annotations: tool.annotations,
+        },
+        async (args, ctx) => {
+          return tool.tool(getSDK(), args, ctx);
+        },
+      );
     } else {
-      server.tool(tool.name, tool.description, async (ctx) => {
-        return tool.tool(getSDK(), ctx);
-      });
+      server.registerTool(
+        tool.name,
+        {
+          description: tool.description,
+          annotations: tool.annotations,
+        },
+        async (ctx) => {
+          return tool.tool(getSDK(), ctx);
+        },
+      );
     }
 
     logger.debug("Registered tool", { name: tool.name });
+    tools.push({ name: tool.name, description: tool.description });
   };
+
+  return [registerTool, tools, toolMap];
+}
+
+function matchesSearchTerms(
+  terms: string[],
+  name: string,
+  def: ToolDefinition<ZodRawShapeCompat | undefined>,
+): boolean {
+  if (terms.length === 0) {
+    return true;
+  }
+
+  const nameLower = name.toLowerCase();
+  const descLower = def.description.toLowerCase();
+  const scopesLower = def.scopes?.flatMap((s: unknown) => {
+    return typeof s === "string" ? [s.toLowerCase()] : [];
+  }) || [];
+
+  return terms.some((term) =>
+    nameLower.includes(term)
+    || descLower.includes(term)
+    || scopesLower.some((s) => s.includes(term))
+  );
+}
+
+export function registerDynamicTools(
+  logger: ConsoleLogger,
+  server: McpServer,
+  getSDK: () => GraviteeApimCore,
+  toolMap: Map<string, ToolDefinition<ZodRawShapeCompat | undefined>>,
+  allowedScopes: Set<MCPScope>,
+): void {
+  // 1. list_tools
+  server.registerTool("list_tools", {
+    description:
+      "List available tools. Optionally filter by search terms that match against tool name, description, and scopes.",
+    inputSchema: {
+      search_terms: z.array(z.string()).optional().describe(
+        [
+          "Filter the list of tools.",
+          "Each term is matched case-insensitively as a substring against tool name, description, and scopes.",
+          "Multiple terms are combined with a logical OR: a tool is included if ANY term matches ANY field.",
+          "If not provided, all tools are returned.",
+        ].join("\n"),
+      ),
+    },
+    annotations: {
+      title: "List Tools",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
+  }, async (args) => {
+    const terms = (args.search_terms ?? []).map((t) => t.toLowerCase());
+
+    const tools: Array<
+      { name: string; description: string; scopes?: MCPScope[] | undefined }
+    > = [];
+    for (const [name, def] of toolMap) {
+      if (!matchesSearchTerms(terms, name, def)) {
+        continue;
+      }
+
+      tools.push({
+        name: name,
+        description: def.description,
+        scopes: def.scopes,
+      });
+    }
+    return {
+      content: [{ type: "text", text: JSON.stringify(tools, null, 2) }],
+    };
+  });
+  logger.debug("Registered dynamic meta-tool", { name: "list_tools" });
+
+  // 2. describe_tool
+  server.registerTool("describe_tool_input", {
+    description:
+      "Get the input schema for one or more tools. It is a good idea to call this tool first to understand how to successfully call execute_tool.",
+    inputSchema: {
+      tool_names: z.array(z.string()).describe(
+        "The names of the tools to describe",
+      ),
+    },
+    annotations: {
+      title: "Describe Tool",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
+  }, async (args) => {
+    const parts: string[] = [];
+    const unknown: string[] = [];
+
+    if (args.tool_names.length === 0) {
+      return { content: [{ type: "text", text: "No tool names provided." }] };
+    }
+
+    for (const toolName of args.tool_names) {
+      const def = toolMap.get(toolName);
+      if (!def) {
+        unknown.push(toolName);
+        continue;
+      }
+
+      let schemaText = `<input_schema tool="${toolName}">\n\n`;
+      if (def.args) {
+        const jsonSchema = z.toJSONSchema(z.object(def.args), {
+          target: "draft-2020-12",
+        });
+        schemaText += JSON.stringify(jsonSchema, null, 2);
+      } else {
+        schemaText += "This tool takes no input parameters.";
+      }
+      schemaText += `\n\n</input_schema>`;
+      parts.push(schemaText);
+    }
+
+    if (unknown.length > 0) {
+      parts.push(`Unknown tools: ${unknown.join(", ")}`);
+    }
+
+    return { content: [{ type: "text", text: parts.join("\n\n") }] };
+  });
+  logger.debug("Registered dynamic meta-tool", { name: "describe_tool_input" });
+
+  // 3. execute_tool
+  server.registerTool("execute_tool", {
+    description:
+      "Execute a tool by name with its arguments. If executing a given tool for the first time, it is recommended to call describe_tool_input first to understand the expected `arguments` shape.",
+    inputSchema: {
+      name: z.string().describe("The name of the tool to execute"),
+      arguments: z.looseObject({}).optional().describe(
+        "Arguments for the target tool as a JSON object, matching the schema returned by describe_tool_input.",
+      ),
+    },
+    annotations: {
+      title: "Execute Tool",
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: false,
+      openWorldHint: true,
+    },
+  }, async (args, ctx) => {
+    const def = toolMap.get(args.name);
+    if (!def) {
+      return {
+        content: [{ type: "text", text: `Unknown tool: ${args.name}` }],
+        isError: true,
+      };
+    }
+
+    let validatedInput: Record<string, unknown> = {};
+    if (def.args) {
+      const vres = z.object(def.args).safeParse(args.arguments ?? {});
+      if (vres.success) {
+        validatedInput = vres.data;
+      } else {
+        const issues = z.prettifyError(vres.error);
+
+        return {
+          content: [{
+            type: "text",
+            text:
+              `Invalid input for tool ${args.name}:\n<issues>\n${issues}\n</issues>`,
+          }],
+          isError: true,
+        };
+      }
+    }
+
+    try {
+      if (def.args) {
+        return await def.tool(getSDK(), validatedInput, ctx);
+      } else {
+        return await def.tool(getSDK(), ctx);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return {
+        content: [{
+          type: "text",
+          text: `Error executing tool ${args.name}: ${message}`,
+        }],
+        isError: true,
+      };
+    }
+  });
+  logger.debug("Registered dynamic meta-tool", { name: "execute_tool" });
+
+  // 4. list_scopes (only when the server has scopes defined)
+  if (mcpScopes.length > 0) {
+    const scopes = allowedScopes.size > 0
+      ? [...allowedScopes].sort()
+      : [...mcpScopes];
+
+    server.registerTool("list_scopes", {
+      description: [
+        "List the scopes available on this server.",
+        "Scopes are categories that group related tools together.",
+        "They can be used as search terms when filtering the list of tools.",
+      ].join("\n"),
+      annotations: {
+        title: "List Scopes",
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    }, async () => {
+      const lines = scopes.map((s) => `- ${s}`);
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    });
+    logger.debug("Registered dynamic meta-tool", { name: "list_scopes" });
+  }
+}
+function resolveHeader<T>(
+  headers: Headers,
+  headerName: string,
+  schema: z.ZodType<T>,
+  cliFlagValue: T | undefined,
+  disableStaticAuth: boolean,
+): T | undefined {
+  const val = headers.get(headerName);
+  if (val != null) {
+    return schema.parse(val);
+  }
+  return disableStaticAuth ? undefined : schema.parse(cliFlagValue);
+}
+
+export function buildSDK(
+  headers: Headers,
+  cliFlags: MCPServerFlags,
+  disableStaticAuth: boolean,
+  logger: { level: string },
+) {
+  const flags = {
+    ...cliFlags,
+    "bearer-auth": resolveHeader(
+      headers,
+      "bearer-auth",
+      z.string(),
+      cliFlags["bearer-auth"],
+      disableStaticAuth,
+    ),
+  };
+
+  return new GraviteeApimCore({
+    security: { bearerAuth: flags["bearer-auth"] ?? "" },
+    serverURL: cliFlags["server-url"],
+    serverIdx: cliFlags["server-index"],
+    protocol: resolveHeader(
+      headers,
+      "protocol",
+      ServerProtocol$zodSchema,
+      cliFlags.protocol,
+      disableStaticAuth,
+    ),
+    managementAPIHost: resolveHeader(
+      headers,
+      "management-api-host",
+      z.string(),
+      cliFlags["management-api-host"],
+      disableStaticAuth,
+    ),
+    orgId: resolveHeader(
+      headers,
+      "org-id",
+      z.string(),
+      cliFlags["org-id"],
+      disableStaticAuth,
+    ),
+    debugLogger: logger.level === "debug"
+      ? {
+        log: (...args) => console.log(...args),
+        group: (...args) => console.group(...args),
+        groupEnd: (...args) => console.groupEnd(...args),
+      }
+      : undefined,
+  });
 }

@@ -12,31 +12,30 @@ import {
 import { TcpListener, TcpListener$zodSchema } from "./tcplistener.js";
 
 export type Listener =
-  | (SubscriptionListener & { type: "SUBSCRIPTION" })
   | (TcpListener & { type: "TCP" })
   | (KafkaListener & { type: "KAFKA" })
-  | (HttpListener & { type: "HTTP" });
+  | (HttpListener & { type: "HTTP" })
+  | (SubscriptionListener & { type: "SUBSCRIPTION" });
 
-export const Listener$zodSchema: z.ZodType<Listener, z.ZodTypeDef, unknown> = z
-  .union([
-    SubscriptionListener$zodSchema.and(
-      z.object({
-        type: z.literal("SUBSCRIPTION"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    TcpListener$zodSchema.and(
-      z.object({
-        type: z.literal("TCP"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    KafkaListener$zodSchema.and(
-      z.object({
-        type: z.literal("KAFKA"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    HttpListener$zodSchema.and(
-      z.object({
-        type: z.literal("HTTP"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-  ]);
+export const Listener$zodSchema: z.ZodType<Listener> = z.union([
+  TcpListener$zodSchema.and(
+    z.object({
+      type: z.literal("TCP"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  KafkaListener$zodSchema.and(
+    z.object({
+      type: z.literal("KAFKA"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  HttpListener$zodSchema.and(
+    z.object({
+      type: z.literal("HTTP"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+  SubscriptionListener$zodSchema.and(
+    z.object({
+      type: z.literal("SUBSCRIPTION"),
+    }).transform((v) => ({ type: v.type })),
+  ),
+]);

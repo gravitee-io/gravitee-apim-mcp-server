@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apIsVerifyHosts: ToolDefinition<typeof args> = {
-  name: "AP-is-verify-hosts",
+  name: "verify_hosts",
   description: `Verify TCP and Kafka API hosts
 
-Verify hosts before creating or updating a TCP or Kafka API.<br>
-This will check it is not already used by other APIs in the environment.<br>
-The result will indicate if the hosts are OK, and give the reason of the failure if they are not.`,
+Verify hosts before creating or updating a TCP or Kafka API.<br> This will check it is not already used by other APIs in the environment.<br> The result will indicate if the hosts are OK, and give the reason of the failure if they are not.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Verify Hosts",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsVerifyHosts(

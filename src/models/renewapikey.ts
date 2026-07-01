@@ -6,10 +6,8 @@ import * as z from "zod";
 
 export type RenewApiKey = { customApiKey?: string | undefined };
 
-export const RenewApiKey$zodSchema: z.ZodType<
-  RenewApiKey,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  customApiKey: z.string().optional(),
+export const RenewApiKey$zodSchema: z.ZodType<RenewApiKey> = z.object({
+  customApiKey: z.string().optional().describe(
+    "Optional custom API Key that can be given when custom API Key support is enabled.",
+  ),
 });

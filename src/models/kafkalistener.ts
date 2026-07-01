@@ -14,14 +14,12 @@ export type KafkaListener = {
   port?: number | undefined;
 };
 
-export const KafkaListener$zodSchema: z.ZodType<
-  KafkaListener,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const KafkaListener$zodSchema: z.ZodType<KafkaListener> = z.object({
   entrypoints: z.array(Entrypoint$zodSchema).optional(),
-  host: z.string(),
-  port: z.number().int().optional(),
+  host: z.string().describe(
+    "A hostname for which the API will match against SNI.",
+  ),
+  port: z.int().optional().describe("The port of the listener"),
   servers: z.array(z.string()).optional(),
-  type: ListenerType$zodSchema,
+  type: ListenerType$zodSchema.describe("Listener type."),
 });

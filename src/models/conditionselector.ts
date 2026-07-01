@@ -3,30 +3,36 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Selector type.
  */
+export const ConditionSelectorType = {
+  Http: "HTTP",
+  Channel: "CHANNEL",
+  Condition: "CONDITION",
+  Mcp: "MCP",
+} as const;
+/**
+ * Selector type.
+ */
+export type ConditionSelectorType = ClosedEnum<typeof ConditionSelectorType>;
+
 export const ConditionSelectorType$zodSchema = z.enum([
   "HTTP",
   "CHANNEL",
   "CONDITION",
+  "MCP",
 ]).describe("Selector type.");
-
-export type ConditionSelectorType = z.infer<
-  typeof ConditionSelectorType$zodSchema
->;
 
 export type ConditionSelector = {
   type: ConditionSelectorType;
   condition: string;
 };
 
-export const ConditionSelector$zodSchema: z.ZodType<
-  ConditionSelector,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  condition: z.string(),
-  type: ConditionSelectorType$zodSchema,
-});
+export const ConditionSelector$zodSchema: z.ZodType<ConditionSelector> = z
+  .object({
+    condition: z.string().describe("The condition of the selector"),
+    type: ConditionSelectorType$zodSchema.describe("Selector type."),
+  });

@@ -15,14 +15,16 @@ export type Pagination = {
   totalCount?: number | undefined;
 };
 
-export const Pagination$zodSchema: z.ZodType<
-  Pagination,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  page: z.number().int().optional(),
-  pageCount: z.number().int().optional(),
-  pageItemsCount: z.number().int().optional(),
-  perPage: z.number().int().optional(),
-  totalCount: z.number().int().optional(),
+export const Pagination$zodSchema: z.ZodType<Pagination> = z.object({
+  page: z.int().optional().describe("The current page."),
+  pageCount: z.int().optional().describe("The total number of pages."),
+  pageItemsCount: z.int().optional().describe(
+    "The number of items for the current page.",
+  ),
+  perPage: z.int().optional().describe(
+    "The number of items requested per page.",
+  ),
+  totalCount: z.int().optional().describe(
+    "The total number of items, or `-1` if the count could not be computed within the configured timeout.",
+  ),
 }).describe("Generic object to handle pagination data.");

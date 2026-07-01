@@ -13,16 +13,20 @@ const args = {
 export const tool$integrationMembersRemoveIntegrationMember: ToolDefinition<
   typeof args
 > = {
-  name: "integration-members-remove-integration-member",
+  name: "remove_integration_member",
   description: `Remove one Integration member
 
-Remove an Integration member.
+Remove an Integration member. Returns a 400 HTTP Error:
 
-Returns a 400 HTTP Error:
- - when the user tries to remove a PrimaryOwner.
-
-User must have the INTEGRATION_MEMBER[DELETE] permission.
-`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Remove Integration Member",
+    "destructiveHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await integrationMembersRemoveIntegrationMember(

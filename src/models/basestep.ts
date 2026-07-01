@@ -9,11 +9,8 @@ import * as z from "zod";
  */
 export type BaseStepConfiguration = {};
 
-export const BaseStepConfiguration$zodSchema: z.ZodType<
-  BaseStepConfiguration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({}).describe("The configuration of the step");
+export const BaseStepConfiguration$zodSchema: z.ZodType<BaseStepConfiguration> =
+  z.object({}).describe("The configuration of the step");
 
 export type BaseStep = {
   name?: string | undefined;
@@ -24,12 +21,12 @@ export type BaseStep = {
   condition?: string | undefined;
 };
 
-export const BaseStep$zodSchema: z.ZodType<BaseStep, z.ZodTypeDef, unknown> = z
-  .object({
-    condition: z.string().optional(),
-    configuration: z.lazy(() => BaseStepConfiguration$zodSchema).optional(),
-    description: z.string().optional(),
-    enabled: z.boolean().default(true),
-    name: z.string().optional(),
-    policy: z.string().optional(),
-  });
+export const BaseStep$zodSchema: z.ZodType<BaseStep> = z.object({
+  condition: z.string().optional().describe("The condition of the step"),
+  configuration: z.lazy(() => BaseStepConfiguration$zodSchema).optional()
+    .describe("The configuration of the step"),
+  description: z.string().optional().describe("The description of the step"),
+  enabled: z.boolean().default(true).describe("Is the step enabled or not."),
+  name: z.string().optional().describe("The name of the step"),
+  policy: z.string().optional().describe("The policy of the step"),
+});

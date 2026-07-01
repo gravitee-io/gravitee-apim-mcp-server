@@ -11,12 +11,18 @@ const args = {
 };
 
 export const tool$apiHealthGetAPIHealthLogs: ToolDefinition<typeof args> = {
-  name: "API-health-get-api-health-logs",
+  name: "get_api_health_logs",
   description: `Get API Health Check logs
 
-Get API Health Check average response time overtime. 
-
-User must have the API_HEALTH[READ] permission.`,
+Get API Health Check average response time overtime.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Health Logs",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiHealthGetAPIHealthLogs(

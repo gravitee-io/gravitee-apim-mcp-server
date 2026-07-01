@@ -12,27 +12,17 @@ import {
   ConditionSelector$zodSchema,
 } from "./conditionselector.js";
 import { HttpSelector, HttpSelector$zodSchema } from "./httpselector.js";
+import { McpSelector, McpSelector$zodSchema } from "./mcpselector.js";
 
 export type Selector =
-  | (ConditionSelector & { type: "CONDITION" })
-  | (HttpSelector & { type: "HTTP" })
-  | (ChannelSelector & { type: "CHANNEL" });
+  | ConditionSelector
+  | McpSelector
+  | HttpSelector
+  | ChannelSelector;
 
-export const Selector$zodSchema: z.ZodType<Selector, z.ZodTypeDef, unknown> = z
-  .union([
-    ConditionSelector$zodSchema.and(
-      z.object({
-        type: z.literal("CONDITION"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    HttpSelector$zodSchema.and(
-      z.object({
-        type: z.literal("HTTP"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-    ChannelSelector$zodSchema.and(
-      z.object({
-        type: z.literal("CHANNEL"),
-      }).transform((v) => ({ type: v.type })),
-    ),
-  ]);
+export const Selector$zodSchema: z.ZodType<Selector> = z.union([
+  ConditionSelector$zodSchema,
+  McpSelector$zodSchema,
+  HttpSelector$zodSchema,
+  ChannelSelector$zodSchema,
+]);

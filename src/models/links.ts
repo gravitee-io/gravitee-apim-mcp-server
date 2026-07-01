@@ -15,11 +15,18 @@ export type Links = {
   next?: string | undefined;
 };
 
-export const Links$zodSchema: z.ZodType<Links, z.ZodTypeDef, unknown> = z
-  .object({
-    first: z.string().optional(),
-    last: z.string().optional(),
-    next: z.string().optional(),
-    previous: z.string().optional(),
-    self: z.string().optional(),
-  }).describe("List of links for pagination");
+export const Links$zodSchema: z.ZodType<Links> = z.object({
+  first: z.string().optional().describe(
+    "In a paginated response, link to the first page",
+  ),
+  last: z.string().optional().describe(
+    "In a paginated response, link to the last page",
+  ),
+  next: z.string().optional().describe(
+    "In a paginated response, link to the next page. Maybe null if current is the last page",
+  ),
+  previous: z.string().optional().describe(
+    "In a paginated response, link to the previous page. Maybe null if current is the first page",
+  ),
+  self: z.string().optional().describe("Link to current resource"),
+}).describe("List of links for pagination");

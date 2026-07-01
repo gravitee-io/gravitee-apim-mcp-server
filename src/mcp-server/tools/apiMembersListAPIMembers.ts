@@ -11,13 +11,18 @@ const args = {
 };
 
 export const tool$apiMembersListAPIMembers: ToolDefinition<typeof args> = {
-  name: "API-members-list-api-members",
+  name: "list_api_members",
   description: `Get the API's members
 
-List the members for a given API.
-
-User must have the API_MEMBER[READ] permission.
-`,
+List the members for a given API.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Api Members",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiMembersListAPIMembers(

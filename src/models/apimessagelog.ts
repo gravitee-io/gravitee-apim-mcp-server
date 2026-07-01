@@ -3,33 +3,77 @@
  */
 
 import * as z from "zod";
+import { ConnectorType, ConnectorType$zodSchema } from "./connectortype.js";
 import {
-  ApiMessageLogContent,
-  ApiMessageLogContent$zodSchema,
-} from "./apimessagelogcontent.js";
+  MessageOperation,
+  MessageOperation$zodSchema,
+} from "./messageoperation.js";
 
+/**
+ * Metrics data for a sampled message.
+ */
 export type ApiMessageLog = {
-  requestId?: string | undefined;
+  gateway?: string | undefined;
   timestamp?: string | undefined;
+  requestId?: string | undefined;
+  apiId?: string | undefined;
+  apiName?: string | undefined;
   clientIdentifier?: string | undefined;
   correlationId?: string | undefined;
-  parentCorrelationId?: string | undefined;
-  operation?: string | undefined;
-  entrypoint?: ApiMessageLogContent | undefined;
-  endpoint?: ApiMessageLogContent | undefined;
+  operation?: MessageOperation | undefined;
+  connectorType?: ConnectorType | undefined;
+  connectorId?: string | undefined;
+  contentLength?: number | undefined;
+  count?: number | undefined;
+  errorCount?: number | undefined;
+  countIncrement?: number | undefined;
+  error?: boolean | undefined;
+  gatewayLatencyMs?: number | undefined;
+  custom?: { [k: string]: string } | undefined;
+  additionalMetrics?: { [k: string]: any } | undefined;
 };
 
-export const ApiMessageLog$zodSchema: z.ZodType<
-  ApiMessageLog,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  clientIdentifier: z.string().optional(),
-  correlationId: z.string().optional(),
-  endpoint: ApiMessageLogContent$zodSchema.optional(),
-  entrypoint: ApiMessageLogContent$zodSchema.optional(),
-  operation: z.string().optional(),
-  parentCorrelationId: z.string().optional(),
-  requestId: z.string().optional(),
-  timestamp: z.string().datetime({ offset: true }).optional(),
-});
+export const ApiMessageLog$zodSchema: z.ZodType<ApiMessageLog> = z.object({
+  additionalMetrics: z.record(z.string(), z.any()).optional().describe(
+    "Plugin specific metrics (e.g. webhook entrypoint add several to monitor callback information such status, errors, latency, time)",
+  ),
+  apiId: z.string().optional().describe("API UUID"),
+  apiName: z.string().optional().describe(
+    "API Name (may change between metrics if API was redeployed with another name)",
+  ),
+  clientIdentifier: z.string().optional().describe("identified client if any"),
+  connectorId: z.string().optional().describe(
+    "Plugin ID of the connector that emitted the metric",
+  ),
+  connectorType: ConnectorType$zodSchema.optional().describe(
+    "Type of connector that emitted the metric",
+  ),
+  contentLength: z.int().optional().describe("Message content length"),
+  correlationId: z.string().optional().describe(
+    "ID to identify that message traserving the Gateway",
+  ),
+  count: z.int().optional().describe(
+    "Total successful messages count over the span of the subscription",
+  ),
+  countIncrement: z.int().optional().describe(
+    "Rate in which message are counted",
+  ),
+  custom: z.record(z.string(), z.string()).optional().describe(
+    "User defined custom metrics data",
+  ),
+  error: z.boolean().optional().describe("If the message is in error"),
+  errorCount: z.int().optional().describe(
+    "Total failure message count in error count",
+  ),
+  gateway: z.string().optional().describe("Gateway ID emitting this metrics"),
+  gatewayLatencyMs: z.int().optional().describe(
+    "Gateway latency to deliver this message",
+  ),
+  operation: MessageOperation$zodSchema.optional().describe(
+    "The operation that emitted the message",
+  ),
+  requestId: z.string().optional().describe(
+    "Request ID after which message were emitted",
+  ),
+  timestamp: z.iso.datetime({ offset: true }).optional(),
+}).describe("Metrics data for a sampled message.");

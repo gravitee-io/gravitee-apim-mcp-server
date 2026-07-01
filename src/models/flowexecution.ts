@@ -10,11 +10,9 @@ export type FlowExecution = {
   matchRequired?: boolean | undefined;
 };
 
-export const FlowExecution$zodSchema: z.ZodType<
-  FlowExecution,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  matchRequired: z.boolean().default(false),
-  mode: FlowMode$zodSchema.default("DEFAULT"),
+export const FlowExecution$zodSchema: z.ZodType<FlowExecution> = z.object({
+  matchRequired: z.boolean().default(false).describe(
+    "Is the flow execution match required.",
+  ),
+  mode: FlowMode$zodSchema.default("DEFAULT").describe("API's flow mode."),
 });

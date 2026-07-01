@@ -3,22 +3,57 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
- * The type of the sampling
+ * The type of the sampling:
+ *
+ * @remarks
+ *
+ * `PROBABILITY`: based on a specified probability,
+ * `TEMPORAL`: report one message at least every duration,
+ * `COUNT`: for every number of specified messages,
+ * `WINDOWED_COUNT`: x number of messages on a time window,
  */
+export const SamplingType = {
+  Probability: "PROBABILITY",
+  Temporal: "TEMPORAL",
+  Count: "COUNT",
+  WindowedCount: "WINDOWED_COUNT",
+} as const;
+/**
+ * The type of the sampling:
+ *
+ * @remarks
+ *
+ * `PROBABILITY`: based on a specified probability,
+ * `TEMPORAL`: report one message at least every duration,
+ * `COUNT`: for every number of specified messages,
+ * `WINDOWED_COUNT`: x number of messages on a time window,
+ */
+export type SamplingType = ClosedEnum<typeof SamplingType>;
+
 export const SamplingType$zodSchema = z.enum([
   "PROBABILITY",
   "TEMPORAL",
   "COUNT",
-]).describe("The type of the sampling");
+  "WINDOWED_COUNT",
+]).describe(
+  "The type of the sampling:\n\n`PROBABILITY`: based on a specified probability,\n`TEMPORAL`: report one message at least every duration,\n`COUNT`: for every number of specified messages,\n`WINDOWED_COUNT`: x number of messages on a time window,\n",
+);
 
-export type SamplingType = z.infer<typeof SamplingType$zodSchema>;
-
+/**
+ * API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
+ */
 export type Sampling = { type: SamplingType; value?: string | undefined };
 
-export const Sampling$zodSchema: z.ZodType<Sampling, z.ZodTypeDef, unknown> = z
-  .object({
-    type: SamplingType$zodSchema,
-    value: z.string().optional(),
-  });
+export const Sampling$zodSchema: z.ZodType<Sampling> = z.object({
+  type: SamplingType$zodSchema.describe(
+    "The type of the sampling:\n\n`PROBABILITY`: based on a specified probability,\n`TEMPORAL`: report one message at least every duration,\n`COUNT`: for every number of specified messages,\n`WINDOWED_COUNT`: x number of messages on a time window,\n",
+  ),
+  value: z.string().optional().describe(
+    "The value of the sampling:\n\n`PROBABILITY`: between `0.01` and `0.5`,\n`TEMPORAL`: ISO-8601 duration format, 1 second minimum (PT1S)\n`COUNT`: greater than `1`,\n`WINDOWED_COUNT`: x/<ISO-8601 duration> cannot exceed 1 message per second\n",
+  ),
+}).describe(
+  "API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.",
+);

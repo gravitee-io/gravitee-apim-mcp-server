@@ -3,11 +3,21 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 import {
   ExportApiV4Output,
   ExportApiV4Output$zodSchema,
 } from "./exportapiv4input.js";
+
+export const ExcludeAdditionalDatum = {
+  Groups: "groups",
+  Members: "members",
+  Metadata: "metadata",
+  Pages: "pages",
+  Plans: "plans",
+} as const;
+export type ExcludeAdditionalDatum = ClosedEnum<typeof ExcludeAdditionalDatum>;
 
 export const ExcludeAdditionalDatum$zodSchema = z.enum([
   "groups",
@@ -17,10 +27,6 @@ export const ExcludeAdditionalDatum$zodSchema = z.enum([
   "plans",
 ]);
 
-export type ExcludeAdditionalDatum = z.infer<
-  typeof ExcludeAdditionalDatum$zodSchema
->;
-
 export type ExportApiDefinitionRequest = {
   envId?: string | undefined;
   apiId: string;
@@ -28,9 +34,7 @@ export type ExportApiDefinitionRequest = {
 };
 
 export const ExportApiDefinitionRequest$zodSchema: z.ZodType<
-  ExportApiDefinitionRequest,
-  z.ZodTypeDef,
-  unknown
+  ExportApiDefinitionRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -41,24 +45,26 @@ export const ExportApiDefinitionRequest$zodSchema: z.ZodType<
   ).optional(),
 });
 
+export type ExportApiDefinitionResponseResult = ExportApiV4Output | ErrorT;
+
+export const ExportApiDefinitionResponseResult$zodSchema: z.ZodType<
+  ExportApiDefinitionResponseResult
+> = z.union([
+  ExportApiV4Output$zodSchema,
+  ErrorT$zodSchema,
+]);
+
 export type ExportApiDefinitionResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ExportApiV4?: ExportApiV4Output | undefined;
-  ErrorT?: ErrorT | undefined;
   Headers: { [k: string]: Array<string> };
+  Result: ExportApiV4Output | ErrorT;
 };
 
 export const ExportApiDefinitionResponse$zodSchema: z.ZodType<
-  ExportApiDefinitionResponse,
-  z.ZodTypeDef,
-  unknown
+  ExportApiDefinitionResponse
 > = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  ExportApiV4: ExportApiV4Output$zodSchema.optional(),
-  Headers: z.record(z.array(z.string())),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
+  Headers: z.record(z.string(), z.array(z.string())).default({}),
+  Result: z.union([
+    ExportApiV4Output$zodSchema,
+    ErrorT$zodSchema,
+  ]),
 });

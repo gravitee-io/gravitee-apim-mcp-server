@@ -13,13 +13,18 @@ const args = {
 export const tool$apiAnalyticsGetAverageConnectionDuration: ToolDefinition<
   typeof args
 > = {
-  name: "API-analytics-get-average-connection-duration",
+  name: "get_average_connection_duration",
   description: `Get API Analytics average connection duration
 
-Get API analytics average connection duration. Duration is only computed for ended requests.
-TCP Proxy APIs are not supported.
-
-User must have the API_ANALYTICS[READ] permission.`,
+Get API analytics average connection duration. Duration is only computed for ended requests. TCP Proxy APIs are not supported.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Average Connection Duration",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetAverageConnectionDuration(

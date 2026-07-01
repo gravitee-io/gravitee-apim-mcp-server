@@ -11,33 +11,16 @@ import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type PostRequest = { envId?: string | undefined; apiId: string };
 
-export const PostRequest$zodSchema: z.ZodType<
-  PostRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const PostRequest$zodSchema: z.ZodType<PostRequest> = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
 });
 
-export type PostResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiSpecGenRequestState?: ApiSpecGenRequestState | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type PostResponse = ApiSpecGenRequestState | ErrorT;
 
-export const PostResponse$zodSchema: z.ZodType<
-  PostResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiSpecGenRequestState: ApiSpecGenRequestState$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const PostResponse$zodSchema: z.ZodType<PostResponse> = z.union([
+  ApiSpecGenRequestState$zodSchema,
+  ErrorT$zodSchema,
+]);

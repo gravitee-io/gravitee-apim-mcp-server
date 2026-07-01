@@ -13,12 +13,18 @@ const args = {
 export const tool$apiAnalyticsGetResponseStatusOvertime: ToolDefinition<
   typeof args
 > = {
-  name: "API-analytics-get-response-status-overtime",
+  name: "get_response_status_overtime",
   description: `Get API Analytics response status counts over time
 
-Get API analytics response status counts over time.
-
-User must have the API_ANALYTICS[READ] permission.`,
+Get API analytics response status counts over time.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Response Status Overtime",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetResponseStatusOvertime(

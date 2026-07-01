@@ -11,17 +11,20 @@ const args = {
 };
 
 export const tool$apIsStartApi: ToolDefinition<typeof args> = {
-  name: "AP-is-start-api",
+  name: "start_api",
   description: `Start an API
 
 Change the API's status to STARTED.
 
-Return a 400 HTTP Error:
- - when user tries to start an ARCHIVED API
- - when the API is already STARTED
- - when the API needs to be reviewed (only if Review feature is activated).
-
-User must have the API_DEFINITION[UPDATE] permission.`,
+Start only after the API has been deployed.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Start Api",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsStartApi(

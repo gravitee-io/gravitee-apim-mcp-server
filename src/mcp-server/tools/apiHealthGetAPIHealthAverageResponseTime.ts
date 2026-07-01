@@ -13,12 +13,18 @@ const args = {
 export const tool$apiHealthGetAPIHealthAverageResponseTime: ToolDefinition<
   typeof args
 > = {
-  name: "API-health-get-api-health-average-response-time",
+  name: "get_api_health_average_response_time",
   description: `Get API Health Check average response time
 
-Get API Health Check average response time. 
-
-User must have the API_HEALTH[READ] permission.`,
+Get API Health Check average response time.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Api Health Average Response Time",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiHealthGetAPIHealthAverageResponseTime(

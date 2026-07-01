@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The mode of an application regarding ApiKey plans.
@@ -12,16 +13,25 @@ import * as z from "zod";
  * * EXCLUSIVE: an API Key is generated for each new subscription
  * * SHARED: reuse always the same API Key for all subscriptions
  */
+export const ApiKeyMode = {
+  Shared: "SHARED",
+  Exclusive: "EXCLUSIVE",
+  Unspecified: "UNSPECIFIED",
+} as const;
+/**
+ * The mode of an application regarding ApiKey plans.
+ *
+ * @remarks
+ * * UNSPECIFIED: no selected mode yet
+ * * EXCLUSIVE: an API Key is generated for each new subscription
+ * * SHARED: reuse always the same API Key for all subscriptions
+ */
+export type ApiKeyMode = ClosedEnum<typeof ApiKeyMode>;
+
 export const ApiKeyMode$zodSchema = z.enum([
   "SHARED",
   "EXCLUSIVE",
   "UNSPECIFIED",
 ]).describe(
-  "The mode of an application regarding ApiKey plans.\n"
-    + "* UNSPECIFIED: no selected mode yet\n"
-    + "* EXCLUSIVE: an API Key is generated for each new subscription\n"
-    + "* SHARED: reuse always the same API Key for all subscriptions\n"
-    + "",
+  "The mode of an application regarding ApiKey plans.\n* UNSPECIFIED: no selected mode yet\n* EXCLUSIVE: an API Key is generated for each new subscription\n* SHARED: reuse always the same API Key for all subscriptions\n",
 );
-
-export type ApiKeyMode = z.infer<typeof ApiKeyMode$zodSchema>;

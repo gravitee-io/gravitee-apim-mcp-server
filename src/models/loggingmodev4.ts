@@ -9,11 +9,7 @@ export type LoggingModeV4 = {
   entrypoint?: boolean | undefined;
 };
 
-export const LoggingModeV4$zodSchema: z.ZodType<
-  LoggingModeV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const LoggingModeV4$zodSchema: z.ZodType<LoggingModeV4> = z.object({
   endpoint: z.boolean().optional(),
   entrypoint: z.boolean().optional(),
 });

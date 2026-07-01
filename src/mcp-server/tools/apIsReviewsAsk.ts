@@ -11,16 +11,16 @@ const args = {
 };
 
 export const tool$apIsReviewsAsk: ToolDefinition<typeof args> = {
-  name: "AP-is-reviews-ask",
-  description: `Ask for a review
-
-Ask for a review
-
-Return a 400 HTTP Error:
- - when user tries to change reviews state of an ARCHIVED API
- - when user tries to change reviews state of an API already in review
-
-User must have the API_DEFINITION[UPDATE] permission.`,
+  name: "reviews_ask",
+  description: `Ask for a review`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Reviews Ask",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsReviewsAsk(

@@ -13,14 +13,18 @@ const args = {
 export const tool$apIsCreateApiWithImportDefinition: ToolDefinition<
   typeof args
 > = {
-  name: "AP-is-create-api-with-import-definition",
+  name: "create_api_with_import_definition",
   description: `Import API definition
 
-⚠️ Support only v4 API for the moment. ⚠️<br>
-Create an API by importing an API definition. <br>
-This definition can be retrieved from \`GET /environments/{envId}/apis/{apiId}/_export/definition\`
-
-User must have the ENVIRONMENT_API[CREATE] permission.`,
+⚠️ Support only v4 API for the moment. ⚠️<br> Create an API by importing an API definition. <br> This definition can be retrieved from \`GET /environments/{envId}/apis/{apiId}/_export/definition\``,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Api With Import Definition",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsCreateApiWithImportDefinition(

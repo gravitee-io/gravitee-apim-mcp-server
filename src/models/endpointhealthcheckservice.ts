@@ -16,12 +16,12 @@ export type EndpointHealthCheckService = {
 };
 
 export const EndpointHealthCheckService$zodSchema: z.ZodType<
-  EndpointHealthCheckService,
-  z.ZodTypeDef,
-  unknown
+  EndpointHealthCheckService
 > = z.object({
-  enabled: z.boolean().optional(),
-  inherit: z.boolean().optional(),
-  schedule: z.string().optional(),
+  enabled: z.boolean().optional().describe("Is the service enabled or not."),
+  inherit: z.boolean().optional().describe(
+    "Inherit the configuration of the parent endpoint.",
+  ),
+  schedule: z.string().optional().describe("The schedule of the service"),
   steps: z.array(HealthCheckStep$zodSchema).optional(),
 });

@@ -9,9 +9,7 @@ import { Qos, Qos$zodSchema } from "./qos.js";
 export type EntrypointConfiguration = {};
 
 export const EntrypointConfiguration$zodSchema: z.ZodType<
-  EntrypointConfiguration,
-  z.ZodTypeDef,
-  unknown
+  EntrypointConfiguration
 > = z.object({});
 
 export type Entrypoint = {
@@ -21,13 +19,11 @@ export type Entrypoint = {
   configuration?: EntrypointConfiguration | undefined;
 };
 
-export const Entrypoint$zodSchema: z.ZodType<
-  Entrypoint,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const Entrypoint$zodSchema: z.ZodType<Entrypoint> = z.object({
   configuration: z.lazy(() => EntrypointConfiguration$zodSchema).optional(),
   dlq: Dlq$zodSchema.optional(),
-  qos: Qos$zodSchema.default("AUTO"),
-  type: z.string(),
+  qos: Qos$zodSchema.default("AUTO").describe(
+    "Type of the quality of service.",
+  ),
+  type: z.string().describe("The type of the entrypoint"),
 });

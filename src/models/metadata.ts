@@ -13,11 +13,14 @@ export type Metadata = {
   defaultValue?: string | undefined;
 };
 
-export const Metadata$zodSchema: z.ZodType<Metadata, z.ZodTypeDef, unknown> = z
-  .object({
-    defaultValue: z.string().optional(),
-    format: MetadataFormat$zodSchema.optional(),
-    key: z.string().optional(),
-    name: z.string().optional(),
-    value: z.string().optional(),
-  });
+export const Metadata$zodSchema: z.ZodType<Metadata> = z.object({
+  defaultValue: z.string().optional().describe(
+    "The default value of the metadata.",
+  ),
+  format: MetadataFormat$zodSchema.optional().describe(
+    "The format of the metadata.",
+  ),
+  key: z.string().optional().describe("The key of the metadata."),
+  name: z.string().optional().describe("The name of the metadata."),
+  value: z.string().optional().describe("The value of the metadata."),
+});

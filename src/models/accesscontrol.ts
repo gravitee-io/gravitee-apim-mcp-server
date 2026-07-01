@@ -9,11 +9,11 @@ export type AccessControl = {
   referenceType?: string | undefined;
 };
 
-export const AccessControl$zodSchema: z.ZodType<
-  AccessControl,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  referenceId: z.string().optional(),
-  referenceType: z.string().optional(),
+export const AccessControl$zodSchema: z.ZodType<AccessControl> = z.object({
+  referenceId: z.string().optional().describe(
+    "The id of the resource used to check the access control",
+  ),
+  referenceType: z.string().optional().describe(
+    "The type of the resource used to check the access control",
+  ),
 });

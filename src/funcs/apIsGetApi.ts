@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get a specific API
  *
  * @remarks
- * Get a specific API.
+ * Get a specific API
  *
- * User must have at least one management (create, update, or delete) permission on the API to access it.
+ * Get a specific API.
  */
 export function apIsGetApi(
   client$: GraviteeApimCore,
@@ -113,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApi",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -169,7 +169,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiResponse$zodSchema, { key: "Api" }),
-    M.json("default", GetApiResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

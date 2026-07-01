@@ -15,13 +15,18 @@ export type HttpProxy = {
   type?: HttpProxyType | undefined;
 };
 
-export const HttpProxy$zodSchema: z.ZodType<HttpProxy, z.ZodTypeDef, unknown> =
-  z.object({
-    enabled: z.boolean().default(false),
-    host: z.string().optional(),
-    password: z.string().optional(),
-    port: z.number().int().optional(),
-    type: HttpProxyType$zodSchema.optional(),
-    useSystemProxy: z.boolean().default(false),
-    username: z.string().optional(),
-  });
+export const HttpProxy$zodSchema: z.ZodType<HttpProxy> = z.object({
+  enabled: z.boolean().default(false).describe("Is the proxy enabled or not"),
+  host: z.string().optional().describe("The host of the proxy"),
+  password: z.string().optional().describe(
+    "The password used to connect to the proxy",
+  ),
+  port: z.int().optional().describe("The port of the proxy"),
+  type: HttpProxyType$zodSchema.optional().describe("The type of the proxy."),
+  useSystemProxy: z.boolean().default(false).describe(
+    "Use the system proxy or not",
+  ),
+  username: z.string().optional().describe(
+    "The username used to connect to the proxy",
+  ),
+});

@@ -11,33 +11,18 @@ export type GetApiScoringRequest = {
   apiId: string;
 };
 
-export const GetApiScoringRequest$zodSchema: z.ZodType<
-  GetApiScoringRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const GetApiScoringRequest$zodSchema: z.ZodType<GetApiScoringRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type GetApiScoringResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiScoring?: ApiScoring | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiScoringResponse = ApiScoring | ErrorT;
 
-export const GetApiScoringResponse$zodSchema: z.ZodType<
-  GetApiScoringResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiScoring: ApiScoring$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiScoringResponse$zodSchema: z.ZodType<GetApiScoringResponse> =
+  z.union([
+    ApiScoring$zodSchema,
+    ErrorT$zodSchema,
+  ]);

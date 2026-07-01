@@ -49,29 +49,53 @@ export type UpdateApiV2 = {
   executionMode?: ExecutionMode | undefined;
 };
 
-export const UpdateApiV2$zodSchema: z.ZodType<
-  UpdateApiV2,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiVersion: z.string(),
-  categories: z.array(z.string()).optional(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
-  disableMembershipNotifications: z.boolean().default(false),
-  executionMode: ExecutionMode$zodSchema.default("V4_EMULATION_ENGINE"),
-  flowMode: FlowMode$zodSchema.default("DEFAULT"),
-  flows: z.array(FlowV2$zodSchema).optional(),
-  groups: z.array(z.string()).optional(),
-  labels: z.array(z.string()).optional(),
-  lifecycleState: ApiLifecycleState$zodSchema.optional(),
-  name: z.string(),
-  pathMappings: z.array(z.string()).optional(),
+export const UpdateApiV2$zodSchema: z.ZodType<UpdateApiV2> = z.object({
+  apiVersion: z.string().describe(
+    "API's version. It's a simple string only used in the portal.",
+  ),
+  categories: z.array(z.string()).optional().describe(
+    "The list of category ids or keys associated with this API.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "API's description. A short description of your API.",
+  ),
+  disableMembershipNotifications: z.boolean().default(false).describe(
+    "Disable membership notifications.",
+  ),
+  executionMode: ExecutionMode$zodSchema.default("V4_EMULATION_ENGINE")
+    .describe("The execution mode of the API."),
+  flowMode: FlowMode$zodSchema.default("DEFAULT").describe("API's flow mode."),
+  flows: z.array(FlowV2$zodSchema).optional().describe(
+    "The list of flows associated with this API.",
+  ),
+  groups: z.array(z.string()).optional().describe(
+    "List of group IDs associated with this API. Used to manage team access.",
+  ),
+  labels: z.array(z.string()).optional().describe(
+    "The free list of labels associated with this API.",
+  ),
+  lifecycleState: ApiLifecycleState$zodSchema.optional().describe(
+    "The status of the API regarding the console.",
+  ),
+  name: z.string().describe("API's name. Duplicate names can exists."),
+  pathMappings: z.array(z.string()).optional().describe(
+    "The list of path mappings associated with this API.",
+  ),
   properties: z.array(Property$zodSchema).optional(),
   proxy: Proxy$zodSchema.optional(),
   resources: z.array(Resource$zodSchema).optional(),
-  responseTemplates: z.record(z.record(ResponseTemplate$zodSchema)).optional(),
+  responseTemplates: z.record(
+    z.string(),
+    z.record(z.string(), ResponseTemplate$zodSchema),
+  ).optional(),
   services: ApiServicesV2$zodSchema.optional(),
-  tags: z.array(z.string()).optional(),
-  visibility: Visibility$zodSchema.optional(),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this API.",
+  ),
+  visibility: Visibility$zodSchema.default("PRIVATE").describe(
+    "The visibility of the resource regarding the portal.",
+  ),
 });

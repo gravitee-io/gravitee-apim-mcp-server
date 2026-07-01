@@ -8,33 +8,16 @@ import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type GetApiRequest = { envId?: string | undefined; apiId: string };
 
-export const GetApiRequest$zodSchema: z.ZodType<
-  GetApiRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const GetApiRequest$zodSchema: z.ZodType<GetApiRequest> = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
 });
 
-export type GetApiResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Api?: Api | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiResponse = Api | ErrorT;
 
-export const GetApiResponse$zodSchema: z.ZodType<
-  GetApiResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  Api: Api$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiResponse$zodSchema: z.ZodType<GetApiResponse> = z.union([
+  Api$zodSchema,
+  ErrorT$zodSchema,
+]);

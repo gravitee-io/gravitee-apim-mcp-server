@@ -3,10 +3,28 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Scope of a role.
  */
+export const RoleScope = {
+  Api: "API",
+  Application: "APPLICATION",
+  Group: "GROUP",
+  Environment: "ENVIRONMENT",
+  Organization: "ORGANIZATION",
+  Platform: "PLATFORM",
+  Integration: "INTEGRATION",
+  Cluster: "CLUSTER",
+  ApiProduct: "API_PRODUCT",
+  AiCatalog: "AI_CATALOG",
+} as const;
+/**
+ * Scope of a role.
+ */
+export type RoleScope = ClosedEnum<typeof RoleScope>;
+
 export const RoleScope$zodSchema = z.enum([
   "API",
   "APPLICATION",
@@ -15,6 +33,7 @@ export const RoleScope$zodSchema = z.enum([
   "ORGANIZATION",
   "PLATFORM",
   "INTEGRATION",
+  "CLUSTER",
+  "API_PRODUCT",
+  "AI_CATALOG",
 ]).describe("Scope of a role.");
-
-export type RoleScope = z.infer<typeof RoleScope$zodSchema>;

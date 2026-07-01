@@ -13,13 +13,18 @@ const args = {
 export const tool$apiSubscriptionsRenewAPISubscriptionAPIKeys: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-renew-api-subscription-api-keys",
+  name: "renew_api_subscription_api_keys",
   description: `Renew the subscription API Keys.
 
-Renew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br>
-The newly created API Key is returned in response.
-
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+Renew the subscription API Key by setting an expiration date on the existing active API Keys and creating a new API Key.<br> The newly created API Key is returned in response.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Renew Api Subscription Api Keys",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsRenewAPISubscriptionAPIKeys(

@@ -32,17 +32,9 @@ import { Result } from "../types/fp.js";
  * Export an API
  *
  * @remarks
- * ⚠️ Support only v4 API for the moment. ⚠️
+ * Export an API
  *
- * Export an API to a JSON file.
- *
- * User must have at least the API_DEFINITION[READ] permission.<br>
- * User should also have these permissions for specific data:
- *  - API_DEFINITION[READ] for the API
- *  - API_MEMBER[READ] for the API's members
- *  - API_PLAN[READ] for the API's plans
- *  - API_METADATA[READ] for the API's metadata
- *  - API_DOCUMENTATION[READ] for the API's documentation pages
+ * ⚠️ Support only v4 API for the moment. ⚠️ Export an API to a JSON file. User should also have these permissions for specific data: - API_DEFINITION[READ] for the API - API_MEMBER[READ] for the API's members - API_PLAN[READ] for the API's plans
  */
 export function apIsExportApiDefinition(
   client$: GraviteeApimCore,
@@ -126,7 +118,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "exportApiDefinition",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -186,7 +178,7 @@ async function $do(
       hdrs: true,
       key: "ExportApiV4",
     }),
-    M.json("default", ExportApiDefinitionResponse$zodSchema, { key: "Error" }),
+    M.json("default", ExportApiDefinitionResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

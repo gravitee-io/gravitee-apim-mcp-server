@@ -21,16 +21,20 @@ export type CategoryApi = {
   accessPaths?: Array<string> | undefined;
 };
 
-export const CategoryApi$zodSchema: z.ZodType<
-  CategoryApi,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  accessPaths: z.array(z.string()).optional(),
-  apiVersion: z.string(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
-  id: z.string(),
-  name: z.string(),
-  order: z.number(),
+export const CategoryApi$zodSchema: z.ZodType<CategoryApi> = z.object({
+  accessPaths: z.array(z.string()).optional().describe(
+    "List of paths for accessing the API",
+  ),
+  apiVersion: z.string().describe(
+    "API's version. It's a simple string only used in the portal.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "API's description. A short description of your API.",
+  ),
+  id: z.string().describe("API's uuid."),
+  name: z.string().describe("API's name. Duplicate names can exists."),
+  order: z.number().describe("Order of the API in the Category list"),
 }).describe("API in a category");

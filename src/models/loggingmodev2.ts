@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The mode of the logging.
  */
+export const LoggingModeV2 = {
+  None: "NONE",
+  Client: "CLIENT",
+  Proxy: "PROXY",
+  ClientProxy: "CLIENT_PROXY",
+} as const;
+/**
+ * The mode of the logging.
+ */
+export type LoggingModeV2 = ClosedEnum<typeof LoggingModeV2>;
+
 export const LoggingModeV2$zodSchema = z.enum([
   "NONE",
   "CLIENT",
   "PROXY",
   "CLIENT_PROXY",
 ]).describe("The mode of the logging.");
-
-export type LoggingModeV2 = z.infer<typeof LoggingModeV2$zodSchema>;

@@ -11,13 +11,11 @@ export type ResponseTemplate = {
   propagateErrorKeyToLogs?: boolean | undefined;
 };
 
-export const ResponseTemplate$zodSchema: z.ZodType<
-  ResponseTemplate,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  body: z.string().optional(),
-  headers: z.record(z.string()).optional(),
-  propagateErrorKeyToLogs: z.boolean().optional(),
-  statusCode: z.number().int().optional(),
-});
+export const ResponseTemplate$zodSchema: z.ZodType<ResponseTemplate> = z.object(
+  {
+    body: z.string().optional(),
+    headers: z.record(z.string(), z.string()).optional(),
+    propagateErrorKeyToLogs: z.boolean().optional(),
+    statusCode: z.int().optional(),
+  },
+);

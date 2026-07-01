@@ -26,42 +26,29 @@ export type GetApiMetadataRequest = {
   sortBy?: ApiMetadataSortByParam | undefined;
 };
 
-export const GetApiMetadataRequest$zodSchema: z.ZodType<
-  GetApiMetadataRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
-  ),
-  sortBy: ApiMetadataSortByParam$zodSchema.optional(),
-  source: z.array(ApiMetadataSourceParam$zodSchema).describe(
-    "Determines source of API Metadata (GLOBAL or API).",
-  ).optional(),
-});
+export const GetApiMetadataRequest$zodSchema: z.ZodType<GetApiMetadataRequest> =
+  z.object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    page: z.int().default(1).describe("The page number for pagination."),
+    perPage: z.int().default(10).describe(
+      "The number of items per page for pagination.\n",
+    ),
+    sortBy: ApiMetadataSortByParam$zodSchema.optional().describe(
+      "Possibility to sort API Metadata results by field.\nCan be ascending or descending with minus '-' prefix.\nBy default, 'key' is applied.",
+    ),
+    source: z.array(ApiMetadataSourceParam$zodSchema).describe(
+      "Determines source of API Metadata (GLOBAL or API).",
+    ).optional(),
+  });
 
-export type GetApiMetadataResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  MetadataResponse?: MetadataResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiMetadataResponse = MetadataResponse | ErrorT;
 
 export const GetApiMetadataResponse$zodSchema: z.ZodType<
-  GetApiMetadataResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  MetadataResponse: MetadataResponse$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiMetadataResponse
+> = z.union([
+  MetadataResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

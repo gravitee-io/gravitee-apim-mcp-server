@@ -14,12 +14,9 @@ export type HealthCheckService = {
   enabled?: boolean | undefined;
 };
 
-export const HealthCheckService$zodSchema: z.ZodType<
-  HealthCheckService,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  enabled: z.boolean().optional(),
-  schedule: z.string().optional(),
-  steps: z.array(HealthCheckStep$zodSchema).optional(),
-});
+export const HealthCheckService$zodSchema: z.ZodType<HealthCheckService> = z
+  .object({
+    enabled: z.boolean().optional().describe("Is the service enabled or not."),
+    schedule: z.string().optional().describe("The schedule of the service"),
+    steps: z.array(HealthCheckStep$zodSchema).optional(),
+  });

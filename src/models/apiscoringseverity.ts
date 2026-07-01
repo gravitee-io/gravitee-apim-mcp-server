@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * An enum representing the severity level of the rule violation.
  */
+export const ApiScoringSeverity = {
+  Error: "ERROR",
+  Hint: "HINT",
+  Info: "INFO",
+  Warn: "WARN",
+} as const;
+/**
+ * An enum representing the severity level of the rule violation.
+ */
+export type ApiScoringSeverity = ClosedEnum<typeof ApiScoringSeverity>;
+
 export const ApiScoringSeverity$zodSchema = z.enum([
   "ERROR",
   "HINT",
   "INFO",
   "WARN",
 ]).describe("An enum representing the severity level of the rule violation.");
-
-export type ApiScoringSeverity = z.infer<typeof ApiScoringSeverity$zodSchema>;

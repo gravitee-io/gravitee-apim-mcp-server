@@ -12,34 +12,34 @@ export type GetApiPlanRequest = {
   planId: string;
 };
 
-export const GetApiPlanRequest$zodSchema: z.ZodType<
-  GetApiPlanRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-  planId: z.string().describe("Id of a plan."),
-});
+export const GetApiPlanRequest$zodSchema: z.ZodType<GetApiPlanRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+    planId: z.string().describe("Id of a plan."),
+  });
+
+export type GetApiPlanResponseResult = Plan | ErrorT;
+
+export const GetApiPlanResponseResult$zodSchema: z.ZodType<
+  GetApiPlanResponseResult
+> = z.union([
+  Plan$zodSchema,
+  ErrorT$zodSchema,
+]);
 
 export type GetApiPlanResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Plan?: Plan | undefined;
-  ErrorT?: ErrorT | undefined;
+  Headers: { [k: string]: Array<string> };
+  Result: Plan | ErrorT;
 };
 
-export const GetApiPlanResponse$zodSchema: z.ZodType<
-  GetApiPlanResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Plan: Plan$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiPlanResponse$zodSchema: z.ZodType<GetApiPlanResponse> = z
+  .object({
+    Headers: z.record(z.string(), z.array(z.string())).default({}),
+    Result: z.union([
+      Plan$zodSchema,
+      ErrorT$zodSchema,
+    ]),
+  });

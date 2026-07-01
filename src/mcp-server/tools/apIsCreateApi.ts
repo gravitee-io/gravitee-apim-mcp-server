@@ -11,13 +11,21 @@ const args = {
 };
 
 export const tool$apIsCreateApi: ToolDefinition<typeof args> = {
-  name: "AP-is-create-api",
+  name: "create_api",
   description: `Create an API
 
-⚠️ Support only v4 API for the moment. ⚠️<br>
-Create a new API.
+⚠️ Support only v4 API for the moment. ⚠️<br> Create a new API.
 
-User must have the ENVIRONMENT_API[CREATE] permission.`,
+For V4 PROXY APIs, provide listeners with HTTP paths and an http-proxy entrypoint, plus endpointGroups with an http-proxy endpoint.
+Example request body: {"name":"My API","apiVersion":"1.0","definitionVersion":"V4","type":"PROXY","listeners":[{"type":"HTTP","paths":[{"path":"/my-api"}],"entrypoints":[{"type":"http-proxy"}]}],"endpointGroups":[{"name":"default","type":"http-proxy","endpoints":[{"name":"backend","type":"http-proxy","configuration":{"target":"https://backend.example.com"}}]}]}`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Api",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsCreateApi(

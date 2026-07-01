@@ -12,12 +12,9 @@ export type SubscriptionListener = {
   servers?: Array<string> | undefined;
 };
 
-export const SubscriptionListener$zodSchema: z.ZodType<
-  SubscriptionListener,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  entrypoints: z.array(Entrypoint$zodSchema).optional(),
-  servers: z.array(z.string()).optional(),
-  type: ListenerType$zodSchema,
-});
+export const SubscriptionListener$zodSchema: z.ZodType<SubscriptionListener> = z
+  .object({
+    entrypoints: z.array(Entrypoint$zodSchema).optional(),
+    servers: z.array(z.string()).optional(),
+    type: ListenerType$zodSchema.describe("Listener type."),
+  });

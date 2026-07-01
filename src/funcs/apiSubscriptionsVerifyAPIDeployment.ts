@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Check if a deployment is possible
  *
  * @remarks
- * Check if an API deployment is possible given the API's definition and license used by the organization.
+ * Check if a deployment is possible
  *
- * User must have the API_DEFINITION[READ] permission.
+ * Check if an API deployment is possible given the API's definition and license used by the organization.
  */
 export function apiSubscriptionsVerifyAPIDeployment(
   client$: GraviteeApimCore,
@@ -115,7 +115,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "verifyApiDeployment",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -174,7 +174,7 @@ async function $do(
       key: "VerifyApiDeploymentResponse",
     }),
     M.json("default", VerifyApiDeploymentResponseResponse$zodSchema, {
-      key: "Error",
+      key: "ErrorT",
     }),
   )(response, req$, { extraFields: responseFields$ });
 

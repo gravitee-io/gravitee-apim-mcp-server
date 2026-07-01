@@ -4,6 +4,7 @@
 
 import * as z from "zod";
 import { LoggingV4, LoggingV4$zodSchema } from "./loggingv4.js";
+import { OtelLogsV4, OtelLogsV4$zodSchema } from "./otellogsv4.js";
 import { Sampling, Sampling$zodSchema } from "./sampling.js";
 import { TracingV4, TracingV4$zodSchema } from "./tracingv4.js";
 
@@ -12,12 +13,21 @@ export type Analytics = {
   sampling?: Sampling | undefined;
   logging?: LoggingV4 | undefined;
   tracing?: TracingV4 | undefined;
+  reporterMetricsEnabled?: boolean | undefined;
+  otelLogs?: OtelLogsV4 | undefined;
 };
 
-export const Analytics$zodSchema: z.ZodType<Analytics, z.ZodTypeDef, unknown> =
-  z.object({
-    enabled: z.boolean().default(true),
-    logging: LoggingV4$zodSchema.optional(),
-    sampling: Sampling$zodSchema.optional(),
-    tracing: TracingV4$zodSchema.optional(),
-  });
+export const Analytics$zodSchema: z.ZodType<Analytics> = z.object({
+  enabled: z.boolean().default(true).describe(
+    "Whether or not analytics is enabled.",
+  ),
+  logging: LoggingV4$zodSchema.optional(),
+  otelLogs: OtelLogsV4$zodSchema.optional(),
+  reporterMetricsEnabled: z.boolean().optional().describe(
+    "Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.\nServer-side default for Native v4 on create is `true`.\nIndependent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.",
+  ),
+  sampling: Sampling$zodSchema.optional().describe(
+    "API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.",
+  ),
+  tracing: TracingV4$zodSchema.optional(),
+});

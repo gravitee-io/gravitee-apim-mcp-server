@@ -7,13 +7,11 @@ import * as z from "zod";
 export type IngestedApi = {
   id?: string | undefined;
   name?: string | undefined;
+  version?: string | undefined;
 };
 
-export const IngestedApi$zodSchema: z.ZodType<
-  IngestedApi,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  id: z.string().optional(),
-  name: z.string().optional(),
+export const IngestedApi$zodSchema: z.ZodType<IngestedApi> = z.object({
+  id: z.string().optional().describe("Ingested API uuid"),
+  name: z.string().optional().describe("Ingested API name"),
+  version: z.string().optional().describe("the version of API"),
 });

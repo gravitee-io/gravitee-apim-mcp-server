@@ -17,11 +17,13 @@ export type SubscriptionApiKeysResponse = {
 };
 
 export const SubscriptionApiKeysResponse$zodSchema: z.ZodType<
-  SubscriptionApiKeysResponse,
-  z.ZodTypeDef,
-  unknown
+  SubscriptionApiKeysResponse
 > = z.object({
-  data: z.array(ApiKey$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
+  data: z.array(ApiKey$zodSchema).optional().describe(
+    "List of subscription API Keys.",
+  ),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
 }).describe("Page of subscription API Keys");

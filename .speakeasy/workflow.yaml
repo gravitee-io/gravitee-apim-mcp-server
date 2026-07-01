@@ -1,9 +1,9 @@
 workflowVersion: 1.0.0
-speakeasyVersion: latest
+speakeasyVersion: 1.768.2
 sources:
     Gravitee.io APIM - Management API - APIs:
         inputs:
-            - location: ../mapi_spec_fixed.yaml
+            - location: ./.speakeasy/openapi-apis.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-apim---management-api---ap-is

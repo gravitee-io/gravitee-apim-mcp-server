@@ -17,43 +17,26 @@ export type GetAverageConnectionDurationRequest = {
 };
 
 export const GetAverageConnectionDurationRequest$zodSchema: z.ZodType<
-  GetAverageConnectionDurationRequest,
-  z.ZodTypeDef,
-  unknown
+  GetAverageConnectionDurationRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  from: z.number().int().describe(
-    "The timestamp from which the logs will be returned.\n"
-      + "",
+  from: z.int().describe(
+    "The timestamp from which the logs will be returned.\n",
   ).optional(),
-  to: z.number().int().describe(
-    "The timestamp to which the logs will be returned.\n"
-      + "",
-  ).optional(),
+  to: z.int().describe("The timestamp to which the logs will be returned.\n")
+    .optional(),
 });
 
-export type GetAverageConnectionDurationResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiAnalyticsAverageConnectionDurationResponse?:
-    | ApiAnalyticsAverageConnectionDurationResponse
-    | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetAverageConnectionDurationResponse =
+  | ApiAnalyticsAverageConnectionDurationResponse
+  | ErrorT;
 
 export const GetAverageConnectionDurationResponse$zodSchema: z.ZodType<
-  GetAverageConnectionDurationResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiAnalyticsAverageConnectionDurationResponse:
-    ApiAnalyticsAverageConnectionDurationResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetAverageConnectionDurationResponse
+> = z.union([
+  ApiAnalyticsAverageConnectionDurationResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Listener type.
  */
+export const ListenerType = {
+  Http: "HTTP",
+  Subscription: "SUBSCRIPTION",
+  Tcp: "TCP",
+  Kafka: "KAFKA",
+} as const;
+/**
+ * Listener type.
+ */
+export type ListenerType = ClosedEnum<typeof ListenerType>;
+
 export const ListenerType$zodSchema = z.enum([
   "HTTP",
   "SUBSCRIPTION",
   "TCP",
   "KAFKA",
 ]).describe("Listener type.");
-
-export type ListenerType = z.infer<typeof ListenerType$zodSchema>;

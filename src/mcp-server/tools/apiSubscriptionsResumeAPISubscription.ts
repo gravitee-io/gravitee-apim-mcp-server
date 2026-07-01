@@ -13,12 +13,18 @@ const args = {
 export const tool$apiSubscriptionsResumeAPISubscription: ToolDefinition<
   typeof args
 > = {
-  name: "API-subscriptions-resume-api-subscription",
+  name: "resume_api_subscription",
   description: `Resume a paused API's subscription
 
-Resume a previously paused subscription.
-
-User must have the API_SUBSCRIPTION[UPDATE] permission.`,
+Resume a previously paused subscription.`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Resume Api Subscription",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSubscriptionsResumeAPISubscription(

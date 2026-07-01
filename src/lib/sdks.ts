@@ -310,9 +310,9 @@ export class ClientSDK {
   }
 }
 
-const jsonLikeContentTypeRE = /(application|text)\/.*?\+*json.*/;
+const jsonLikeContentTypeRE = /^(application|text)\/([^+]+\+)*json.*/;
 const jsonlLikeContentTypeRE =
-  /(application|text)\/(.*?\+*\bjsonl\b.*|.*?\+*\bx-ndjson\b.*)/;
+  /^(application|text)\/([^+]+\+)*(jsonl|x-ndjson)\b.*/;
 async function logRequest(logger: Logger | undefined, req: Request) {
   if (!logger) {
     return;
@@ -383,8 +383,6 @@ async function logResponse(
       break;
     case matchContentType(res, "application/jsonl")
       || jsonlLikeContentTypeRE.test(ct):
-      logger.log(await res.clone().text());
-      break;
     case matchContentType(res, "text/event-stream"):
       logger.log(`<${contentType}>`);
       break;

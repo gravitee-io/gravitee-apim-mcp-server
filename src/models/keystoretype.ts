@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the key store.
  */
+export const KeyStoreType = {
+  Jks: "JKS",
+  Pem: "PEM",
+  Pkcs12: "PKCS12",
+  None: "NONE",
+} as const;
+/**
+ * The type of the key store.
+ */
+export type KeyStoreType = ClosedEnum<typeof KeyStoreType>;
+
 export const KeyStoreType$zodSchema = z.enum([
   "JKS",
   "PEM",
   "PKCS12",
   "NONE",
 ]).describe("The type of the key store.");
-
-export type KeyStoreType = z.infer<typeof KeyStoreType$zodSchema>;

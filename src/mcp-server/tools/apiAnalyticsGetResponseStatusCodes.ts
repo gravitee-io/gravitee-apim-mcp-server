@@ -13,12 +13,18 @@ const args = {
 export const tool$apiAnalyticsGetResponseStatusCodes: ToolDefinition<
   typeof args
 > = {
-  name: "API-analytics-get-response-status-codes",
+  name: "get_response_status_codes",
   description: `Get API Analytics response status counts
 
-Get API analytics response status counts. Response statuses are grouped by endpoint and status code hundreds.
-
-User must have the API_ANALYTICS[READ] permission.`,
+Get API analytics response status counts. Response statuses are grouped by endpoint and status code hundreds.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Response Status Codes",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiAnalyticsGetResponseStatusCodes(

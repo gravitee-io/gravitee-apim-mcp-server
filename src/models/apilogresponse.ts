@@ -28,19 +28,29 @@ export type ApiLogResponse = {
   endpointResponse?: ApiLogResponseContent | undefined;
 };
 
-export const ApiLogResponse$zodSchema: z.ZodType<
-  ApiLogResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().optional(),
-  clientIdentifier: z.string().optional(),
-  endpointRequest: ApiLogRequestContent$zodSchema.optional(),
-  endpointResponse: ApiLogResponseContent$zodSchema.optional(),
-  entrypointRequest: ApiLogRequestContent$zodSchema.optional(),
-  entrypointResponse: ApiLogResponseContent$zodSchema.optional(),
-  requestEnded: z.boolean().optional(),
-  requestId: z.string().optional(),
-  timestamp: z.string().datetime({ offset: true }).optional(),
-  transactionId: z.string().optional(),
+export const ApiLogResponse$zodSchema: z.ZodType<ApiLogResponse> = z.object({
+  apiId: z.string().optional().describe("The id of the api."),
+  clientIdentifier: z.string().optional().describe(
+    "The client identifier of the request.",
+  ),
+  endpointRequest: ApiLogRequestContent$zodSchema.optional().describe(
+    "The log request content.",
+  ),
+  endpointResponse: ApiLogResponseContent$zodSchema.optional().describe(
+    "The log response content.",
+  ),
+  entrypointRequest: ApiLogRequestContent$zodSchema.optional().describe(
+    "The log request content.",
+  ),
+  entrypointResponse: ApiLogResponseContent$zodSchema.optional().describe(
+    "The log response content.",
+  ),
+  requestEnded: z.boolean().optional().describe(
+    "The flag indicating if the request has ended.",
+  ),
+  requestId: z.string().optional().describe("The id of the request."),
+  timestamp: z.iso.datetime({ offset: true }).optional().describe(
+    "The date (as timestamp) of the log.",
+  ),
+  transactionId: z.string().optional().describe("The id of the transaction."),
 }).describe("API log for a request.");

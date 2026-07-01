@@ -32,9 +32,12 @@ import { Result } from "../types/fp.js";
  * Create an API's plan
  *
  * @remarks
+ * Create an API's plan
+ *
  * Create a new plan on a given API.
  *
- * User must have the API_PLAN[CREATE] permission.
+ * Plans are created in STAGING status. Publish the plan before deployment when the API should receive traffic.
+ * Example request body: {"definitionVersion":"V4","name":"Keyless","security":{"type":"KEY_LESS"},"mode":"STANDARD","validation":"AUTO"}
  */
 export function apiPlansCreateAPIPlan(
   client$: GraviteeApimCore,
@@ -114,7 +117,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createApiPlan",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -170,7 +173,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(201, CreateApiPlanResponse$zodSchema, { key: "Plan" }),
-    M.json("default", CreateApiPlanResponse$zodSchema, { key: "Error" }),
+    M.json("default", CreateApiPlanResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -9,11 +9,7 @@ export type LoggingPhase = {
   response?: boolean | undefined;
 };
 
-export const LoggingPhase$zodSchema: z.ZodType<
-  LoggingPhase,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const LoggingPhase$zodSchema: z.ZodType<LoggingPhase> = z.object({
   request: z.boolean().optional(),
   response: z.boolean().optional(),
 });

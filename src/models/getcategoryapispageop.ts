@@ -17,37 +17,23 @@ export type GetCategoryApisPageRequest = {
 };
 
 export const GetCategoryApisPageRequest$zodSchema: z.ZodType<
-  GetCategoryApisPageRequest,
-  z.ZodTypeDef,
-  unknown
+  GetCategoryApisPageRequest
 > = z.object({
   categoryIdOrKey: z.string().describe("Id or Key of a category."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  page: z.number().int().default(1).describe("The page number for pagination."),
-  perPage: z.number().int().default(10).describe(
-    "The number of items per page for pagination.\n"
-      + "",
+  page: z.int().default(1).describe("The page number for pagination."),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
   ),
 });
 
-export type GetCategoryApisPageResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  CategoryApisResponse?: CategoryApisResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetCategoryApisPageResponse = CategoryApisResponse | ErrorT;
 
 export const GetCategoryApisPageResponse$zodSchema: z.ZodType<
-  GetCategoryApisPageResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  CategoryApisResponse: CategoryApisResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetCategoryApisPageResponse
+> = z.union([
+  CategoryApisResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

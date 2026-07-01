@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import * as b64$ from "../lib/base64.js";
 import { ErrorT, ErrorT$zodSchema } from "./error.js";
 
 export type GetApiPictureRequest = {
@@ -10,33 +11,20 @@ export type GetApiPictureRequest = {
   apiId: string;
 };
 
-export const GetApiPictureRequest$zodSchema: z.ZodType<
-  GetApiPictureRequest,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  apiId: z.string().describe("Id of an API."),
-  envId: z.string().default("DEFAULT").describe(
-    "Id or Hrid (Human readable Id) of an environment.",
-  ),
-});
+export const GetApiPictureRequest$zodSchema: z.ZodType<GetApiPictureRequest> = z
+  .object({
+    apiId: z.string().describe("Id of an API."),
+    envId: z.string().default("DEFAULT").describe(
+      "Id or Hrid (Human readable Id) of an environment.",
+    ),
+  });
 
-export type GetApiPictureResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ImageResponse?: Uint8Array | string | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiPictureResponse = Uint8Array | string | ErrorT;
 
-export const GetApiPictureResponse$zodSchema: z.ZodType<
-  GetApiPictureResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  ImageResponse: z.string().base64().describe("An image").optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+export const GetApiPictureResponse$zodSchema: z.ZodType<GetApiPictureResponse> =
+  z.union([
+    z.string().describe("Base64-encoded binary content").transform(
+      b64$.bytesFromBase64,
+    ),
+    ErrorT$zodSchema,
+  ]);

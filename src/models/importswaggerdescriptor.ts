@@ -8,14 +8,24 @@ export type ImportSwaggerDescriptor = {
   payload?: string | undefined;
   withDocumentation?: boolean | undefined;
   withOASValidationPolicy?: boolean | undefined;
+  withPolicies?: Array<string> | undefined;
+  withPolicyPaths?: boolean | undefined;
 };
 
 export const ImportSwaggerDescriptor$zodSchema: z.ZodType<
-  ImportSwaggerDescriptor,
-  z.ZodTypeDef,
-  unknown
+  ImportSwaggerDescriptor
 > = z.object({
-  payload: z.string().optional(),
-  withDocumentation: z.boolean().optional(),
-  withOASValidationPolicy: z.boolean().optional(),
+  payload: z.string().optional().describe("The Swagger/OpenAPI content."),
+  withDocumentation: z.boolean().optional().describe(
+    "Create documentation based on Swagger/OpenAPI specification.",
+  ),
+  withOASValidationPolicy: z.boolean().optional().describe(
+    "Add an OpenAPI Specification validation policy based on OpenAPI specification.",
+  ),
+  withPolicies: z.array(z.string()).optional().describe(
+    "Policy visitor IDs to apply during OpenAPI import.",
+  ),
+  withPolicyPaths: z.boolean().optional().describe(
+    "Create a flow for each path declared in the OpenAPI specification.",
+  ),
 });

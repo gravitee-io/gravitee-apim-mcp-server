@@ -14,11 +14,15 @@ export type DeletedIngestedApisResponse = {
 };
 
 export const DeletedIngestedApisResponse$zodSchema: z.ZodType<
-  DeletedIngestedApisResponse,
-  z.ZodTypeDef,
-  unknown
+  DeletedIngestedApisResponse
 > = z.object({
-  deleted: z.number().optional(),
-  errors: z.number().optional(),
-  skipped: z.number().optional(),
+  deleted: z.number().optional().describe(
+    "Number of successfully deleted APIs ",
+  ),
+  errors: z.number().optional().describe(
+    "Number of errors encountered during deletion process",
+  ),
+  skipped: z.number().optional().describe(
+    "Number of skipped APIs due to some criteria (e.g. being PUBLISHED)",
+  ),
 }).describe("Result of deleting ingested APIs operation");

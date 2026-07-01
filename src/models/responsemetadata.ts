@@ -9,10 +9,8 @@ import * as z from "zod";
  */
 export type ResponseMetadata = {};
 
-export const ResponseMetadata$zodSchema: z.ZodType<
-  ResponseMetadata,
-  z.ZodTypeDef,
-  unknown
-> = z.object({}).describe(
+export const ResponseMetadata$zodSchema: z.ZodType<ResponseMetadata> = z.object(
+  {},
+).describe(
   "Generic object to handle additional information about an entity. Can also be used for pagination data.",
 );

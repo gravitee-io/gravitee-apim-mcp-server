@@ -15,9 +15,7 @@ export type TriggerApiScoringRequest = {
 };
 
 export const TriggerApiScoringRequest$zodSchema: z.ZodType<
-  TriggerApiScoringRequest,
-  z.ZodTypeDef,
-  unknown
+  TriggerApiScoringRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -25,22 +23,11 @@ export const TriggerApiScoringRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type TriggerApiScoringResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiScoringTriggerResponse?: ApiScoringTriggerResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type TriggerApiScoringResponse = ApiScoringTriggerResponse | ErrorT;
 
 export const TriggerApiScoringResponse$zodSchema: z.ZodType<
-  TriggerApiScoringResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiScoringTriggerResponse: ApiScoringTriggerResponse$zodSchema.optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  TriggerApiScoringResponse
+> = z.union([
+  ApiScoringTriggerResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

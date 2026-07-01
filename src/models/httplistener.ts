@@ -7,6 +7,10 @@ import { Cors, Cors$zodSchema } from "./cors.js";
 import { Entrypoint, Entrypoint$zodSchema } from "./entrypoint.js";
 import { ListenerType, ListenerType$zodSchema } from "./listenertype.js";
 import { PathV4, PathV4$zodSchema } from "./pathv4.js";
+import {
+  RequestValidation,
+  RequestValidation$zodSchema,
+} from "./requestvalidation.js";
 
 export type HttpListener = {
   type: ListenerType;
@@ -15,17 +19,15 @@ export type HttpListener = {
   paths?: Array<PathV4> | undefined;
   pathMappings?: Array<string> | undefined;
   cors?: Cors | undefined;
+  requestValidation?: RequestValidation | undefined;
 };
 
-export const HttpListener$zodSchema: z.ZodType<
-  HttpListener,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const HttpListener$zodSchema: z.ZodType<HttpListener> = z.object({
   cors: Cors$zodSchema.optional(),
   entrypoints: z.array(Entrypoint$zodSchema).optional(),
   pathMappings: z.array(z.string()).optional(),
   paths: z.array(PathV4$zodSchema).optional(),
+  requestValidation: RequestValidation$zodSchema.optional(),
   servers: z.array(z.string()).optional(),
-  type: ListenerType$zodSchema,
+  type: ListenerType$zodSchema.describe("Listener type."),
 });

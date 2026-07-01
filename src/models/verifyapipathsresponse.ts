@@ -13,10 +13,10 @@ export type VerifyApiPathsResponse = {
 };
 
 export const VerifyApiPathsResponse$zodSchema: z.ZodType<
-  VerifyApiPathsResponse,
-  z.ZodTypeDef,
-  unknown
+  VerifyApiPathsResponse
 > = z.object({
-  ok: z.boolean().optional(),
-  reason: z.string().optional(),
+  ok: z.boolean().optional().describe("Indicates whether the paths are valid."),
+  reason: z.string().optional().describe(
+    "An optional reason giving details about the result.",
+  ),
 }).describe("Result of the API paths verification");

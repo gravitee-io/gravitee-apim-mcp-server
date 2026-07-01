@@ -33,8 +33,6 @@ import { Result } from "../types/fp.js";
  *
  * @remarks
  * Evaluate the state of the API SpecGen
- *
- * User must have the API_DOCUMENTATION[READ] permission.
  */
 export function apiSpecGenGetSpecGenState(
   client$: GraviteeApimCore,
@@ -115,7 +113,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getSpecGenState",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -173,7 +171,7 @@ async function $do(
     M.json(200, GetSpecGenStateResponse$zodSchema, {
       key: "ApiSpecGenRequestState",
     }),
-    M.json("default", GetSpecGenStateResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetSpecGenStateResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

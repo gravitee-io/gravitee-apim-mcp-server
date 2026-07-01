@@ -13,9 +13,8 @@ import { pathToFunc } from "../lib/url.js";
 import {
   CreateApiDeploymentRequest,
   CreateApiDeploymentRequest$zodSchema,
-  CreateApiDeploymentResponse,
-  CreateApiDeploymentResponse$zodSchema,
 } from "../models/createapideploymentop.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -32,10 +31,12 @@ import { Result } from "../types/fp.js";
  * Request a deployment to gateway instances
  *
  * @remarks
- * Request a deployment for a given API. <br>
- * An optional deployment label can be given to the requested deployment.
+ * Request a deployment to gateway instances
  *
- * User must have the API_DEFINITION[UPDATE] permission.
+ * Request a deployment for a given API. <br> An optional deployment label can be given to the requested deployment.
+ *
+ * Deploy after configuration or plan changes and before starting the API.
+ * Example request body: {"deploymentLabel":"release"}
  */
 export function apIsCreateApiDeployment(
   client$: GraviteeApimCore,
@@ -43,7 +44,7 @@ export function apIsCreateApiDeployment(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    CreateApiDeploymentResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -67,7 +68,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      CreateApiDeploymentResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -115,7 +116,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "createApiDeployment",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -161,7 +162,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    CreateApiDeploymentResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -170,8 +171,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(202, CreateApiDeploymentResponse$zodSchema),
-    M.json("default", CreateApiDeploymentResponse$zodSchema, { key: "Error" }),
+    M.nil(202, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

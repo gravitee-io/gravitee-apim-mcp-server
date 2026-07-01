@@ -23,13 +23,11 @@ export type ApiScoringAsset = {
   errors?: Array<ApiScoringError> | undefined;
 };
 
-export const ApiScoringAsset$zodSchema: z.ZodType<
-  ApiScoringAsset,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const ApiScoringAsset$zodSchema: z.ZodType<ApiScoringAsset> = z.object({
   diagnostics: z.array(ApiScoringDiagnostic$zodSchema).optional(),
   errors: z.array(ApiScoringError$zodSchema).optional(),
-  name: z.string().optional(),
-  type: ApiScoringAssetType$zodSchema.optional(),
+  name: z.string().optional().describe("Asset name."),
+  type: ApiScoringAssetType$zodSchema.optional().describe(
+    "The type of the asset.",
+  ),
 });

@@ -27,18 +27,37 @@ export type ApiKey = {
   revokedAt?: string | undefined;
 };
 
-export const ApiKey$zodSchema: z.ZodType<ApiKey, z.ZodTypeDef, unknown> = z
-  .object({
-    application: BaseApplication$zodSchema.optional(),
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    daysToExpirationOnLastNotification: z.number().int().optional(),
-    expireAt: z.string().datetime({ offset: true }).optional(),
-    expired: z.boolean().optional(),
-    id: z.string().optional(),
-    key: z.string().optional(),
-    paused: z.boolean().optional(),
-    revoked: z.boolean().optional(),
-    revokedAt: z.string().datetime({ offset: true }).optional(),
-    subscriptions: z.array(BaseSubscription$zodSchema).optional(),
-    updatedAt: z.string().datetime({ offset: true }).optional(),
-  });
+export const ApiKey$zodSchema: z.ZodType<ApiKey> = z.object({
+  application: BaseApplication$zodSchema.optional(),
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the API Key has been created.",
+  ),
+  daysToExpirationOnLastNotification: z.int().optional().describe(
+    "Number of days before the expiration of this subscription when the last pre-expiration notification was sent.",
+  ),
+  expireAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the API Key expires. No date means no expiration.",
+  ),
+  expired: z.boolean().optional().describe(
+    "Flag indicating that the API Key has expired.",
+  ),
+  id: z.string().optional().describe("The internal UUID of the API Key."),
+  key: z.string().optional().describe(
+    "The API Key value to use to call the protected api.",
+  ),
+  paused: z.boolean().optional().describe(
+    "Flag indicating that the API Key has been paused.",
+  ),
+  revoked: z.boolean().optional().describe(
+    "Flag indicating that the API Key has been revoked.",
+  ),
+  revokedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the API Key has been revoke. No date means not revoked.",
+  ),
+  subscriptions: z.array(BaseSubscription$zodSchema).optional().describe(
+    "The list of subscriptions using this API Key. Multiple subscription is possible with shared API Key.",
+  ),
+  updatedAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The datetime when the API Key has been updated.",
+  ),
+});

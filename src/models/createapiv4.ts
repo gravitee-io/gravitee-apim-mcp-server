@@ -17,11 +17,13 @@ import { FailoverV4, FailoverV4$zodSchema } from "./failoverv4.js";
 import { FlowExecution, FlowExecution$zodSchema } from "./flowexecution.js";
 import { FlowV4, FlowV4$zodSchema } from "./flowv4.js";
 import { Listener, Listener$zodSchema } from "./listener.js";
+import { Visibility, Visibility$zodSchema } from "./visibility.js";
 
 export type CreateApiV4 = {
   name: string;
   apiVersion: string;
   description?: string | undefined;
+  visibility?: Visibility | undefined;
   definitionVersion: DefinitionVersion;
   groups?: Array<string> | undefined;
   type: ApiType;
@@ -32,24 +34,39 @@ export type CreateApiV4 = {
   failover?: FailoverV4 | undefined;
   flowExecution?: FlowExecution | undefined;
   flows?: Array<FlowV4> | undefined;
+  allowedInApiProducts?: boolean | undefined;
 };
 
-export const CreateApiV4$zodSchema: z.ZodType<
-  CreateApiV4,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
+export const CreateApiV4$zodSchema: z.ZodType<CreateApiV4> = z.object({
+  allowedInApiProducts: z.boolean().default(true).describe(
+    "Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.",
+  ),
   analytics: Analytics$zodSchema.optional(),
-  apiVersion: z.string(),
-  definitionVersion: DefinitionVersion$zodSchema,
-  description: z.string().optional(),
+  apiVersion: z.string().describe(
+    "API's version. It's a simple string only used in the portal.",
+  ),
+  definitionVersion: DefinitionVersion$zodSchema.describe(
+    "API's gravitee definition version.",
+  ),
+  description: z.string().optional().describe(
+    "API's description. A short description of your API.",
+  ),
   endpointGroups: z.array(EndpointGroupV4$zodSchema),
   failover: FailoverV4$zodSchema.optional(),
   flowExecution: FlowExecution$zodSchema.optional(),
   flows: z.array(FlowV4$zodSchema).optional(),
-  groups: z.array(z.string()).optional(),
-  listeners: z.array(Listener$zodSchema),
-  name: z.string(),
-  tags: z.array(z.string()).optional(),
-  type: ApiType$zodSchema,
+  groups: z.array(z.string()).optional().describe(
+    "List of group IDs associated with this API. Used to manage team access.",
+  ),
+  listeners: z.array(Listener$zodSchema).describe(
+    "The list of listeners associated with this API.",
+  ),
+  name: z.string().describe("API's name. Duplicate names can exists."),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this API.",
+  ),
+  type: ApiType$zodSchema.describe("API's type."),
+  visibility: Visibility$zodSchema.default("PRIVATE").describe(
+    "The visibility of the resource regarding the portal.",
+  ),
 });

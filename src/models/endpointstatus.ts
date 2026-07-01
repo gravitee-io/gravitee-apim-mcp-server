@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The status of the endpoint.
  */
+export const EndpointStatus = {
+  Up: "UP",
+  Down: "DOWN",
+  TransitionallyDown: "TRANSITIONALLY_DOWN",
+  TransitionallyUp: "TRANSITIONALLY_UP",
+} as const;
+/**
+ * The status of the endpoint.
+ */
+export type EndpointStatus = ClosedEnum<typeof EndpointStatus>;
+
 export const EndpointStatus$zodSchema = z.enum([
   "UP",
   "DOWN",
   "TRANSITIONALLY_DOWN",
   "TRANSITIONALLY_UP",
 ]).describe("The status of the endpoint.");
-
-export type EndpointStatus = z.infer<typeof EndpointStatus$zodSchema>;

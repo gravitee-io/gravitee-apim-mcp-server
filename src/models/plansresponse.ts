@@ -16,12 +16,10 @@ export type PlansResponse = {
   links?: Links | undefined;
 };
 
-export const PlansResponse$zodSchema: z.ZodType<
-  PlansResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Plan$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
+export const PlansResponse$zodSchema: z.ZodType<PlansResponse> = z.object({
+  data: z.array(Plan$zodSchema).optional().describe("List of API plans."),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
 }).describe("Page of API plans");

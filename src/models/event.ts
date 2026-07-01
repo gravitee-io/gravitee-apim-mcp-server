@@ -16,13 +16,20 @@ export type Event = {
   properties?: { [k: string]: string } | undefined;
 };
 
-export const Event$zodSchema: z.ZodType<Event, z.ZodTypeDef, unknown> = z
-  .object({
-    createdAt: z.string().datetime({ offset: true }).optional(),
-    environmentIds: z.array(z.string()).optional(),
-    id: z.string().optional(),
-    initiator: BaseUser$zodSchema.optional(),
-    payload: z.string().optional(),
-    properties: z.record(z.string()).optional(),
-    type: EventType$zodSchema.optional(),
-  });
+export const Event$zodSchema: z.ZodType<Event> = z.object({
+  createdAt: z.iso.datetime({ offset: true }).optional().describe(
+    "The date when the event has been created.",
+  ),
+  environmentIds: z.array(z.string()).optional().describe(
+    "The id of the environments.",
+  ),
+  id: z.string().optional().describe("The internal UUID of the event."),
+  initiator: BaseUser$zodSchema.optional().describe(
+    "Base information about a user.",
+  ),
+  payload: z.string().optional().describe("The event payload."),
+  properties: z.record(z.string(), z.string()).optional().describe(
+    "Properties of the event.",
+  ),
+  type: EventType$zodSchema.optional().describe("The type of the event."),
+});

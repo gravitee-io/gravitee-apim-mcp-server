@@ -11,10 +11,8 @@ export type ApiScoringTriggerResponse = {
 };
 
 export const ApiScoringTriggerResponse$zodSchema: z.ZodType<
-  ApiScoringTriggerResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiScoringTriggerResponse
 > = z.object({
-  message: z.string().optional(),
-  status: ScoringStatus$zodSchema.optional(),
+  message: z.string().optional().describe("Api Scoring message."),
+  status: ScoringStatus$zodSchema.optional().describe("API Scoring status."),
 });

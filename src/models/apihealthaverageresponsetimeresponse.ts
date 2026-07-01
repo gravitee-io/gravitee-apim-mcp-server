@@ -13,10 +13,12 @@ export type ApiHealthAverageResponseTimeResponse = {
 };
 
 export const ApiHealthAverageResponseTimeResponse$zodSchema: z.ZodType<
-  ApiHealthAverageResponseTimeResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiHealthAverageResponseTimeResponse
 > = z.object({
-  global: z.number().int().optional(),
-  group: z.record(z.number().int()).optional(),
+  global: z.int().optional().describe(
+    "Average response time of the API Health-Check for all endpoint combined",
+  ),
+  group: z.record(z.string(), z.int()).optional().describe(
+    "Average response time by endpoint or by gateway",
+  ),
 }).describe("Average response time of an API Health-Check.");

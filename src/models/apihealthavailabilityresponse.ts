@@ -13,10 +13,12 @@ export type ApiHealthAvailabilityResponse = {
 };
 
 export const ApiHealthAvailabilityResponse$zodSchema: z.ZodType<
-  ApiHealthAvailabilityResponse,
-  z.ZodTypeDef,
-  unknown
+  ApiHealthAvailabilityResponse
 > = z.object({
-  global: z.number().optional(),
-  group: z.record(z.number()).optional(),
+  global: z.number().optional().describe(
+    "Availability of the API for all endpoint combined",
+  ),
+  group: z.record(z.string(), z.number()).optional().describe(
+    "Availability by endpoint or by gateway",
+  ),
 }).describe("Availability of an API.");

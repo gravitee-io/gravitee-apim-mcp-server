@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Get API Audit
  *
  * @remarks
- * Get API Audit.
+ * Get API Audit
  *
- * User must have the API_AUDIT[READ] permission.
+ * Get API Audit.
  */
 export function apiAuditsGetAPIAudits(
   client$: GraviteeApimCore,
@@ -124,7 +124,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "getApiAudits",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -181,7 +181,7 @@ async function $do(
     | ConnectionError
   >(
     M.json(200, GetApiAuditsResponse$zodSchema, { key: "AuditsResponse" }),
-    M.json("default", GetApiAuditsResponse$zodSchema, { key: "Error" }),
+    M.json("default", GetApiAuditsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

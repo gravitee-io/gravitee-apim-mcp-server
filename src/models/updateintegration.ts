@@ -3,19 +3,27 @@
  */
 
 import * as z from "zod";
+import {
+  IntegrationWellKnownUrl,
+  IntegrationWellKnownUrl$zodSchema,
+} from "./integrationwellknownurl.js";
 
 export type UpdateIntegration = {
   name: string;
   description?: string | undefined;
   groups?: Array<string> | undefined;
+  wellKnownUrls?: Array<IntegrationWellKnownUrl> | undefined;
 };
 
-export const UpdateIntegration$zodSchema: z.ZodType<
-  UpdateIntegration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  description: z.string().optional(),
-  groups: z.array(z.string()).optional(),
-  name: z.string(),
-});
+export const UpdateIntegration$zodSchema: z.ZodType<UpdateIntegration> = z
+  .object({
+    description: z.string().optional().describe(
+      "Updated description of the integration",
+    ),
+    groups: z.array(z.string()).optional().describe(
+      "Update integration's groups",
+    ),
+    name: z.string().describe("Updated name of the integration"),
+    wellKnownUrls: z.array(IntegrationWellKnownUrl$zodSchema).optional()
+      .describe("A2A well-known URLs (only for A2A provider)"),
+  });

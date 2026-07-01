@@ -7,8 +7,5 @@ import { HttpEndpointV2, HttpEndpointV2$zodSchema } from "./httpendpointv2.js";
 
 export type EndpointV2 = HttpEndpointV2;
 
-export const EndpointV2$zodSchema: z.ZodType<
-  EndpointV2,
-  z.ZodTypeDef,
-  unknown
-> = HttpEndpointV2$zodSchema;
+export const EndpointV2$zodSchema: z.ZodType<EndpointV2> =
+  HttpEndpointV2$zodSchema;

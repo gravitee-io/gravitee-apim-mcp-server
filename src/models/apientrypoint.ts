@@ -10,12 +10,10 @@ export type ApiEntrypoint = {
   tags?: Array<string> | undefined;
 };
 
-export const ApiEntrypoint$zodSchema: z.ZodType<
-  ApiEntrypoint,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  host: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  target: z.string().optional(),
+export const ApiEntrypoint$zodSchema: z.ZodType<ApiEntrypoint> = z.object({
+  host: z.string().optional().describe("The host of the entrypoint."),
+  tags: z.array(z.string()).optional().describe(
+    "The list of sharding tags associated with this entrypoint.",
+  ),
+  target: z.string().optional().describe("The target of the entrypoint."),
 });

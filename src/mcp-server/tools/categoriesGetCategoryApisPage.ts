@@ -11,8 +11,16 @@ const args = {
 };
 
 export const tool$categoriesGetCategoryApisPage: ToolDefinition<typeof args> = {
-  name: "categories-get-category-apis-page",
+  name: "get_category_apis_page",
   description: `Page of APIs within a Category`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Category Apis Page",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await categoriesGetCategoryApisPage(

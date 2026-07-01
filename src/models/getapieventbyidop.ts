@@ -13,9 +13,7 @@ export type GetApiEventByIdRequest = {
 };
 
 export const GetApiEventByIdRequest$zodSchema: z.ZodType<
-  GetApiEventByIdRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiEventByIdRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
@@ -24,22 +22,11 @@ export const GetApiEventByIdRequest$zodSchema: z.ZodType<
   eventId: z.string().describe("Id of an API Event."),
 });
 
-export type GetApiEventByIdResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Event?: Event | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiEventByIdResponse = Event | ErrorT;
 
 export const GetApiEventByIdResponse$zodSchema: z.ZodType<
-  GetApiEventByIdResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Event: Event$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiEventByIdResponse
+> = z.union([
+  Event$zodSchema,
+  ErrorT$zodSchema,
+]);

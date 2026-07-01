@@ -32,9 +32,9 @@ import { Result } from "../types/fp.js";
  * Verify TCP and Kafka API hosts
  *
  * @remarks
- * Verify hosts before creating or updating a TCP or Kafka API.<br>
- * This will check it is not already used by other APIs in the environment.<br>
- * The result will indicate if the hosts are OK, and give the reason of the failure if they are not.
+ * Verify TCP and Kafka API hosts
+ *
+ * Verify hosts before creating or updating a TCP or Kafka API.<br> This will check it is not already used by other APIs in the environment.<br> The result will indicate if the hosts are OK, and give the reason of the failure if they are not.
  */
 export function apIsVerifyHosts(
   client$: GraviteeApimCore,
@@ -110,7 +110,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "verifyHosts",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -168,7 +168,7 @@ async function $do(
     M.json(200, VerifyHostsResponse$zodSchema, {
       key: "VerifyApiHostsResponse",
     }),
-    M.json("default", VerifyHostsResponse$zodSchema, { key: "Error" }),
+    M.json("default", VerifyHostsResponse$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

@@ -11,12 +11,21 @@ const args = {
 };
 
 export const tool$apiPlansCreateAPIPlan: ToolDefinition<typeof args> = {
-  name: "API-plans-create-api-plan",
+  name: "create_api_plan",
   description: `Create an API's plan
 
 Create a new plan on a given API.
 
-User must have the API_PLAN[CREATE] permission.`,
+Plans are created in STAGING status. Publish the plan before deployment when the API should receive traffic.
+Example request body: {"definitionVersion":"V4","name":"Keyless","security":{"type":"KEY_LESS"},"mode":"STANDARD","validation":"AUTO"}`,
+  scopes: ["write"],
+  annotations: {
+    "title": "Create Api Plan",
+    "destructiveHint": false,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansCreateAPIPlan(

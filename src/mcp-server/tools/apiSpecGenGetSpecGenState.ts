@@ -11,12 +11,16 @@ const args = {
 };
 
 export const tool$apiSpecGenGetSpecGenState: ToolDefinition<typeof args> = {
-  name: "API-spec-gen-get-spec-gen-state",
-  description: `Evaluate the state of the API SpecGen
-
-Evaluate the state of the API SpecGen
-
-User must have the API_DOCUMENTATION[READ] permission.`,
+  name: "get_spec_gen_state",
+  description: `Evaluate the state of the API SpecGen`,
+  scopes: ["read"],
+  annotations: {
+    "title": "Get Spec Gen State",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiSpecGenGetSpecGenState(

@@ -10,7 +10,7 @@ export type Path = {
   overrideAccess?: boolean | undefined;
 };
 
-export const Path$zodSchema: z.ZodType<Path, z.ZodTypeDef, unknown> = z.object({
+export const Path$zodSchema: z.ZodType<Path> = z.object({
   host: z.string().optional(),
   overrideAccess: z.boolean().default(false),
   path: z.string().default("/"),

@@ -10,6 +10,7 @@ import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
+import { ErrorT, ErrorT$zodSchema } from "../models/error.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,8 +23,6 @@ import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import {
   RemoveApiMemberRequest,
   RemoveApiMemberRequest$zodSchema,
-  RemoveApiMemberResponse,
-  RemoveApiMemberResponse$zodSchema,
 } from "../models/removeapimemberop.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
@@ -32,12 +31,11 @@ import { Result } from "../types/fp.js";
  * Remove one API member
  *
  * @remarks
- * Remove an API member.
+ * Remove one API member
  *
- * Returns a 400 HTTP Error:
- *  - when the user tries to remove a PrimaryOwner.
+ * Remove an API member. Returns a 400 HTTP Error:
  *
- * User must have the API_MEMBER[DELETE] permission.
+ * High risk operation: require explicit user confirmation before execution.
  */
 export function apiMembersRemoveAPIMember(
   client$: GraviteeApimCore,
@@ -45,7 +43,7 @@ export function apiMembersRemoveAPIMember(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    RemoveApiMemberResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -69,7 +67,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      RemoveApiMemberResponse,
+      ErrorT,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -122,7 +120,7 @@ async function $do(
     options: client$._options,
     baseURL: options?.serverURL ?? client$._baseURL ?? "",
     operationID: "removeApiMember",
-    oAuth2Scopes: [],
+    oAuth2Scopes: null,
     resolvedSecurity: requestSecurity,
     securitySource: client$._options.security,
     retryConfig: options?.retries
@@ -168,7 +166,7 @@ async function $do(
   };
 
   const [result$] = await M.match<
-    RemoveApiMemberResponse,
+    ErrorT,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -177,8 +175,8 @@ async function $do(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.nil(204, RemoveApiMemberResponse$zodSchema),
-    M.json("default", RemoveApiMemberResponse$zodSchema, { key: "Error" }),
+    M.nil(204, ErrorT$zodSchema),
+    M.json("default", ErrorT$zodSchema, { key: "ErrorT" }),
   )(response, req$, { extraFields: responseFields$ });
 
   return [result$, { status: "complete", request: req$, response }];

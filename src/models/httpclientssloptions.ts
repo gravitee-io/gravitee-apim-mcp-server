@@ -15,14 +15,15 @@ export type HttpClientSslOptions = {
   headers?: Array<HttpHeader> | undefined;
 };
 
-export const HttpClientSslOptions$zodSchema: z.ZodType<
-  HttpClientSslOptions,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  headers: z.array(HttpHeader$zodSchema).optional(),
-  hostnameVerifier: z.boolean().default(false),
-  keyStore: KeyStore$zodSchema.optional(),
-  trustAll: z.boolean().default(false),
-  trustStore: TrustStore$zodSchema.optional(),
-});
+export const HttpClientSslOptions$zodSchema: z.ZodType<HttpClientSslOptions> = z
+  .object({
+    headers: z.array(HttpHeader$zodSchema).optional(),
+    hostnameVerifier: z.boolean().default(false).describe(
+      "Should the hostname be verified or not",
+    ),
+    keyStore: KeyStore$zodSchema.optional(),
+    trustAll: z.boolean().default(false).describe(
+      "Trust all certificates or not",
+    ),
+    trustStore: TrustStore$zodSchema.optional(),
+  });

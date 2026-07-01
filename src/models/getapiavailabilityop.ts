@@ -17,34 +17,22 @@ export type GetApiAvailabilityRequest = {
 };
 
 export const GetApiAvailabilityRequest$zodSchema: z.ZodType<
-  GetApiAvailabilityRequest,
-  z.ZodTypeDef,
-  unknown
+  GetApiAvailabilityRequest
 > = z.object({
   apiId: z.string().describe("Id of an API."),
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
-  field: HealthField$zodSchema.default("endpoint"),
+  field: HealthField$zodSchema.default("endpoint").describe(
+    "The field to group response time and availability.\n",
+  ),
 });
 
-export type GetApiAvailabilityResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  ApiHealthAvailabilityResponse?: ApiHealthAvailabilityResponse | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type GetApiAvailabilityResponse = ApiHealthAvailabilityResponse | ErrorT;
 
 export const GetApiAvailabilityResponse$zodSchema: z.ZodType<
-  GetApiAvailabilityResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ApiHealthAvailabilityResponse: ApiHealthAvailabilityResponse$zodSchema
-    .optional(),
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  GetApiAvailabilityResponse
+> = z.union([
+  ApiHealthAvailabilityResponse$zodSchema,
+  ErrorT$zodSchema,
+]);

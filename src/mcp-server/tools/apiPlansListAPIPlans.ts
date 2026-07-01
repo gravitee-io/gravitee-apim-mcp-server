@@ -11,14 +11,18 @@ const args = {
 };
 
 export const tool$apiPlansListAPIPlans: ToolDefinition<typeof args> = {
-  name: "API-plans-list-api-plans",
+  name: "list_api_plans",
   description: `List the API's plans
 
-List plans for a given API, always filtered by a \`status\` and the possibility to filter by \`security\`.<br>
-The results are paginated.
-
-User must have API_PLAN[READ] permissions to access endpoint.
-`,
+List plans for a given API, always filtered by a \`status\` and the possibility to filter by \`security\`.<br> The results are paginated.`,
+  scopes: ["read"],
+  annotations: {
+    "title": "List Api Plans",
+    "destructiveHint": false,
+    "idempotentHint": true,
+    "openWorldHint": false,
+    "readOnlyHint": true,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apiPlansListAPIPlans(

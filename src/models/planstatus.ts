@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * Plan status.
  */
+export const PlanStatus = {
+  Staging: "STAGING",
+  Published: "PUBLISHED",
+  Deprecated: "DEPRECATED",
+  Closed: "CLOSED",
+} as const;
+/**
+ * Plan status.
+ */
+export type PlanStatus = ClosedEnum<typeof PlanStatus>;
+
 export const PlanStatus$zodSchema = z.enum([
   "STAGING",
   "PUBLISHED",
   "DEPRECATED",
   "CLOSED",
 ]).describe("Plan status.");
-
-export type PlanStatus = z.infer<typeof PlanStatus$zodSchema>;

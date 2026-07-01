@@ -17,9 +17,7 @@ export type CreateDocumentationPageRequest = {
 };
 
 export const CreateDocumentationPageRequest$zodSchema: z.ZodType<
-  CreateDocumentationPageRequest,
-  z.ZodTypeDef,
-  unknown
+  CreateDocumentationPageRequest
 > = z.object({
   CreateDocumentation: CreateDocumentation$zodSchema,
   apiId: z.string().describe("Id of an API."),
@@ -28,22 +26,11 @@ export const CreateDocumentationPageRequest$zodSchema: z.ZodType<
   ),
 });
 
-export type CreateDocumentationPageResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Page?: Page | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type CreateDocumentationPageResponse = Page | ErrorT;
 
 export const CreateDocumentationPageResponse$zodSchema: z.ZodType<
-  CreateDocumentationPageResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Page: Page$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  CreateDocumentationPageResponse
+> = z.union([
+  Page$zodSchema,
+  ErrorT$zodSchema,
+]);

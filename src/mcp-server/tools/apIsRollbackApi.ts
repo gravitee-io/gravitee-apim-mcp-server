@@ -11,12 +11,20 @@ const args = {
 };
 
 export const tool$apIsRollbackApi: ToolDefinition<typeof args> = {
-  name: "AP-is-rollback-api",
+  name: "rollback_api",
   description: `Rollback an API
 
 Rollback an API to a previous version.
 
-User must have the API_DEFINITION[UPDATE] permission.`,
+High risk operation: require explicit user confirmation before execution.`,
+  scopes: ["write", "dangerous"],
+  annotations: {
+    "title": "Rollback Api",
+    "destructiveHint": true,
+    "idempotentHint": false,
+    "openWorldHint": false,
+    "readOnlyHint": false,
+  },
   args,
   tool: async (client, args, ctx) => {
     const [result, apiCall] = await apIsRollbackApi(

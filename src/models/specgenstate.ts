@@ -3,15 +3,25 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * API SpecGen state value
  */
+export const SpecGenState = {
+  Available: "AVAILABLE",
+  Unavailable: "UNAVAILABLE",
+  Started: "STARTED",
+  Generating: "GENERATING",
+} as const;
+/**
+ * API SpecGen state value
+ */
+export type SpecGenState = ClosedEnum<typeof SpecGenState>;
+
 export const SpecGenState$zodSchema = z.enum([
   "AVAILABLE",
   "UNAVAILABLE",
   "STARTED",
   "GENERATING",
 ]).describe("API SpecGen state value");
-
-export type SpecGenState = z.infer<typeof SpecGenState$zodSchema>;

@@ -14,9 +14,7 @@ export type AddIntegrationMemberRequest = {
 };
 
 export const AddIntegrationMemberRequest$zodSchema: z.ZodType<
-  AddIntegrationMemberRequest,
-  z.ZodTypeDef,
-  unknown
+  AddIntegrationMemberRequest
 > = z.object({
   AddMember: AddMember$zodSchema,
   envId: z.string().default("DEFAULT").describe(
@@ -25,22 +23,11 @@ export const AddIntegrationMemberRequest$zodSchema: z.ZodType<
   integrationId: z.string().describe("Id of an integration."),
 });
 
-export type AddIntegrationMemberResponse = {
-  ContentType: string;
-  StatusCode: number;
-  RawResponse: Response;
-  Member?: Member | undefined;
-  ErrorT?: ErrorT | undefined;
-};
+export type AddIntegrationMemberResponse = Member | ErrorT;
 
 export const AddIntegrationMemberResponse$zodSchema: z.ZodType<
-  AddIntegrationMemberResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  ContentType: z.string(),
-  ErrorT: ErrorT$zodSchema.optional(),
-  Member: Member$zodSchema.optional(),
-  RawResponse: z.instanceof(Response),
-  StatusCode: z.number().int(),
-});
+  AddIntegrationMemberResponse
+> = z.union([
+  Member$zodSchema,
+  ErrorT$zodSchema,
+]);

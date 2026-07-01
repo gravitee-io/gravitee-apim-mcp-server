@@ -16,12 +16,10 @@ export type AuditsResponse = {
   links?: Links | undefined;
 };
 
-export const AuditsResponse$zodSchema: z.ZodType<
-  AuditsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Audit$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
+export const AuditsResponse$zodSchema: z.ZodType<AuditsResponse> = z.object({
+  data: z.array(Audit$zodSchema).optional().describe("List of audits."),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
 }).describe("Page of Audit");

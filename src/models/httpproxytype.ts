@@ -3,14 +3,23 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 
 /**
  * The type of the proxy.
  */
+export const HttpProxyType = {
+  Http: "HTTP",
+  Socks4: "SOCKS4",
+  Socks5: "SOCKS5",
+} as const;
+/**
+ * The type of the proxy.
+ */
+export type HttpProxyType = ClosedEnum<typeof HttpProxyType>;
+
 export const HttpProxyType$zodSchema = z.enum([
   "HTTP",
   "SOCKS4",
   "SOCKS5",
 ]).describe("The type of the proxy.");
-
-export type HttpProxyType = z.infer<typeof HttpProxyType$zodSchema>;

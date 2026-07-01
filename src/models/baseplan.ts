@@ -11,16 +11,25 @@ export type BasePlan = {
   name?: string | undefined;
   description?: string | undefined;
   apiId?: string | undefined;
+  apiProductId?: string | undefined;
   security?: PlanSecurity | undefined;
   mode?: PlanMode | undefined;
 };
 
-export const BasePlan$zodSchema: z.ZodType<BasePlan, z.ZodTypeDef, unknown> = z
-  .object({
-    apiId: z.string().optional(),
-    description: z.string().optional(),
-    id: z.string().optional(),
-    mode: PlanMode$zodSchema.optional(),
-    name: z.string().optional(),
-    security: PlanSecurity$zodSchema.optional(),
-  });
+export const BasePlan$zodSchema: z.ZodType<BasePlan> = z.object({
+  apiId: z.string().optional().describe("Id of the API owning the plan."),
+  apiProductId: z.string().optional().describe(
+    "Id of the API Product owning the plan. Present only when the plan belongs to an API Product (omitted for API plans).",
+  ),
+  description: z.string().optional().describe(
+    "Plan's description. A short description of your plan.",
+  ),
+  id: z.string().optional().describe("Plan's uuid."),
+  mode: PlanMode$zodSchema.optional().describe(
+    "The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).",
+  ),
+  name: z.string().optional().describe(
+    "Plan's name. Duplicate names can exists.",
+  ),
+  security: PlanSecurity$zodSchema.optional(),
+});

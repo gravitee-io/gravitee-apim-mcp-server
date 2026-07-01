@@ -6,11 +6,8 @@ import * as z from "zod";
 
 export type ResourceConfiguration = {};
 
-export const ResourceConfiguration$zodSchema: z.ZodType<
-  ResourceConfiguration,
-  z.ZodTypeDef,
-  unknown
-> = z.object({});
+export const ResourceConfiguration$zodSchema: z.ZodType<ResourceConfiguration> =
+  z.object({});
 
 export type Resource = {
   name: string;
@@ -19,10 +16,9 @@ export type Resource = {
   enabled?: boolean | undefined;
 };
 
-export const Resource$zodSchema: z.ZodType<Resource, z.ZodTypeDef, unknown> = z
-  .object({
-    configuration: z.lazy(() => ResourceConfiguration$zodSchema),
-    enabled: z.boolean().optional(),
-    name: z.string(),
-    type: z.string(),
-  });
+export const Resource$zodSchema: z.ZodType<Resource> = z.object({
+  configuration: z.lazy(() => ResourceConfiguration$zodSchema),
+  enabled: z.boolean().optional(),
+  name: z.string(),
+  type: z.string(),
+});

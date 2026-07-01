@@ -21,13 +21,13 @@ export type GroupsResponse = {
   pagination?: Pagination | undefined;
 };
 
-export const GroupsResponse$zodSchema: z.ZodType<
-  GroupsResponse,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  data: z.array(Group$zodSchema).optional(),
-  links: Links$zodSchema.optional(),
-  metadata: ResponseMetadata$zodSchema.optional(),
-  pagination: Pagination$zodSchema.optional(),
+export const GroupsResponse$zodSchema: z.ZodType<GroupsResponse> = z.object({
+  data: z.array(Group$zodSchema).optional().describe("List of groups."),
+  links: Links$zodSchema.optional().describe("List of links for pagination"),
+  metadata: ResponseMetadata$zodSchema.optional().describe(
+    "Generic object to handle additional information about an entity. Can also be used for pagination data.",
+  ),
+  pagination: Pagination$zodSchema.optional().describe(
+    "Generic object to handle pagination data.",
+  ),
 }).describe("Page of Groups");

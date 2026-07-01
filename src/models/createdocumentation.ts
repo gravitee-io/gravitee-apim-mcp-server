@@ -3,12 +3,27 @@
  */
 
 import * as z from "zod";
+import { ClosedEnum } from "../types/enums.js";
 import { AccessControl, AccessControl$zodSchema } from "./accesscontrol.js";
 import { Visibility, Visibility$zodSchema } from "./visibility.js";
 
 /**
  * The type of the page.
  */
+export const CreateDocumentationType = {
+  Markdown: "MARKDOWN",
+  Folder: "FOLDER",
+  Swagger: "SWAGGER",
+  Asyncapi: "ASYNCAPI",
+  Asciidoc: "ASCIIDOC",
+} as const;
+/**
+ * The type of the page.
+ */
+export type CreateDocumentationType = ClosedEnum<
+  typeof CreateDocumentationType
+>;
+
 export const CreateDocumentationType$zodSchema = z.enum([
   "MARKDOWN",
   "FOLDER",
@@ -17,10 +32,6 @@ export const CreateDocumentationType$zodSchema = z.enum([
   "ASCIIDOC",
 ]).describe("The type of the page.");
 
-export type CreateDocumentationType = z.infer<
-  typeof CreateDocumentationType$zodSchema
->;
-
 export type CreateDocumentation = {
   name: string;
   type: CreateDocumentationType;
@@ -28,17 +39,24 @@ export type CreateDocumentation = {
   parentId?: string | undefined;
   excludedAccessControls?: boolean | undefined;
   accessControls?: Array<AccessControl> | undefined;
+  configuration?: { [k: string]: string } | undefined;
 };
 
-export const CreateDocumentation$zodSchema: z.ZodType<
-  CreateDocumentation,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  accessControls: z.array(AccessControl$zodSchema).optional(),
-  excludedAccessControls: z.boolean().optional(),
-  name: z.string(),
-  parentId: z.string().optional(),
-  type: CreateDocumentationType$zodSchema,
-  visibility: Visibility$zodSchema.optional(),
-});
+export const CreateDocumentation$zodSchema: z.ZodType<CreateDocumentation> = z
+  .object({
+    accessControls: z.array(AccessControl$zodSchema).optional().describe(
+      "List of access controls.",
+    ),
+    configuration: z.record(z.string(), z.string()).optional().describe(
+      "Configuration of a page",
+    ),
+    excludedAccessControls: z.boolean().optional().describe(
+      "Flag to restrict access to user matching the restrictions.",
+    ),
+    name: z.string().describe("Page's name."),
+    parentId: z.string().optional().describe("Page's parent id."),
+    type: CreateDocumentationType$zodSchema.describe("The type of the page."),
+    visibility: Visibility$zodSchema.default("PRIVATE").describe(
+      "The visibility of the resource regarding the portal.",
+    ),
+  });
