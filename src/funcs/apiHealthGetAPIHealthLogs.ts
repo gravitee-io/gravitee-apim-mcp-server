@@ -103,6 +103,10 @@ async function $do(
     pathParams$,
   );
   const query$ = encodeFormQuery({
+    "from": payload$.from,
+    "to": payload$.to,
+    "page": payload$.page,
+    "perPage": payload$.perPage,
     "success": payload$.success,
   });
 

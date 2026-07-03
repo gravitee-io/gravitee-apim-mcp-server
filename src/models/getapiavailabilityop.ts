@@ -13,6 +13,8 @@ import { HealthField, HealthField$zodSchema } from "./healthfield.js";
 export type GetApiAvailabilityRequest = {
   envId?: string | undefined;
   apiId: string;
+  from?: number | undefined;
+  to?: number | undefined;
   field?: HealthField | undefined;
 };
 
@@ -23,6 +25,12 @@ export const GetApiAvailabilityRequest$zodSchema: z.ZodType<
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
+  from: z.int().describe(
+    "The timestamp from which the availability will be computed.\n",
+  ).optional(),
+  to: z.int().describe(
+    "The timestamp to which the availability will be computed.\n",
+  ).optional(),
   field: HealthField$zodSchema.default("endpoint").describe(
     "The field to group response time and availability.\n",
   ),
