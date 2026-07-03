@@ -12,6 +12,10 @@ import { ErrorT, ErrorT$zodSchema } from "./error.js";
 export type GetApiHealthLogsRequest = {
   envId?: string | undefined;
   apiId: string;
+  from?: number | undefined;
+  to?: number | undefined;
+  page?: number | undefined;
+  perPage?: number | undefined;
   success?: boolean | undefined;
 };
 
@@ -22,6 +26,16 @@ export const GetApiHealthLogsRequest$zodSchema: z.ZodType<
   envId: z.string().default("DEFAULT").describe(
     "Id or Hrid (Human readable Id) of an environment.",
   ),
+  from: z.int().describe(
+    "The timestamp from which the logs will be returned.\n",
+  ).optional(),
+  to: z.int().describe("The timestamp to which the logs will be returned.\n")
+    .optional(),
+  page: z.int().default(1).describe("The page number for pagination.")
+    .optional(),
+  perPage: z.int().default(10).describe(
+    "The number of items per page for pagination.\n",
+  ).optional(),
   success: z.boolean().describe("Filter logs by success status").optional(),
 });
 
