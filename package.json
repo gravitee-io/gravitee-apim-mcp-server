@@ -1,6 +1,6 @@
 {
   "name": "@gravitee/apim-mcp-server",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Model Context Protocol server for the Gravitee APIM Management API.",
   "author": "Gravitee.io",
   "license": "MIT",
