@@ -33,13 +33,32 @@ Recommended flow:
 
 ## Install
 
+### From npm (recommended)
+
+Run directly with `npx`:
+
+```bash
+npx @gravitee/apim-mcp-server start \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "http://localhost:8083/management/v2"
+```
+
+Or install globally:
+
+```bash
+npm install -g @gravitee/apim-mcp-server
+apim-mcp-server start \
+  --bearer-auth "$APIM_BEARER_TOKEN" \
+  --server-url "http://localhost:8083/management/v2"
+```
+
 ### Claude Desktop Bundle
 
 Official GitHub releases include a Claude Desktop bundle named `gravitee-apim-mcp-server.mcpb`. Install that file in Claude Desktop to use the packaged server. The bundle prompts for the APIM connection settings and bearer token.
 
 ### From GitHub Source
 
-Clone and build locally:
+Clone and build locally (requires Node.js 18+ and Bun):
 
 ```bash
 git clone https://github.com/gravitee-io/gravitee-apim-mcp-server.git
@@ -48,13 +67,7 @@ npm install
 npm run build
 ```
 
-The build creates the server executable at:
-
-```bash
-./bin/mcp-server.js
-```
-
-Use the absolute path to `./bin/mcp-server.js` in MCP client configuration.
+The build creates the server executable at `./bin/mcp-server.js`.
 
 ## Basic Usage
 
@@ -63,7 +76,7 @@ Use the Management API v2 base URL as `--server-url`.
 Self-hosted example:
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --bearer-auth "$APIM_BEARER_TOKEN" \
   --server-url "http://localhost:8083/management/v2"
 ```
@@ -71,7 +84,7 @@ node ./bin/mcp-server.js start \
 Cloud example:
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --bearer-auth "$APIM_BEARER_TOKEN" \
   --server-url "https://<your-org>.<region>.api.gravitee.io/management/v2"
 ```
@@ -79,7 +92,7 @@ node ./bin/mcp-server.js start \
 You can also use templated server arguments:
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --protocol https \
   --management-api-host "<management-api-host>" \
   --org-id DEFAULT \
@@ -96,7 +109,7 @@ Dynamic mode exposes a compact set of discovery and execution tools instead of r
 - `execute_tool`
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --mode dynamic \
   --bearer-auth "$APIM_BEARER_TOKEN" \
   --server-url "$APIM_SERVER_URL"
@@ -109,7 +122,7 @@ In dynamic mode, an MCP client first discovers a tool, inspects its input schema
 For safer exploration, mount only tools marked with the `read` scope:
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --mode dynamic \
   --scope read \
   --bearer-auth "$APIM_BEARER_TOKEN" \
@@ -125,7 +138,7 @@ MCP scopes and APIM permissions both control write tools. For operational use, c
 Example:
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --mode dynamic \
   --scope read \
   --scope write \
@@ -136,7 +149,7 @@ node ./bin/mcp-server.js start \
 The `dangerous` scope marks high-impact tools. Only enable that scope for controlled workflows:
 
 ```bash
-node ./bin/mcp-server.js start \
+npx @gravitee/apim-mcp-server start \
   --mode dynamic \
   --scope read \
   --scope write \
@@ -153,9 +166,10 @@ Claude Desktop or compatible stdio clients can use:
 {
   "mcpServers": {
     "GraviteeApim": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "/absolute/path/to/gravitee-apim-mcp-server/bin/mcp-server.js",
+        "-y",
+        "@gravitee/apim-mcp-server",
         "start",
         "--mode",
         "dynamic",
