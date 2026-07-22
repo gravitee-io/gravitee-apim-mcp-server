@@ -1,0 +1,40 @@
+version: 2.1
+
+orbs:
+  keeper: gravitee-io/keeper@0.7.0
+
+jobs:
+  publish:
+    docker:
+      - image: cimg/node:22.16
+    steps:
+      - checkout
+      - run:
+          name: Install Bun
+          command: curl -fsSL https://bun.sh/install | bash && echo 'export PATH="$HOME/.bun/bin:$PATH"' >> "$BASH_ENV"
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Build
+          command: npm run build
+      - run:
+          name: Publish to npm
+          command: |
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+            npm publish --access public
+
+workflows:
+  publish:
+    jobs:
+      - publish:
+          context: cicd-orchestrator
+          pre-steps:
+            - keeper/env-export:
+                secret-url: keeper://hyuyfd_i5JChvc8OgSoxgg/field/password
+                var-name: NPM_TOKEN
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/

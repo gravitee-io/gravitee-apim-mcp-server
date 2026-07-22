@@ -1,5 +1,5 @@
 {
-  "name": "gravitee-apim",
+  "name": "@gravitee/apim-mcp-server",
   "version": "0.1.1",
   "description": "Model Context Protocol server for the Gravitee APIM Management API.",
   "author": "Gravitee.io",
@@ -22,8 +22,19 @@
   "type": "module",
   "sideEffects": false,
   "bin": {
-    "gravitee-apim": "bin/mcp-server.js",
-    "mcp": "bin/mcp-server.js"
+    "apim-mcp-server": "bin/mcp-server.js"
+  },
+  "files": [
+    "bin/",
+    "esm/",
+    "manifest.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "clean": "node -e \"const fs=require('node:fs'); for (const p of ['bin','esm','mcp-server.mcpb','gravitee-apim-mcp-server.mcpb','.mcpb-stage']) fs.rmSync(p,{recursive:true,force:true});\"",
