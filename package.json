@@ -46,13 +46,13 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.26.0",
+    "@modelcontextprotocol/sdk": "1.29.0",
     "@stricli/core": "^1.1.2",
     "express": "^5.1.0",
     "zod": "^4.0.0"
   },
   "overrides": {
-    "@modelcontextprotocol/sdk": "1.26.0",
+    "@modelcontextprotocol/sdk": "1.29.0",
     "path-to-regexp": "^8.4.2",
     "tmp": "^0.2.7"
   },
