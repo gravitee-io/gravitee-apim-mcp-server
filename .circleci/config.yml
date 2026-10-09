@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  keeper: gravitee-io/keeper@0.7.0
+  keeper: gravitee-io/keeper@0.7.2
 
 jobs:
   publish:
